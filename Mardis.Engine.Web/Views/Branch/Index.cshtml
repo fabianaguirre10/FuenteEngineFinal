@@ -63,7 +63,7 @@
             {
                 <tr id="@("row" + branch.Id)">
                     <td>
-                        <input asp-for="@branch.IsSelected" id="@branch.Id" onchange="SelectItem(this);" type="checkbox" value="@branch.Id"/>
+                        <input @*asp-for="@branch.IsSelected"*@ id="@branch.Id" onchange="SelectItem(this);" type="checkbox" value="@branch.Id"/>
                     </td>
                     <td>@branch.Code</td>
                     <td>@branch.ExternalCode</td>
