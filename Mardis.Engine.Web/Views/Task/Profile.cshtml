@@ -57,7 +57,7 @@
     <div id="divHeaderPoll">
         <div class="row">
             <div class="col-sm-3">
-                <strong>Campaña: </strong> {{poll.CampaignName}}
+                <strong>Campaña : </strong> {{poll.CampaignName}}
             </div>
             <div class="col-sm-3">
                 <strong>Cliente: </strong> {{poll.CustomerName}}
@@ -272,9 +272,9 @@
                                                                     </div>
                                                                     <div class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
 
-                                                                        <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" v-model="question.Answer" class="form-control inputmardis subsec" v-bind:id="question.Id" style="margin: 0 auto; float: none; background-color: #cccccc;" onchange="valorseleccion(this)"/>
+                                                                        <input name="v-info-sender" v-if="question.CodeTypePoll=='OPEN'" v-model="question.Answer" class="form-control inputmardis subsec" v-bind:id="question.Id" style="margin: 0 auto; float: none; background-color: #cccccc;" onchange="valorseleccion(this)"/>
 
-                                                                        <select  v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)">
+                                                                        <select  name="v-info-sender"  v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)">
                                                                             <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
                                                                         </select>
 
@@ -301,9 +301,9 @@
                                                                                 </div>
 
                                                                                 <div  v-if="question.CodeTypePoll=='MANY'||question.CodeTypePoll=='OPEN'||question.CodeTypePoll=='ONE'" class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
-                                                                                    <input v-info-sender v-if="question.CodeTypePoll=='OPEN'"  class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" />
+                                                                                    <input name="v-info-sender"  v-if="question.CodeTypePoll=='OPEN'"  class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" />
 
-                                                                                    <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" style="margin: 0 auto; float: none;">
+                                                                                    <select name="v-info-sender"  v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" style="margin: 0 auto; float: none;">
                                                                                         <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
                                                                                     </select>
                                                                                 </div>
@@ -334,7 +334,9 @@
                                                                              }"
                                                                          style="word-wrap: break-word ;padding-left: 5px; font-size: 10px;padding-left: 5px; text-align: center;">
                                                                         {{subSection.QuestionCollection[i].Title}}
-                                                                             
+
+3º0
+                                                                             z-
                                                                     </div>
 
                                                                     </div>
@@ -360,9 +362,9 @@
                                                                  }"
                                                                  style="padding-left: 5px; padding-right: 0;">
                                                                    
-                                                                <input v-info-sender v-if="question.CodeTypePoll == 'OPEN'"  v-on:keypress="keymonitor" class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" v-bind:id="question.Id"/>
+                                                                <input name="v-info-sender"  v-if="question.CodeTypePoll == 'OPEN'"  v-on:keypress="keymonitor" class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" v-bind:id="question.Id"/>
 
-                                                                <select v-info-sender v-if="question.CodeTypePoll == 'ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail"  v-bind:id="question.Id"
+                                                                <select name="v-info-sender"  v-if="question.CodeTypePoll == 'ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail"  v-bind:id="question.Id"
                                                                         style="margin: 0 auto; float: none;"  onchange="valorseleccion(this)">
                                                                     <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id" >{{answer.Answer}}</option>
                                                                 </select>
