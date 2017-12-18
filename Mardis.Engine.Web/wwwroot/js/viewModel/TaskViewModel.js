@@ -61,29 +61,11 @@ function ApplyBindingTaskService(data) {
             }
         }
     });
+  
 
     $.unblockUI();
 }
-Vue.directive('info-sender', {
-    //maxItemsToSend: 3,
-    bind: function (el, binding, vnode) {
-        //var self = this;
-        el.addEventListener("change", function () {
-            store.set(el.id, { id: el.id, value: el.value });
-            let storeSize = store.size();
-            if (storeSize >= 3) {
-                //preparar
-                let infoList = [];
-                let data = store.getAll();
-                for (var property in data) {
-                    if (data.hasOwnProperty(property)) {
-                        infoList.push(data[property]);
-                    }
-                };
-            }
-        });
-    }
-});
+
 function BuscarPregunta(servicio, idpregunta) {
     if (servicio != null) {
         var preguntas = servicio.ServiceDetailCollection[s];
