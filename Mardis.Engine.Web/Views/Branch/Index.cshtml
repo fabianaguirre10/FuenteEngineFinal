@@ -63,6 +63,7 @@
             {
                 <tr id="@("row" + branch.Id)">
                     <td>
+                        <!--Control de cambios-->
                         <input  id="@branch.Id" onchange="SelectItem(this);" type="checkbox" value="@branch.Id"/>
                     </td>
                     <td>@branch.Code</td>
