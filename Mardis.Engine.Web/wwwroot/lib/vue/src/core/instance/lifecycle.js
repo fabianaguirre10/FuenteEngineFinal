@@ -18,7 +18,6 @@ import {
 } from '../util/index'
 
 export let activeInstance: any = null
-export let isUpdatingChildComponent: boolean = false
 
 export function initLifecycle (vm: Component) {
   const options = vm.$options
@@ -66,9 +65,6 @@ export function lifecycleMixin (Vue: Class<Component>) {
         vm.$options._parentElm,
         vm.$options._refElm
       )
-      // no need for the ref nodes after initial patch
-      // this prevents keeping a detached DOM tree in memory (#5851)
-      vm.$options._parentElm = vm.$options._refElm = null
     } else {
       // updates
       vm.$el = vm.__patch__(prevVnode, vnode)
@@ -133,10 +129,8 @@ export function lifecycleMixin (Vue: Class<Component>) {
     if (vm.$el) {
       vm.$el.__vue__ = null
     }
-    // release circular reference (#6759)
-    if (vm.$vnode) {
-      vm.$vnode.parent = null
-    }
+    // remove reference to DOM nodes (prevents leak)
+    vm.$options._parentElm = vm.$options._refElm = null
   }
 }
 
@@ -180,12 +174,12 @@ export function mountComponent (
       mark(startTag)
       const vnode = vm._render()
       mark(endTag)
-      measure(`vue ${name} render`, startTag, endTag)
+      measure(`${name} render`, startTag, endTag)
 
       mark(startTag)
       vm._update(vnode, hydrating)
       mark(endTag)
-      measure(`vue ${name} patch`, startTag, endTag)
+      measure(`${name} patch`, startTag, endTag)
     }
   } else {
     updateComponent = () => {
@@ -193,10 +187,7 @@ export function mountComponent (
     }
   }
 
-  // we set this to vm._watcher inside the watcher's constructor
-  // since the watcher's initial patch may call $forceUpdate (e.g. inside child
-  // component's mounted hook), which relies on vm._watcher being already defined
-  new Watcher(vm, updateComponent, noop, null, true /* isRenderWatcher */)
+  vm._watcher = new Watcher(vm, updateComponent, noop)
   hydrating = false
 
   // manually mounted instance, call mounted on self
@@ -212,13 +203,9 @@ export function updateChildComponent (
   vm: Component,
   propsData: ?Object,
   listeners: ?Object,
-  parentVnode: MountedComponentVNode,
+  parentVnode: VNode,
   renderChildren: ?Array<VNode>
 ) {
-  if (process.env.NODE_ENV !== 'production') {
-    isUpdatingChildComponent = true
-  }
-
   // determine whether component has slot children
   // we need to do this before overwriting $options._renderChildren
   const hasChildren = !!(
@@ -230,21 +217,17 @@ export function updateChildComponent (
 
   vm.$options._parentVnode = parentVnode
   vm.$vnode = parentVnode // update vm's placeholder node without re-render
-
   if (vm._vnode) { // update child tree's parent
     vm._vnode.parent = parentVnode
   }
   vm.$options._renderChildren = renderChildren
 
-  // update $attrs and $listeners hash
-  // these are also reactive so they may trigger child update if the child
-  // used them during render
-  vm.$attrs = (parentVnode.data && parentVnode.data.attrs) || emptyObject
-  vm.$listeners = listeners || emptyObject
-
   // update props
   if (propsData && vm.$options.props) {
     observerState.shouldConvert = false
+    if (process.env.NODE_ENV !== 'production') {
+      observerState.isSettingProps = true
+    }
     const props = vm._props
     const propKeys = vm.$options._propKeys || []
     for (let i = 0; i < propKeys.length; i++) {
@@ -252,10 +235,12 @@ export function updateChildComponent (
       props[key] = validateProp(key, vm.$options.props, propsData, vm)
     }
     observerState.shouldConvert = true
+    if (process.env.NODE_ENV !== 'production') {
+      observerState.isSettingProps = false
+    }
     // keep a copy of raw propsData
     vm.$options.propsData = propsData
   }
-
   // update listeners
   if (listeners) {
     const oldListeners = vm.$options._parentListeners
@@ -266,10 +251,6 @@ export function updateChildComponent (
   if (hasChildren) {
     vm.$slots = resolveSlots(renderChildren, parentVnode.context)
     vm.$forceUpdate()
-  }
-
-  if (process.env.NODE_ENV !== 'production') {
-    isUpdatingChildComponent = false
   }
 }
 

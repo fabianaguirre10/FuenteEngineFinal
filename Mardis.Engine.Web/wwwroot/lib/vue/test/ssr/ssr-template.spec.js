@@ -227,10 +227,10 @@ describe('SSR: template option', () => {
       `<link rel="preload" href="/0.js" as="script">` +
       `<link rel="preload" href="/test.css" as="style">` +
       // images and fonts are only preloaded when explicitly asked for
-      (options.preloadOtherAssets ? `<link rel="preload" href="/test.woff2" as="font" type="font/woff2" crossorigin>` : ``) +
       (options.preloadOtherAssets ? `<link rel="preload" href="/test.png" as="image">` : ``) +
+      (options.preloadOtherAssets ? `<link rel="preload" href="/test.woff2" as="font" type="font/woff2" crossorigin>` : ``) +
       // unused chunks should have prefetch
-      (options.noPrefetch ? `` : `<link rel="prefetch" href="/1.js">`) +
+      `<link rel="prefetch" href="/1.js" as="script">` +
       // css assets should be loaded
       `<link rel="stylesheet" href="/test.css">` +
     `</head><body>` +
@@ -238,10 +238,10 @@ describe('SSR: template option', () => {
       // state should be inlined before scripts
       `<script>window.${options.stateKey || '__INITIAL_STATE__'}={"a":1}</script>` +
       // manifest chunk should be first
-      `<script src="/manifest.js" defer></script>` +
+      `<script src="/manifest.js"></script>` +
       // async chunks should be before main chunk
-      `<script src="/0.js" defer></script>` +
-      `<script src="/main.js" defer></script>` +
+      `<script src="/0.js"></script>` +
+      `<script src="/main.js"></script>` +
     `</body></html>`
 
   createClientManifestAssertions(true)
@@ -275,29 +275,6 @@ describe('SSR: template option', () => {
         stream.on('end', () => {
           expect(res).toContain(expectedHTMLWithManifest({
             preloadOtherAssets: true
-          }))
-          done()
-        })
-      })
-    })
-
-    it('bundleRenderer + renderToStream + clientManifest + shouldPrefetch', done => {
-      createRendererWithManifest('split.js', {
-        runInNewContext,
-        shouldPrefetch: (file, type) => {
-          if (type === 'script') {
-            return false
-          }
-        }
-      }, renderer => {
-        const stream = renderer.renderToStream({ state: { a: 1 }})
-        let res = ''
-        stream.on('data', chunk => {
-          res += chunk.toString()
-        })
-        stream.on('end', () => {
-          expect(res).toContain(expectedHTMLWithManifest({
-            noPrefetch: true
           }))
           done()
         })
@@ -351,39 +328,6 @@ describe('SSR: template option', () => {
           }))
           done()
         })
-      })
-    })
-
-    it('whitespace insensitive interpolation', done => {
-      const interpolateTemplate = `<html><head><title>{{title}}</title></head><body><!--vue-ssr-outlet-->{{{snippet}}}</body></html>`
-      const renderer = createRenderer({
-        template: interpolateTemplate
-      })
-
-      const context = {
-        title: '<script>hacks</script>',
-        snippet: '<div>foo</div>',
-        head: '<meta name="viewport" content="width=device-width">',
-        styles: '<style>h1 { color: red }</style>',
-        state: { a: 1 }
-      }
-
-      renderer.renderToString(new Vue({
-        template: '<div>hi</div>'
-      }), context, (err, res) => {
-        expect(err).toBeNull()
-        expect(res).toContain(
-          `<html><head>` +
-          // double mustache should be escaped
-          `<title>&lt;script&gt;hacks&lt;/script&gt;</title>` +
-          `${context.head}${context.styles}</head><body>` +
-          `<div data-server-rendered="true">hi</div>` +
-          `<script>window.__INITIAL_STATE__={"a":1}</script>` +
-          // triple should be raw
-          `<div>foo</div>` +
-          `</body></html>`
-        )
-        done()
       })
     })
   }

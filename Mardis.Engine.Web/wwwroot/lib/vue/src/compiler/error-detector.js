@@ -15,6 +15,9 @@ const unaryOperatorsRE = new RegExp('\\b' + (
   'delete,typeof,void'
 ).split(',').join('\\s*\\([^\\)]*\\)|\\b') + '\\s*\\([^\\)]*\\)')
 
+// check valid identifier for v-for
+const identRE = /[A-Za-z_$][\w$]*/
+
 // strip strings in expressions
 const stripStringRE = /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*\$\{|\}(?:[^`\\]|\\.)*`|`(?:[^`\\]|\\.)*`/g
 
@@ -72,18 +75,9 @@ function checkFor (node: ASTElement, text: string, errors: Array<string>) {
   checkIdentifier(node.iterator2, 'v-for iterator', text, errors)
 }
 
-function checkIdentifier (
-  ident: ?string,
-  type: string,
-  text: string,
-  errors: Array<string>
-) {
-  if (typeof ident === 'string') {
-    try {
-      new Function(`var ${ident}=_`)
-    } catch (e) {
-      errors.push(`invalid ${type} "${ident}" in expression: ${text.trim()}`)
-    }
+function checkIdentifier (ident: ?string, type: string, text: string, errors: Array<string>) {
+  if (typeof ident === 'string' && !identRE.test(ident)) {
+    errors.push(`invalid ${type} "${ident}" in expression: ${text.trim()}`)
   }
 }
 
@@ -95,14 +89,10 @@ function checkExpression (exp: string, text: string, errors: Array<string>) {
     if (keywordMatch) {
       errors.push(
         `avoid using JavaScript keyword as property name: ` +
-        `"${keywordMatch[0]}"\n  Raw expression: ${text.trim()}`
+        `"${keywordMatch[0]}" in expression ${text.trim()}`
       )
     } else {
-      errors.push(
-        `invalid expression: ${e.message} in\n\n` +
-        `    ${exp}\n\n` +
-        `  Raw expression: ${text.trim()}\n`
-      )
+      errors.push(`invalid expression: ${text.trim()}`)
     }
   }
 }

@@ -5,8 +5,7 @@ import { noop } from 'shared/util'
 
 export let warn = noop
 export let tip = noop
-export let generateComponentTrace = (noop: any) // work around flow check
-export let formatComponentName = (noop: any)
+export let formatComponentName: Function = (null: any) // work around flow check
 
 if (process.env.NODE_ENV !== 'production') {
   const hasConsole = typeof console !== 'undefined'
@@ -16,12 +15,10 @@ if (process.env.NODE_ENV !== 'production') {
     .replace(/[-_]/g, '')
 
   warn = (msg, vm) => {
-    const trace = vm ? generateComponentTrace(vm) : ''
-
-    if (config.warnHandler) {
-      config.warnHandler.call(null, msg, vm, trace)
-    } else if (hasConsole && (!config.silent)) {
-      console.error(`[Vue warn]: ${msg}${trace}`)
+    if (hasConsole && (!config.silent)) {
+      console.error(`[Vue warn]: ${msg}` + (
+        vm ? generateComponentTrace(vm) : ''
+      ))
     }
   }
 
@@ -37,13 +34,15 @@ if (process.env.NODE_ENV !== 'production') {
     if (vm.$root === vm) {
       return '<Root>'
     }
-    const options = typeof vm === 'function' && vm.cid != null
-      ? vm.options
-      : vm._isVue
-        ? vm.$options || vm.constructor.options
-        : vm || {}
-    let name = options.name || options._componentTag
-    const file = options.__file
+    let name = typeof vm === 'string'
+      ? vm
+      : typeof vm === 'function' && vm.options
+        ? vm.options.name
+        : vm._isVue
+          ? vm.$options.name || vm.$options._componentTag
+          : vm.name
+
+    const file = vm._isVue && vm.$options.__file
     if (!name && file) {
       const match = file.match(/([^/\\]+)\.vue$/)
       name = match && match[1]
@@ -65,7 +64,7 @@ if (process.env.NODE_ENV !== 'production') {
     return res
   }
 
-  generateComponentTrace = vm => {
+  const generateComponentTrace = vm => {
     if (vm._isVue && vm.$parent) {
       const tree = []
       let currentRecursiveSequence = 0

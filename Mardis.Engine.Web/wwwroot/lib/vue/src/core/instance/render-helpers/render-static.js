@@ -7,10 +7,9 @@ import { cloneVNode, cloneVNodes } from 'core/vdom/vnode'
  */
 export function renderStatic (
   index: number,
-  isInFor: boolean
+  isInFor?: boolean
 ): VNode | Array<VNode> {
-  const cached = this._staticTrees || (this._staticTrees = [])
-  let tree = cached[index]
+  let tree = this._staticTrees[index]
   // if has already-rendered static tree and not inside v-for,
   // we can reuse the same tree by doing a shallow clone.
   if (tree && !isInFor) {
@@ -19,11 +18,8 @@ export function renderStatic (
       : cloneVNode(tree)
   }
   // otherwise, render a fresh tree.
-  tree = cached[index] = this.$options.staticRenderFns[index].call(
-    this._renderProxy,
-    null,
-    this // for render fns generated for functional component templates
-  )
+  tree = this._staticTrees[index] =
+    this.$options.staticRenderFns[index].call(this._renderProxy)
   markStatic(tree, `__static__${index}`, false)
   return tree
 }

@@ -94,10 +94,9 @@ function enter (_, vnode) {
     const parent = el.parentNode
     const pendingNode = parent && parent._pending && parent._pending[vnode.key]
     if (pendingNode &&
-      pendingNode.context === vnode.context &&
-      pendingNode.tag === vnode.tag &&
-      pendingNode.elm._leaveCb
-    ) {
+        pendingNode.context === vnode.context &&
+        pendingNode.tag === vnode.tag &&
+        pendingNode.elm._leaveCb) {
       pendingNode.elm._leaveCb()
     }
     enterHook && enterHook(el, cb)
@@ -119,12 +118,8 @@ function enter (_, vnode) {
   beforeEnterHook && beforeEnterHook(el)
 
   if (startState) {
-    if (typeof el.setStyles === 'function') {
-      el.setStyles(startState)
-    } else {
-      for (const key in startState) {
-        el.setStyle(key, startState[key])
-      }
+    for (const key in startState) {
+      el.setStyle(key, startState[key])
     }
   }
 

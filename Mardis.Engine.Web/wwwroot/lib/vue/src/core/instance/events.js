@@ -1,13 +1,7 @@
 /* @flow */
 
-import {
-  tip,
-  toArray,
-  hyphenate,
-  handleError,
-  formatComponentName
-} from '../util/index'
 import { updateListeners } from '../vdom/helpers/index'
+import { toArray, tip, hyphenate, formatComponentName } from '../util/index'
 
 export function initEvents (vm: Component) {
   vm._events = Object.create(null)
@@ -19,7 +13,7 @@ export function initEvents (vm: Component) {
   }
 }
 
-let target: any
+let target: Component
 
 function add (event, fn, once) {
   if (once) {
@@ -40,7 +34,6 @@ export function updateComponentListeners (
 ) {
   target = vm
   updateListeners(listeners, oldListeners || {}, add, remove, vm)
-  target = undefined
 }
 
 export function eventsMixin (Vue: Class<Component>) {
@@ -92,20 +85,18 @@ export function eventsMixin (Vue: Class<Component>) {
     if (!cbs) {
       return vm
     }
-    if (!fn) {
+    if (arguments.length === 1) {
       vm._events[event] = null
       return vm
     }
-    if (fn) {
-      // specific handler
-      let cb
-      let i = cbs.length
-      while (i--) {
-        cb = cbs[i]
-        if (cb === fn || cb.fn === fn) {
-          cbs.splice(i, 1)
-          break
-        }
+    // specific handler
+    let cb
+    let i = cbs.length
+    while (i--) {
+      cb = cbs[i]
+      if (cb === fn || cb.fn === fn) {
+        cbs.splice(i, 1)
+        break
       }
     }
     return vm
@@ -130,11 +121,7 @@ export function eventsMixin (Vue: Class<Component>) {
       cbs = cbs.length > 1 ? toArray(cbs) : cbs
       const args = toArray(arguments, 1)
       for (let i = 0, l = cbs.length; i < l; i++) {
-        try {
-          cbs[i].apply(vm, args)
-        } catch (e) {
-          handleError(e, vm, `event handler for "${event}"`)
-        }
+        cbs[i].apply(vm, args)
       }
     }
     return vm

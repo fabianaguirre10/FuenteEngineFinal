@@ -27,9 +27,8 @@ export function createFnInvoker (fns: Function | Array<Function>): Function {
   function invoker () {
     const fns = invoker.fns
     if (Array.isArray(fns)) {
-      const cloned = fns.slice()
-      for (let i = 0; i < cloned.length; i++) {
-        cloned[i].apply(null, arguments)
+      for (let i = 0; i < fns.length; i++) {
+        fns[i].apply(null, arguments)
       }
     } else {
       // return handler return value for single handlers

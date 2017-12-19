@@ -1,15 +1,8 @@
 /* @flow */
 
-import { warn } from './debug'
+import { hasOwn, isObject, isPlainObject, capitalize, hyphenate } from 'shared/util'
 import { observe, observerState } from '../observer/index'
-import {
-  hasOwn,
-  isObject,
-  toRawType,
-  hyphenate,
-  capitalize,
-  isPlainObject
-} from 'shared/util'
+import { warn } from './debug'
 
 type PropOptions = {
   type: Function | Array<Function> | null,
@@ -73,8 +66,7 @@ function getPropDefaultValue (vm: ?Component, prop: PropOptions, key: string): a
   // return previous default value to avoid unnecessary watcher trigger
   if (vm && vm.$options.propsData &&
     vm.$options.propsData[key] === undefined &&
-    vm._props[key] !== undefined
-  ) {
+    vm._props[key] !== undefined) {
     return vm._props[key]
   }
   // call factory function for non-Function types
@@ -119,9 +111,9 @@ function assertProp (
   }
   if (!valid) {
     warn(
-      `Invalid prop: type check failed for prop "${name}".` +
-      ` Expected ${expectedTypes.map(capitalize).join(', ')}` +
-      `, got ${toRawType(value)}.`,
+      'Invalid prop: type check failed for prop "' + name + '".' +
+      ' Expected ' + expectedTypes.map(capitalize).join(', ') +
+      ', got ' + Object.prototype.toString.call(value).slice(8, -1) + '.',
       vm
     )
     return
@@ -146,12 +138,7 @@ function assertType (value: any, type: Function): {
   let valid
   const expectedType = getType(type)
   if (simpleCheckRE.test(expectedType)) {
-    const t = typeof value
-    valid = t === expectedType.toLowerCase()
-    // for primitive wrapper objects
-    if (!valid && t === 'object') {
-      valid = value instanceof type
-    }
+    valid = typeof value === expectedType.toLowerCase()
   } else if (expectedType === 'Object') {
     valid = isPlainObject(value)
   } else if (expectedType === 'Array') {

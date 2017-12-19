@@ -1,9 +1,6 @@
 import Vue from 'vue'
-import testObjectOption from '../../../helpers/test-object-option'
 
 describe('Options computed', () => {
-  testObjectOption('computed')
-
   it('basic usage', done => {
     const vm = new Vue({
       template: '<div>{{ b }}</div>',
@@ -75,19 +72,7 @@ describe('Options computed', () => {
       }
     }).$mount()
     expect(vm.$el.innerHTML).toBe('<div>1</div>')
-    expect('Getter is missing for computed property "b".').toHaveBeenWarned()
-  })
-
-  it('warn assigning to computed with no setter', () => {
-    const vm = new Vue({
-      computed: {
-        b () {
-          return 1
-        }
-      }
-    })
-    vm.b = 2
-    expect(`Computed property "b" was assigned to but it has no setter.`).toHaveBeenWarned()
+    expect('No getter function has been defined for computed property "b".').toHaveBeenWarned()
   })
 
   it('watching computed', done => {
@@ -204,16 +189,5 @@ describe('Options computed', () => {
       }
     })
     expect(`computed property "a" is already defined as a prop`).toHaveBeenWarned()
-  })
-
-  it('rethrow computed error', () => {
-    const vm = new Vue({
-      computed: {
-        a: () => {
-          throw new Error('rethrow')
-        }
-      }
-    })
-    expect(() => vm.a).toThrowError('rethrow')
   })
 })

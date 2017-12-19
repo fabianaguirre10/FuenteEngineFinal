@@ -1,6 +1,5 @@
 /* @flow */
 
-import { createPromiseCallback } from '../util'
 import { createBundleRunner } from './create-bundle-runner'
 import type { Renderer, RenderOptions } from '../create-renderer'
 import { createSourceMapConsumers, rewriteErrorTrace } from './source-map-support'
@@ -28,9 +27,7 @@ type RenderBundle = {
   modules?: { [filename: string]: Array<string> };
 };
 
-export function createBundleRendererCreator (
-  createRenderer: (options?: RenderOptions) => Renderer
-) {
+export function createBundleRendererCreator (createRenderer: () => Renderer) {
   return function createBundleRenderer (
     bundle: string | RenderBundle,
     rendererOptions?: RenderOptions = {}
@@ -86,17 +83,11 @@ export function createBundleRendererCreator (
     )
 
     return {
-      renderToString: (context?: Object, cb: any) => {
+      renderToString: (context?: Object, cb: (err: ?Error, res: ?string) => void) => {
         if (typeof context === 'function') {
           cb = context
           context = {}
         }
-
-        let promise
-        if (!cb) {
-          ({ promise, cb } = createPromiseCallback())
-        }
-
         run(context).catch(err => {
           rewriteErrorTrace(err, maps)
           cb(err)
@@ -108,8 +99,6 @@ export function createBundleRendererCreator (
             })
           }
         })
-
-        return promise
       },
 
       renderToStream: (context?: Object) => {

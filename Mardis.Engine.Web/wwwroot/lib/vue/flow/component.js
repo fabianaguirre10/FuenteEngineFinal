@@ -20,7 +20,6 @@ declare interface Component {
   // public properties
   $el: any; // so that we can attach __vue__ to it
   $data: Object;
-  $props: Object;
   $options: ComponentOptions;
   $parent: Component | void;
   $root: Component;
@@ -29,9 +28,8 @@ declare interface Component {
   $slots: { [key: string]: Array<VNode> };
   $scopedSlots: { [key: string]: () => VNodeChildren };
   $vnode: VNode; // the placeholder node for the component in parent's render tree
-  $attrs: { [key: string] : string };
-  $listeners: { [key: string]: Function | Array<Function> };
   $isServer: boolean;
+  $props: Object;
 
   // public methods
   $mount: (el?: Element | string, hydrating?: boolean) => Component;
@@ -66,39 +64,21 @@ declare interface Component {
   _isDestroyed: boolean;
   _isBeingDestroyed: boolean;
   _vnode: ?VNode; // self root node
-  _staticTrees: ?Array<VNode>; // v-once cached trees
+  _staticTrees: ?Array<VNode>;
   _hasHookEvent: boolean;
   _provided: ?Object;
 
   // private methods
-
   // lifecycle
   _init: Function;
   _mount: (el?: Element | void, hydrating?: boolean) => Component;
   _update: (vnode: VNode, hydrating?: boolean) => void;
-
   // rendering
   _render: () => VNode;
-
-  __patch__: (
-    a: Element | VNode | void,
-    b: VNode,
-    hydrating?: boolean,
-    removeOnly?: boolean,
-    parentElm?: any,
-    refElm?: any
-  ) => any;
-
+  __patch__: (a: Element | VNode | void, b: VNode) => any;
   // createElement
-
   // _c is internal that accepts `normalizationType` optimization hint
-  _c: (
-    vnode?: VNode,
-    data?: VNodeData,
-    children?: VNodeChildren,
-    normalizationType?: number
-  ) => VNode | void;
-
+  _c: (vnode?: VNode, data?: VNodeData, children?: VNodeChildren, normalizationType?: number) => VNode | void;
   // renderStatic
   _m: (index: number, isInFor?: boolean) => VNode | VNodeChildren;
   // markOnce
@@ -122,24 +102,12 @@ declare interface Component {
   // renderSlot
   _t: (name: string, fallback: ?Array<VNode>, props: ?Object) => ?Array<VNode>;
   // apply v-bind object
-  _b: (data: any, tag: string, value: any, asProp: boolean, isSync?: boolean) => VNodeData;
-  // apply v-on object
-  _g: (data: any, value: any) => VNodeData;
+  _b: (data: any, value: any, asProp?: boolean) => VNodeData;
   // check custom keyCode
-  _k: (eventKeyCode: number, key: string, builtInAlias?: number | Array<number>, eventKeyName?: string) => ?boolean;
+  _k: (eventKeyCode: number, key: string, builtInAlias: number | Array<number> | void) => boolean;
   // resolve scoped slots
-  _u: (scopedSlots: ScopedSlotsData, res?: Object) => { [key: string]: Function };
-
-  // SSR specific
-  _ssrNode: Function;
-  _ssrList: Function;
-  _ssrEscape: Function;
-  _ssrAttr: Function;
-  _ssrAttrs: Function;
-  _ssrDOMProps: Function;
-  _ssrClass: Function;
-  _ssrStyle: Function;
+  _u: (scopedSlots: Array<[string, Function]>) => { [key: string]: Function };
 
   // allow dynamic method registration
   [key: string]: any
-};
+}

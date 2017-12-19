@@ -1,10 +1,7 @@
 import Vue from 'vue'
 import { hasSymbol } from 'core/util/env'
-import testObjectOption from '../../../helpers/test-object-option'
 
 describe('Options props', () => {
-  testObjectOption('props')
-
   it('array syntax', done => {
     const vm = new Vue({
       data: {
@@ -209,17 +206,6 @@ describe('Options props', () => {
       expect('Expected Array').toHaveBeenWarned()
     })
 
-    it('primitive wrapper objects', () => {
-      /* eslint-disable no-new-wrappers */
-      makeInstance(new String('s'), String)
-      expect(console.error.calls.count()).toBe(0)
-      makeInstance(new Number(1), Number)
-      expect(console.error.calls.count()).toBe(0)
-      makeInstance(new Boolean(true), Boolean)
-      expect(console.error.calls.count()).toBe(0)
-      /* eslint-enable no-new-wrappers */
-    })
-
     if (hasSymbol) {
       it('symbol', () => {
         makeInstance(Symbol('foo'), Symbol)
@@ -347,7 +333,7 @@ describe('Options props', () => {
         }
       }
     }).$mount()
-    expect(`Method "a" has already been defined as a prop`).toHaveBeenWarned()
+    expect(`method "a" has already been defined as a prop`).toHaveBeenWarned()
     expect(`Avoid mutating a prop directly`).toHaveBeenWarned()
   })
 
@@ -504,29 +490,11 @@ describe('Options props', () => {
   })
 
   it('warn reserved props', () => {
-    const specialAttrs = ['key', 'ref', 'slot', 'is', 'slot-scope']
     new Vue({
-      props: specialAttrs
-    })
-    specialAttrs.forEach(attr => {
-      expect(`"${attr}" is a reserved attribute`).toHaveBeenWarned()
-    })
-  })
-
-  it('should warn about misspelled keys in prop validation object', () => {
-    new Vue({
-      template: '<test></test>',
-      components: {
-        test: {
-          template: '<div></div>',
-          props: {
-            value: { reqquired: true },
-            count: { deafult: 1 }
-          }
-        }
+      props: {
+        key: String
       }
-    }).$mount()
-    expect(`Invalid key "reqquired" in validation rules object for prop "value".`).toHaveBeenWarned()
-    expect(`Invalid key "deafult" in validation rules object for prop "count".`).toHaveBeenWarned()
+    })
+    expect(`"key" is a reserved attribute`).toHaveBeenWarned()
   })
 })

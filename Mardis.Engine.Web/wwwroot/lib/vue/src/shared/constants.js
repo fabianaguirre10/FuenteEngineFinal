@@ -16,6 +16,5 @@ export const LIFECYCLE_HOOKS = [
   'beforeDestroy',
   'destroyed',
   'activated',
-  'deactivated',
-  'errorCaptured'
+  'deactivated'
 ]

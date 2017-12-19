@@ -13,14 +13,29 @@ import { makeMap, no } from 'shared/util'
 import { isNonPhrasingTag } from 'web/compiler/util'
 
 // Regular Expressions for parsing tags and attributes
-const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/
+const singleAttrIdentifier = /([^\s"'<>/=]+)/
+const singleAttrAssign = /(?:=)/
+const singleAttrValues = [
+  // attr value double quotes
+  /"([^"]*)"+/.source,
+  // attr value, single quotes
+  /'([^']*)'+/.source,
+  // attr value, no quotes
+  /([^\s"'=<>`]+)/.source
+]
+const attribute = new RegExp(
+  '^\\s*' + singleAttrIdentifier.source +
+  '(?:\\s*(' + singleAttrAssign.source + ')' +
+  '\\s*(?:' + singleAttrValues.join('|') + '))?'
+)
+
 // could use https://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-QName
 // but for Vue templates we can enforce a simple charset
 const ncname = '[a-zA-Z_][\\w\\-\\.]*'
-const qnameCapture = `((?:${ncname}\\:)?${ncname})`
-const startTagOpen = new RegExp(`^<${qnameCapture}`)
+const qnameCapture = '((?:' + ncname + '\\:)?' + ncname + ')'
+const startTagOpen = new RegExp('^<' + qnameCapture)
 const startTagClose = /^\s*(\/?)>/
-const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`)
+const endTag = new RegExp('^<\\/' + qnameCapture + '[^>]*>')
 const doctype = /^<!DOCTYPE [^>]+>/i
 const comment = /^<!--/
 const conditionalComment = /^<!\[/
@@ -39,15 +54,10 @@ const decodingMap = {
   '&gt;': '>',
   '&quot;': '"',
   '&amp;': '&',
-  '&#10;': '\n',
-  '&#9;': '\t'
+  '&#10;': '\n'
 }
 const encodedAttr = /&(?:lt|gt|quot|amp);/g
-const encodedAttrWithNewLines = /&(?:lt|gt|quot|amp|#10|#9);/g
-
-// #5992
-const isIgnoreNewlineTag = makeMap('pre,textarea', true)
-const shouldIgnoreFirstNewline = (tag, html) => tag && isIgnoreNewlineTag(tag) && html[0] === '\n'
+const encodedAttrWithNewLines = /&(?:lt|gt|quot|amp|#10);/g
 
 function decodeAttr (value, shouldDecodeNewlines) {
   const re = shouldDecodeNewlines ? encodedAttrWithNewLines : encodedAttr
@@ -72,9 +82,6 @@ export function parseHTML (html, options) {
           const commentEnd = html.indexOf('-->')
 
           if (commentEnd >= 0) {
-            if (options.shouldKeepComment) {
-              options.comment(html.substring(4, commentEnd))
-            }
             advance(commentEnd + 3)
             continue
           }
@@ -110,9 +117,6 @@ export function parseHTML (html, options) {
         const startTagMatch = parseStartTag()
         if (startTagMatch) {
           handleStartTag(startTagMatch)
-          if (shouldIgnoreFirstNewline(lastTag, html)) {
-            advance(1)
-          }
           continue
         }
       }
@@ -145,18 +149,15 @@ export function parseHTML (html, options) {
         options.chars(text)
       }
     } else {
-      let endTagLength = 0
-      const stackedTag = lastTag.toLowerCase()
-      const reStackedTag = reCache[stackedTag] || (reCache[stackedTag] = new RegExp('([\\s\\S]*?)(</' + stackedTag + '[^>]*>)', 'i'))
-      const rest = html.replace(reStackedTag, function (all, text, endTag) {
+      var stackedTag = lastTag.toLowerCase()
+      var reStackedTag = reCache[stackedTag] || (reCache[stackedTag] = new RegExp('([\\s\\S]*?)(</' + stackedTag + '[^>]*>)', 'i'))
+      var endTagLength = 0
+      var rest = html.replace(reStackedTag, function (all, text, endTag) {
         endTagLength = endTag.length
         if (!isPlainTextElement(stackedTag) && stackedTag !== 'noscript') {
           text = text
             .replace(/<!--([\s\S]*?)-->/g, '$1')
             .replace(/<!\[CDATA\[([\s\S]*?)]]>/g, '$1')
-        }
-        if (shouldIgnoreFirstNewline(stackedTag, text)) {
-          text = text.slice(1)
         }
         if (options.chars) {
           options.chars(text)
@@ -221,7 +222,7 @@ export function parseHTML (html, options) {
       }
     }
 
-    const unary = isUnaryTag(tagName) || !!unarySlash
+    const unary = isUnaryTag(tagName) || tagName === 'html' && lastTag === 'head' || !!unarySlash
 
     const l = match.attrs.length
     const attrs = new Array(l)
@@ -234,12 +235,12 @@ export function parseHTML (html, options) {
         if (args[5] === '') { delete args[5] }
       }
       const value = args[3] || args[4] || args[5] || ''
-      const shouldDecodeNewlines = tagName === 'a' && args[1] === 'href'
-        ? options.shouldDecodeNewlinesForHref
-        : options.shouldDecodeNewlines
       attrs[i] = {
         name: args[1],
-        value: decodeAttr(value, shouldDecodeNewlines)
+        value: decodeAttr(
+          value,
+          options.shouldDecodeNewlines
+        )
       }
     }
 
@@ -278,9 +279,8 @@ export function parseHTML (html, options) {
       // Close all the open elements, up the stack
       for (let i = stack.length - 1; i >= pos; i--) {
         if (process.env.NODE_ENV !== 'production' &&
-          (i > pos || !tagName) &&
-          options.warn
-        ) {
+            (i > pos || !tagName) &&
+            options.warn) {
           options.warn(
             `tag <${stack[i].tag}> has no matching end tag.`
           )

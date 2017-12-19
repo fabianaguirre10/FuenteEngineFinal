@@ -44,25 +44,21 @@ export let animationEndEvent = 'animationend'
 if (hasTransition) {
   /* istanbul ignore if */
   if (window.ontransitionend === undefined &&
-    window.onwebkittransitionend !== undefined
-  ) {
+    window.onwebkittransitionend !== undefined) {
     transitionProp = 'WebkitTransition'
     transitionEndEvent = 'webkitTransitionEnd'
   }
   if (window.onanimationend === undefined &&
-    window.onwebkitanimationend !== undefined
-  ) {
+    window.onwebkitanimationend !== undefined) {
     animationProp = 'WebkitAnimation'
     animationEndEvent = 'webkitAnimationEnd'
   }
 }
 
 // binding to window is necessary to make hot reload work in IE in strict mode
-const raf = inBrowser
-  ? window.requestAnimationFrame
-    ? window.requestAnimationFrame.bind(window)
-    : setTimeout
-  : /* istanbul ignore next */ fn => fn()
+const raf = inBrowser && window.requestAnimationFrame
+  ? window.requestAnimationFrame.bind(window)
+  : setTimeout
 
 export function nextFrame (fn: Function) {
   raf(() => {
@@ -71,11 +67,8 @@ export function nextFrame (fn: Function) {
 }
 
 export function addTransitionClass (el: any, cls: string) {
-  const transitionClasses = el._transitionClasses || (el._transitionClasses = [])
-  if (transitionClasses.indexOf(cls) < 0) {
-    transitionClasses.push(cls)
-    addClass(el, cls)
-  }
+  (el._transitionClasses || (el._transitionClasses = [])).push(cls)
+  addClass(el, cls)
 }
 
 export function removeTransitionClass (el: any, cls: string) {

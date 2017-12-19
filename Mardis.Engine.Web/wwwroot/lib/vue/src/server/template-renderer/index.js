@@ -15,7 +15,6 @@ type TemplateRendererOptions = {
   inject?: boolean;
   clientManifest?: ClientManifest;
   shouldPreload?: (file: string, type: string) => boolean;
-  shouldPrefetch?: (file: string, type: string) => boolean;
 };
 
 export type ClientManifest = {
@@ -31,7 +30,7 @@ export type ClientManifest = {
   }
 };
 
-type Resource = {
+type PreloadFile = {
   file: string;
   extension: string;
   fileWithoutQuery: string;
@@ -44,8 +43,8 @@ export default class TemplateRenderer {
   parsedTemplate: ParsedTemplate | null;
   publicPath: string;
   clientManifest: ClientManifest;
-  preloadFiles: Array<Resource>;
-  prefetchFiles: Array<Resource>;
+  preloadFiles: Array<string>;
+  prefetchFiles: Array<string>;
   mapFiles: AsyncFileMapper;
 
   constructor (options: TemplateRendererOptions) {
@@ -61,9 +60,9 @@ export default class TemplateRenderer {
     if (options.clientManifest) {
       const clientManifest = this.clientManifest = options.clientManifest
       this.publicPath = clientManifest.publicPath.replace(/\/$/, '')
-      // preload/prefetch directives
-      this.preloadFiles = (clientManifest.initial || []).map(normalizeFile)
-      this.prefetchFiles = (clientManifest.async || []).map(normalizeFile)
+      // preload/prefetch drectives
+      this.preloadFiles = clientManifest.initial
+      this.prefetchFiles = clientManifest.async
       // initial async chunk mapping
       this.mapFiles = createMapper(clientManifest)
     }
@@ -126,10 +125,19 @@ export default class TemplateRenderer {
     return this.renderPreloadLinks(context) + this.renderPrefetchLinks(context)
   }
 
-  getPreloadFiles (context: Object): Array<Resource> {
+  getPreloadFiles (context: Object): Array<PreloadFile> {
     const usedAsyncFiles = this.getUsedAsyncFiles(context)
     if (this.preloadFiles || usedAsyncFiles) {
-      return (this.preloadFiles || []).concat(usedAsyncFiles || [])
+      return (this.preloadFiles || []).concat(usedAsyncFiles || []).map(file => {
+        const withoutQuery = file.replace(/\?.*/, '')
+        const extension = path.extname(withoutQuery).slice(1)
+        return {
+          file,
+          extension,
+          fileWithoutQuery: withoutQuery,
+          asType: getPreloadType(extension)
+        }
+      })
     } else {
       return []
     }
@@ -137,10 +145,10 @@ export default class TemplateRenderer {
 
   renderPreloadLinks (context: Object): string {
     const files = this.getPreloadFiles(context)
-    const shouldPreload = this.options.shouldPreload
     if (files.length) {
       return files.map(({ file, extension, fileWithoutQuery, asType }) => {
         let extra = ''
+        const shouldPreload = this.options.shouldPreload
         // by default, we only preload scripts or css
         if (!shouldPreload && asType !== 'script' && asType !== 'style') {
           return ''
@@ -166,20 +174,17 @@ export default class TemplateRenderer {
   }
 
   renderPrefetchLinks (context: Object): string {
-    const shouldPrefetch = this.options.shouldPrefetch
     if (this.prefetchFiles) {
       const usedAsyncFiles = this.getUsedAsyncFiles(context)
       const alreadyRendered = file => {
-        return usedAsyncFiles && usedAsyncFiles.some(f => f.file === file)
+        return usedAsyncFiles && usedAsyncFiles.some(f => f === file)
       }
-      return this.prefetchFiles.map(({ file, fileWithoutQuery, asType }) => {
-        if (shouldPrefetch && !shouldPrefetch(fileWithoutQuery, asType)) {
+      return this.prefetchFiles.map(file => {
+        if (!alreadyRendered(file)) {
+          return `<link rel="prefetch" href="${this.publicPath}/${file}" as="script">`
+        } else {
           return ''
         }
-        if (alreadyRendered(file)) {
-          return ''
-        }
-        return `<link rel="prefetch" href="${this.publicPath}/${file}">`
       }).join('')
     } else {
       return ''
@@ -191,32 +196,29 @@ export default class TemplateRenderer {
       contextKey = 'state',
       windowKey = '__INITIAL_STATE__'
     } = options || {}
-    const state = serialize(context[contextKey], { isJSON: true })
-    const autoRemove = process.env.NODE_ENV === 'production'
-      ? ';(function(){var s;(s=document.currentScript||document.scripts[document.scripts.length-1]).parentNode.removeChild(s);}());'
-      : ''
     return context[contextKey]
-      ? `<script>window.${windowKey}=${state}${autoRemove}</script>`
+      ? `<script>window.${windowKey}=${
+          serialize(context[contextKey], { isJSON: true })
+        }</script>`
       : ''
   }
 
   renderScripts (context: Object): string {
     if (this.clientManifest) {
-      const initial = this.preloadFiles
+      const initial = this.clientManifest.initial
       const async = this.getUsedAsyncFiles(context)
       const needed = [initial[0]].concat(async || [], initial.slice(1))
-      return needed.filter(({ file }) => isJS(file)).map(({ file }) => {
-        return `<script src="${this.publicPath}/${file}" defer></script>`
+      return needed.filter(isJS).map(file => {
+        return `<script src="${this.publicPath}/${file}"></script>`
       }).join('')
     } else {
       return ''
     }
   }
 
-  getUsedAsyncFiles (context: Object): ?Array<Resource> {
-    if (!context._mappedFiles && context._registeredComponents && this.mapFiles) {
-      const registered = Array.from(context._registeredComponents)
-      context._mappedFiles = this.mapFiles(registered).map(normalizeFile)
+  getUsedAsyncFiles (context: Object): ?Array<string> {
+    if (!context._mappedfiles && context._registeredComponents && this.mapFiles) {
+      context._mappedFiles = this.mapFiles(Array.from(context._registeredComponents))
     }
     return context._mappedFiles
   }
@@ -230,17 +232,6 @@ export default class TemplateRenderer {
   }
 }
 
-function normalizeFile (file: string): Resource {
-  const withoutQuery = file.replace(/\?.*/, '')
-  const extension = path.extname(withoutQuery).slice(1)
-  return {
-    file,
-    extension,
-    fileWithoutQuery: withoutQuery,
-    asType: getPreloadType(extension)
-  }
-}
-
 function getPreloadType (ext: string): string {
   if (ext === 'js') {
     return 'script'
@@ -251,7 +242,7 @@ function getPreloadType (ext: string): string {
   } else if (/woff2?|ttf|otf|eot/.test(ext)) {
     return 'font'
   } else {
-    // not exhausting all possibilities here, but above covers common cases
+    // not exhausting all possbilities here, but above covers common cases
     return ''
   }
 }

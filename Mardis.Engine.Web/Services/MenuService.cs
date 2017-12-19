@@ -29,7 +29,10 @@ namespace Mardis.Engine.Web.Services
         private async void SetCurrentUser()
         {
             var userId = _userManager.GetUserId(_httpContextAccessor.HttpContext.User);
-            ApplicationUserCurrent = await _userManager.FindByIdAsync(userId);
+            if (userId != null)
+            {
+                ApplicationUserCurrent = await _userManager.FindByIdAsync(userId);
+            }
         }
 
         List<Menu> IMenuService.GetMenuList()

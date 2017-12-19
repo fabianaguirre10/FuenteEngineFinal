@@ -11,9 +11,7 @@ console.log('--- renderToString --- ')
 const self = (global || root)
 self.s = self.performance.now()
 
-renderToString(new Vue(gridComponent), (err, res) => {
-  if (err) throw err
-  // console.log(res)
+renderToString(new Vue(gridComponent), () => {
   console.log('Complete time: ' + (self.performance.now() - self.s).toFixed(2) + 'ms')
   console.log()
 })

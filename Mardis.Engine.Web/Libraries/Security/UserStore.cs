@@ -72,11 +72,14 @@ namespace Mardis.Engine.Web.Libraries.Security
 
         public Task<ApplicationUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
+            if (userId != null)
+            {
+                var userBdd = _userBusiness.GetUserById(new Guid(userId));
+                var user = new ApplicationUser(userBdd);
 
-            var userBdd = _userBusiness.GetUserById(new Guid(userId));
-            var user = new ApplicationUser(userBdd);
-
-            return Task.FromResult(user);
+                return Task.FromResult(user);
+            }
+            return null;
         }
 
         public Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
