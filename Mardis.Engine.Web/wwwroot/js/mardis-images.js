@@ -1,4 +1,28 @@
-﻿function openModal() {
+﻿var styles = {
+
+    width: "600px",
+    height: "500px"
+};
+var styles_none = {
+
+    width: "auto",
+    height: "auto"
+};
+var styles_rig = {
+
+    width: "580px",
+    height: "425px"
+};
+var styles_left = {
+
+    width: "540px",
+    height: "400px"
+};
+var styles_initialPosition = {
+
+    width: "100%"
+};
+function openModal() {
     document.getElementById("myModal").style.display = "block";
 }
 
@@ -40,15 +64,22 @@ function showSlides(n) {
 
 function rotateRight() {
     $(".mySlides").removeClass("image_left");
+
     $(".mySlides").addClass("image_right");
+    $(".imgClass").css(styles_rig);
+    $("#modalClass").css(styles);
 }
 
 function rotateLeft() {
     $(".mySlides").removeClass("image_right");
     $(".mySlides").addClass("image_left");
+    $(".imgClass").css(styles_left);
+    $("#modalClass").css(styles);
 }
 
 function initialPosition() {
     $(".mySlides").removeClass("image_right");
     $(".mySlides").removeClass("image_left");
+    $(".imgClass").css(styles_initialPosition);
+    $("#modalClass").css(styles_none);
 }

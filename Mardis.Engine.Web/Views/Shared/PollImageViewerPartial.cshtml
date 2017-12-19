@@ -33,7 +33,7 @@
                             
             <div id="myModal" class="modalmardis">
                 <span class="close cursor" onclick="closeModal()">&times;</span>
-                <div class="modal-content" style="background: black;">
+                <div class="modal-content" style="background: black;"  id="modalClass">
 
                     <div class="mySlides" v-for="(image, index) in poll.BranchImages">
                         <div class="numbertext">{{index + ' / ' + poll.BranchImages.length}}</div>
@@ -46,7 +46,7 @@
                         </div>
                                     
                         <div v-if="image.NameFile.indexOf('.jpg')>=0 || image.NameFile.indexOf('.bmp')>=0 || image.NameFile.indexOf('.gif')>=0 || image.NameFile.indexOf('.png')>=0">
-                            <img v-bind:src="image.UrlImage" style="width: 100%">
+                            <img v-bind:src="image.UrlImage" style="width: 100%"  class="imgClass">
                         </div>
                                     
                         <div v-if="image.NameFile.indexOf('.mp3')>=0 || image.NameFile.indexOf('.wav')>=0 || image.NameFile.indexOf('.amr')>=0 || image.NameFile.indexOf('.wav')>=0 || image.NameFile.indexOf('.aac')>=0 || image.NameFile.indexOf('.m4a')>=0">
