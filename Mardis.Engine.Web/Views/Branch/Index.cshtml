@@ -63,7 +63,7 @@
             {
                 <tr id="@("row" + branch.Id)">
                     <td>
-                        <input  @*id="@branch.Id"*@ onchange="SelectItem(this);" type="checkbox" value="@branch.Id"/>
+                        <input  id="@branch.Id" onchange="SelectItem(this);" type="checkbox" value="@branch.Id"/>
                     </td>
                     <td>@branch.Code</td>
                     <td>@branch.ExternalCode</td>

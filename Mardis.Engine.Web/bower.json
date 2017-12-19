@@ -36,7 +36,8 @@
     "x-editable": "1.5.1",
     "vue": "v2.5.11",
     "bootstrap": "v3.3.7",
-    "jQuery": "3.2.1"
+    "jQuery": "3.2.1",
+    "store2": "2.5.9"
   },
   "resolutions": {
     "bootstrap": "v3.3.7",
