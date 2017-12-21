@@ -1,21 +1,16 @@
 /* @flow */
 
+import Vue from '../instance/index'
 import config from '../config'
 import { warn } from './debug'
 import { set } from '../observer/index'
-
-import {
-  ASSET_TYPES,
-  LIFECYCLE_HOOKS
-} from 'shared/constants'
-
 import {
   extend,
+  isPlainObject,
   hasOwn,
   camelize,
   capitalize,
-  isBuiltInTag,
-  isPlainObject
+  isBuiltInTag
 } from 'shared/util'
 
 /**
@@ -130,7 +125,7 @@ function mergeHook (
     : parentVal
 }
 
-LIFECYCLE_HOOKS.forEach(hook => {
+config._lifecycleHooks.forEach(hook => {
   strats[hook] = mergeHook
 })
 
@@ -148,7 +143,7 @@ function mergeAssets (parentVal: ?Object, childVal: ?Object): Object {
     : res
 }
 
-ASSET_TYPES.forEach(function (type) {
+config._assetTypes.forEach(function (type) {
   strats[type + 's'] = mergeAssets
 })
 
@@ -274,20 +269,21 @@ export function mergeOptions (
   if (process.env.NODE_ENV !== 'production') {
     checkComponents(child)
   }
-
-  if (typeof child === 'function') {
-    child = child.options
-  }
-
   normalizeProps(child)
   normalizeDirectives(child)
   const extendsFrom = child.extends
   if (extendsFrom) {
-    parent = mergeOptions(parent, extendsFrom, vm)
+    parent = typeof extendsFrom === 'function'
+      ? mergeOptions(parent, extendsFrom.options, vm)
+      : mergeOptions(parent, extendsFrom, vm)
   }
   if (child.mixins) {
     for (let i = 0, l = child.mixins.length; i < l; i++) {
-      parent = mergeOptions(parent, child.mixins[i], vm)
+      let mixin = child.mixins[i]
+      if (mixin.prototype instanceof Vue) {
+        mixin = mixin.options
+      }
+      parent = mergeOptions(parent, mixin, vm)
     }
   }
   const options = {}

@@ -12,8 +12,6 @@ import {
   handleError
 } from '../util/index'
 
-import type { ISet } from '../util/index'
-
 let uid = 0
 
 /**
@@ -34,8 +32,8 @@ export default class Watcher {
   active: boolean;
   deps: Array<Dep>;
   newDeps: Array<Dep>;
-  depIds: ISet;
-  newDepIds: ISet;
+  depIds: Set;
+  newDepIds: Set;
   getter: Function;
   value: any;
 
@@ -244,7 +242,7 @@ function traverse (val: any) {
   _traverse(val, seenObjects)
 }
 
-function _traverse (val: any, seen: ISet) {
+function _traverse (val: any, seen: Set) {
   let i, keys
   const isA = Array.isArray(val)
   if ((!isA && !isObject(val)) || !Object.isExtensible(val)) {

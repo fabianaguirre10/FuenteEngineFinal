@@ -1,14 +1,14 @@
 /* @flow */
 
+const HTMLStream = require('vue-ssr-html-stream')
+
 import RenderStream from './render-stream'
-import TemplateRenderer from './template-renderer/index'
 import { createWriteFunction } from './write'
 import { createRenderFunction } from './render'
-import type { ClientManifest } from './template-renderer/index'
 
 export type Renderer = {
-  renderToString: (component: Component, context: any, cb: any) => void;
-  renderToStream: (component: Component, context?: Object) => stream$Readable;
+  renderToString: (component: Component, cb: (err: ?Error, res: ?string) => void) => void;
+  renderToStream: (component: Component) => stream$Readable;
 };
 
 type RenderCache = {
@@ -23,11 +23,7 @@ export type RenderOptions = {
   isUnaryTag?: Function;
   cache?: RenderCache;
   template?: string;
-  inject?: boolean;
   basedir?: string;
-  shouldPreload?: Function;
-  clientManifest?: ClientManifest;
-  runInNewContext?: boolean | 'once';
 };
 
 export function createRenderer ({
@@ -35,41 +31,25 @@ export function createRenderer ({
   directives = {},
   isUnaryTag = (() => false),
   template,
-  inject,
-  cache,
-  shouldPreload,
-  clientManifest
+  cache
 }: RenderOptions = {}): Renderer {
   const render = createRenderFunction(modules, directives, isUnaryTag, cache)
-  const templateRenderer = new TemplateRenderer({
-    template,
-    inject,
-    shouldPreload,
-    clientManifest
-  })
+  const parsedTemplate = template && HTMLStream.parseTemplate(template)
 
   return {
     renderToString (
       component: Component,
-      context: any,
-      done: any
+      done: (err: ?Error, res: ?string) => any,
+      context?: ?Object
     ): void {
-      if (typeof context === 'function') {
-        done = context
-        context = {}
-      }
-      if (context) {
-        templateRenderer.bindRenderFns(context)
-      }
       let result = ''
       const write = createWriteFunction(text => {
         result += text
-        return false
       }, done)
       try {
-        render(component, write, context, () => {
-          if (template) {
-            result = templateRenderer.renderSync(result, context)
+        render(component, write, () => {
+          if (parsedTemplate) {
+            result = HTMLStream.renderTemplate(parsedTemplate, result, context)
           }
           done(null, result)
         })
@@ -80,23 +60,23 @@ export function createRenderer ({
 
     renderToStream (
       component: Component,
-      context?: Object
+      context?: ?Object
     ): stream$Readable {
-      if (context) {
-        templateRenderer.bindRenderFns(context)
-      }
       const renderStream = new RenderStream((write, done) => {
-        render(component, write, context, done)
+        render(component, write, done)
       })
-      if (!template) {
+      if (!parsedTemplate) {
         return renderStream
       } else {
-        const templateStream = templateRenderer.createStream(context)
-        renderStream.on('error', err => {
-          templateStream.emit('error', err)
+        const htmlStream = new HTMLStream({
+          template: parsedTemplate,
+          context
         })
-        renderStream.pipe(templateStream)
-        return templateStream
+        renderStream.on('error', err => {
+          htmlStream.emit('error', err)
+        })
+        renderStream.pipe(htmlStream)
+        return htmlStream
       }
     }
   }

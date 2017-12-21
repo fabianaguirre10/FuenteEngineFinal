@@ -277,7 +277,22 @@ namespace Mardis.Engine.Web.Controllers
                 return null;
             }
         }
-
+        [HttpPost]
+        public JsonResult SaveAnswerQuestion(String AnswerQuestion,String fintransaccion)
+        {
+            try
+            {
+                var model = JSonConvertUtil.Deserialize<List<MyTaskViewAnswer>>(AnswerQuestion);
+                if (model == null) return null;
+                _taskCampaignBusiness.CrearAnswerQuestion(model, ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId), ApplicationUserCurrent.ProfileId, fintransaccion);
+                return Json(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), ex.Message);
+                return null;
+            }
+        }
         #endregion
 
         public void LoadSelectItems()

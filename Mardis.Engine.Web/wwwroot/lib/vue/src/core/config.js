@@ -1,12 +1,6 @@
 /* @flow */
 
-import {
-  no,
-  noop,
-  identity
-} from 'shared/util'
-
-import { LIFECYCLE_HOOKS } from 'shared/constants'
+import { no, noop, identity } from 'shared/util'
 
 export type Config = {
   // user
@@ -18,20 +12,19 @@ export type Config = {
   errorHandler: ?(err: Error, vm: Component, info: string) => void;
   ignoredElements: Array<string>;
   keyCodes: { [key: string]: number | Array<number> };
-
   // platform
   isReservedTag: (x?: string) => boolean;
-  isReservedAttr: (x?: string) => boolean;
   parsePlatformTagName: (x: string) => string;
   isUnknownElement: (x?: string) => boolean;
   getTagNamespace: (x?: string) => string | void;
   mustUseProp: (tag: string, type: ?string, name: string) => boolean;
-
-  // legacy
+  // internal
+  _assetTypes: Array<string>;
   _lifecycleHooks: Array<string>;
+  _maxUpdateCount: number;
 };
 
-export default ({
+const config: Config = {
   /**
    * Option merge strategies (used in core/util/options)
    */
@@ -79,12 +72,6 @@ export default ({
   isReservedTag: no,
 
   /**
-   * Check if an attribute is reserved so that it cannot be used as a component
-   * prop. This is platform-dependent and may be overwritten.
-   */
-  isReservedAttr: no,
-
-  /**
    * Check if a tag is an unknown element.
    * Platform-dependent.
    */
@@ -107,7 +94,34 @@ export default ({
   mustUseProp: no,
 
   /**
-   * Exposed for legacy reasons
+   * List of asset types that a component can own.
    */
-  _lifecycleHooks: LIFECYCLE_HOOKS
-}: Config)
+  _assetTypes: [
+    'component',
+    'directive',
+    'filter'
+  ],
+
+  /**
+   * List of lifecycle hooks.
+   */
+  _lifecycleHooks: [
+    'beforeCreate',
+    'created',
+    'beforeMount',
+    'mounted',
+    'beforeUpdate',
+    'updated',
+    'beforeDestroy',
+    'destroyed',
+    'activated',
+    'deactivated'
+  ],
+
+  /**
+   * Max circular updates allowed in a scheduler flush cycle.
+   */
+  _maxUpdateCount: 100
+}
+
+export default config

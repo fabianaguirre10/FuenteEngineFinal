@@ -69,7 +69,6 @@ export interface RenderContext {
   slots(): any;
   data: VNodeData;
   parent: Vue;
-  injections: any
 }
 
 export interface PropOptions {

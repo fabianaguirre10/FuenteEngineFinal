@@ -1,16 +1,9 @@
 /* @flow */
 
+import { once, isObject, toNumber } from 'shared/util'
 import { inBrowser, isIE9, warn } from 'core/util/index'
 import { mergeVNodeHook } from 'core/vdom/helpers/index'
 import { activeInstance } from 'core/instance/lifecycle'
-
-import {
-  once,
-  isDef,
-  isUndef,
-  isObject,
-  toNumber
-} from 'shared/util'
 
 import {
   nextFrame,
@@ -24,18 +17,18 @@ export function enter (vnode: VNodeWithData, toggleDisplay: ?() => void) {
   const el: any = vnode.elm
 
   // call leave callback now
-  if (isDef(el._leaveCb)) {
+  if (el._leaveCb) {
     el._leaveCb.cancelled = true
     el._leaveCb()
   }
 
   const data = resolveTransition(vnode.data.transition)
-  if (isUndef(data)) {
+  if (!data) {
     return
   }
 
   /* istanbul ignore if */
-  if (isDef(el._enterCb) || el.nodeType !== 1) {
+  if (el._enterCb || el.nodeType !== 1) {
     return
   }
 
@@ -174,18 +167,18 @@ export function leave (vnode: VNodeWithData, rm: Function) {
   const el: any = vnode.elm
 
   // call enter callback now
-  if (isDef(el._enterCb)) {
+  if (el._enterCb) {
     el._enterCb.cancelled = true
     el._enterCb()
   }
 
   const data = resolveTransition(vnode.data.transition)
-  if (isUndef(data)) {
+  if (!data) {
     return rm()
   }
 
   /* istanbul ignore if */
-  if (isDef(el._leaveCb) || el.nodeType !== 1) {
+  if (el._leaveCb || el.nodeType !== 1) {
     return
   }
 
@@ -212,7 +205,7 @@ export function leave (vnode: VNodeWithData, rm: Function) {
       : duration
   )
 
-  if (process.env.NODE_ENV !== 'production' && isDef(explicitLeaveDuration)) {
+  if (process.env.NODE_ENV !== 'production' && explicitLeaveDuration != null) {
     checkDuration(explicitLeaveDuration, 'leave', vnode)
   }
 
@@ -249,7 +242,7 @@ export function leave (vnode: VNodeWithData, rm: Function) {
     }
     // record leaving element
     if (!vnode.data.show) {
-      (el.parentNode._pending || (el.parentNode._pending = {}))[(vnode.key: any)] = vnode
+      (el.parentNode._pending || (el.parentNode._pending = {}))[vnode.key] = vnode
     }
     beforeLeave && beforeLeave(el)
     if (expectsCSS) {
@@ -302,11 +295,9 @@ function isValidDuration (val) {
  * - a plain function (.length)
  */
 function getHookArgumentsLength (fn: Function): boolean {
-  if (isUndef(fn)) {
-    return false
-  }
+  if (!fn) return false
   const invokerFns = fn.fns
-  if (isDef(invokerFns)) {
+  if (invokerFns) {
     // invoker
     return getHookArgumentsLength(
       Array.isArray(invokerFns)
@@ -319,7 +310,7 @@ function getHookArgumentsLength (fn: Function): boolean {
 }
 
 function _enter (_: any, vnode: VNodeWithData) {
-  if (vnode.data.show !== true) {
+  if (!vnode.data.show) {
     enter(vnode)
   }
 }
@@ -329,7 +320,7 @@ export default inBrowser ? {
   activate: _enter,
   remove (vnode: VNode, rm: Function) {
     /* istanbul ignore else */
-    if (vnode.data.show !== true) {
+    if (!vnode.data.show) {
       leave(vnode, rm)
     } else {
       rm()

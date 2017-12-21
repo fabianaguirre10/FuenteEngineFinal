@@ -530,7 +530,7 @@ namespace Mardis.Engine.Business.MardisCore
                 string resultado = ex.Message;
                 throw;
             }
-           
+
         }
 
         private void FinalizeTask(MyTaskViewModel model, Guid idAccount, Guid idProfile, Guid idUser)
@@ -552,6 +552,26 @@ namespace Mardis.Engine.Business.MardisCore
             }
         }
 
+        private void FinalizeTaskAnswerQuestion(Guid idtask, Guid idAccount, Guid idProfile, Guid idUser)
+        {
+            var profile = _profileDao.GetById(idProfile);
+
+            switch (_typeUserBusiness.Get(profile.IdTypeUser).Name)
+            {
+                case CTypePerson.PersonMerchant:
+                case CTypePerson.PersonSupervisor:
+                case CTypePerson.PersonSystem:
+                    _taskCampaignDao.ImplementTask(idtask, _statusTaskBusiness.GeStatusTaskByName(CTask.StatusImplemented).Id,
+                        idAccount);
+                    break;
+                case CTypePerson.PersonValidator:
+                    _taskCampaignDao.ValidateTask(idtask, _statusTaskBusiness.GeStatusTaskByName(CTask.StatusImplemented).Id,
+                        idAccount, idUser);
+                    break;
+            }
+        }
+
+
         private void CreateAnswer(MyTaskViewModel model, Guid idAccount, MyTaskServicesDetailViewModel serviceDetail)
         {
             foreach (var question in serviceDetail.QuestionCollection)
@@ -570,6 +590,92 @@ namespace Mardis.Engine.Business.MardisCore
                 }
             }
         }
+
+        /*Crear Respuestas para gurdar informacion por seccion*/
+        #region AnswerQuestion
+        public void CrearAnswerQuestion(List<MyTaskViewAnswer> model, Guid idAccount, Guid IdMerchant, Guid idProfile, String fintransaccion)
+        {
+            Guid idtask = new Guid();
+            foreach (var answerquestion in model)
+            {
+                if (answerquestion.estado == "P")
+                {
+                    try
+                    {
+                        var question = _questionDao.GetOne(answerquestion.Idquestion);
+
+
+                        var answer = new Answer()
+                        {
+                            IdAccount = idAccount,
+                            IdMerchant = IdMerchant,
+                            IdQuestion = question.Id,
+                            IdServiceDetail = question.IdServiceDetail,
+                            IdTask = answerquestion.idTask,
+                            DateCreation = DateTime.Now,
+                            StatusRegister = CStatusRegister.Active
+                        };
+                        if (answerquestion.idAnswer != "")
+                        {
+                            if (Guid.Parse(answerquestion.idAnswer) != Guid.Empty)
+                                answer.Id = Guid.Parse(answerquestion.idAnswer);
+                            else
+                            {
+                                var answ = _answerDao.GetAnswerValueByQuestion(answerquestion.Idquestion, answerquestion.idTask, idAccount);
+                                if (answ != null)
+                                    answer.Id = answ.Id;
+                            }
+                        }
+                        answer = _answerDao.InsertOrUpdate(answer);
+
+                        if (question.TypePoll.Code == CTypePoll.One)
+                            CreateAnswerDetailQuestion(answer, question, Guid.Parse(answerquestion.AnswerQuestion), "");
+                        if (question.TypePoll.Code == CTypePoll.Open)
+                            CreateAnswerDetailQuestion(answer, question, Guid.Parse("00000000-0000-0000-0000-000000000000"), answerquestion.AnswerQuestion);
+                        answerquestion.idAnswer = answer.Id.ToString();
+                        answerquestion.estado = "I";
+                        idtask = answerquestion.idTask;
+                    }
+                    catch (Exception ex)
+                    {
+                        answerquestion.idAnswer = "";
+                        answerquestion.estado = "E";
+                    }
+                }
+            }
+            if (fintransaccion == "ok")
+            {
+                FinalizeTaskAnswerQuestion(idtask, idAccount, idProfile, IdMerchant);
+            }
+
+        }
+        private void CreateAnswerDetailQuestion(Answer answer, Question question, Guid Idquestiondetail, String Answervalue)
+        {
+            Context.AnswerDetails.RemoveRange(Context.AnswerDetails.Where(a => a.Answer.Id == answer.Id));
+            Context.SaveChanges();
+            var answerDetail =
+                new AnswerDetail()
+                {
+                    DateCreation = DateTime.Now,
+                    IdAnswer = answer.Id,
+                    CopyNumber = 0,
+                    StatusRegister = CStatusRegister.Active
+                };
+
+
+            if (Idquestiondetail != Guid.Empty)
+            {
+                answerDetail.IdQuestionDetail = Idquestiondetail;
+            }
+
+            if (question.TypePoll.Code == CTypePoll.Open)
+            {
+                answerDetail.AnswerValue = Answervalue;
+            }
+
+            _answerDetailDao.InsertOrUpdate(answerDetail);
+        }
+        #endregion
 
         private void CreateAnswerDetail(Answer answer, MyTaskQuestionsViewModel question)
         {
@@ -619,6 +725,7 @@ namespace Mardis.Engine.Business.MardisCore
             Context.Answers.RemoveRange(Context.Answers.Where(a => a.IdTask == model.IdTask));
             Context.SaveChanges();
         }
+
 
         private void SaveBranchData(MyTaskViewModel model, Guid idAccount)
         {

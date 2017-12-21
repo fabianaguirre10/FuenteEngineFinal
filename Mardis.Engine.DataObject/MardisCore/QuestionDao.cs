@@ -43,6 +43,8 @@ namespace Mardis.Engine.DataObject.MardisCore
         public Question GetOne(Guid idQuestion)
         {
             var itemReturn = Context.Questions
+                  .Include(q => q.TypePoll)
+                  .Include(q => q.QuestionDetails)
                                     .FirstOrDefault(tb => tb.Id == idQuestion &&
                                                  tb.StatusRegister == CStatusRegister.Active);
 
@@ -97,16 +99,17 @@ namespace Mardis.Engine.DataObject.MardisCore
         public Task<List<Question>> GetCompleteQuestion(Guid idServiceDetail)
         {
             Task<List<Question>> res = null;
-           res =Context.Questions
-                .Include(q => q.TypePoll)
-                .Include(q => q.QuestionDetails)
-                .Where(
-                    q =>
-                        q.IdServiceDetail == idServiceDetail &&
-                        //q.ServiceDetail.Service.IdAccount == idAccount &&
-                        q.StatusRegister == CStatusRegister.Active)
-                .ToListAsync();
-           
+            res = Context.Questions
+                 .Include(q => q.TypePoll)
+                 .Include(q => q.QuestionDetails)
+
+                 .Where(
+                     q =>
+                         q.IdServiceDetail == idServiceDetail &&
+                         //q.ServiceDetail.Service.IdAccount == idAccount &&
+                         q.StatusRegister == CStatusRegister.Active)
+                 .ToListAsync();
+
             return res;
         }
 
@@ -140,6 +143,21 @@ namespace Mardis.Engine.DataObject.MardisCore
 	                            inner join mardiscore.servicedetail c on b.idsection=c.id
 	                            inner join mardiscore.typepoll d on a.idtypepoll=d.id
                             where c.idservice='{idService}'";
+            return Context.Query<MyTaskQuestionsViewModel>(query).ToList();
+        }
+
+        public List<MyTaskQuestionsViewModel> GetQuestionFromIdquestion(Guid idquestion)
+        {
+            var query = $@"select 
+                                a.Id, a.Title,a.[order],d.Code as CodeTypePoll,d.Name as NameTypePoll,a.IdTypePoll,
+                                a.IdserviceDetail,c.SectionTitle, b.[Order] as SectionOrder, c.Id as IdParentSection,
+                                b.SectionTitle as SubSectionTitle, b.GroupName, a.IdTypePoll, d.Name as NamePoll,
+                                d.Code as CodeTypePoll,a.sequence as Sequence
+                            from mardiscore.question a 
+	                            inner join mardiscore.servicedetail b on a.idservicedetail=b.id
+	                            inner join mardiscore.servicedetail c on b.idsection=c.id
+	                            inner join mardiscore.typepoll d on a.idtypepoll=d.id
+                            where a.id='{idquestion}'";
             return Context.Query<MyTaskQuestionsViewModel>(query).ToList();
         }
 

@@ -27,7 +27,7 @@ declare interface Component {
   $refs: { [key: string]: Component | Element | Array<Component | Element> | void };
   $slots: { [key: string]: Array<VNode> };
   $scopedSlots: { [key: string]: () => VNodeChildren };
-  $vnode: VNode; // the placeholder node for the component in parent's render tree
+  $vnode: VNode;
   $isServer: boolean;
   $props: Object;
 
@@ -42,7 +42,7 @@ declare interface Component {
   $once: (event: string, fn: Function) => Component;
   $off: (event?: string | Array<string>, fn?: Function) => Component;
   $emit: (event: string, ...args: Array<mixed>) => Component;
-  $nextTick: (fn: Function) => void | Promise<*>;
+  $nextTick: (fn: Function) => void;
   $createElement: (tag?: string | Component, data?: Object, children?: VNodeChildren) => VNode;
 
   // private properties
@@ -63,7 +63,7 @@ declare interface Component {
   _isMounted: boolean;
   _isDestroyed: boolean;
   _isBeingDestroyed: boolean;
-  _vnode: ?VNode; // self root node
+  _vnode: ?VNode;
   _staticTrees: ?Array<VNode>;
   _hasHookEvent: boolean;
   _provided: ?Object;

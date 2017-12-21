@@ -215,9 +215,11 @@ namespace Mardis.Engine.Business.MardisCore
                                     {
                                         case CTypePoll.One:
                                             question.IdQuestionDetail = (Guid)resp[0].IdQuestionDetail;
+                                            question.IdAnswer = answerquestion[0].Id;
                                             break;
                                         case CTypePoll.Open:
                                             question.Answer = resp[0].AnswerValue;
+                                            question.IdAnswer = answerquestion[0].Id;
                                             break;
                                     }
                                 }

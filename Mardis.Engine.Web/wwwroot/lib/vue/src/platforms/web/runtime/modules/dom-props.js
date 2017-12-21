@@ -1,9 +1,9 @@
 /* @flow */
 
-import { isDef, isUndef, extend, toNumber } from 'shared/util'
+import { extend, toNumber } from 'shared/util'
 
 function updateDOMProps (oldVnode: VNodeWithData, vnode: VNodeWithData) {
-  if (isUndef(oldVnode.data.domProps) && isUndef(vnode.data.domProps)) {
+  if (!oldVnode.data.domProps && !vnode.data.domProps) {
     return
   }
   let key, cur
@@ -11,12 +11,12 @@ function updateDOMProps (oldVnode: VNodeWithData, vnode: VNodeWithData) {
   const oldProps = oldVnode.data.domProps || {}
   let props = vnode.data.domProps || {}
   // clone observed objects, as the user probably wants to mutate it
-  if (isDef(props.__ob__)) {
+  if (props.__ob__) {
     props = vnode.data.domProps = extend({}, props)
   }
 
   for (key in oldProps) {
-    if (isUndef(props[key])) {
+    if (props[key] == null) {
       elm[key] = ''
     }
   }
@@ -35,7 +35,7 @@ function updateDOMProps (oldVnode: VNodeWithData, vnode: VNodeWithData) {
       // non-string values will be stringified
       elm._value = cur
       // avoid resetting cursor position when value is the same
-      const strCur = isUndef(cur) ? '' : String(cur)
+      const strCur = cur == null ? '' : String(cur)
       if (shouldUpdateValue(elm, vnode, strCur)) {
         elm.value = strCur
       }
@@ -68,10 +68,10 @@ function isDirty (elm: acceptValueElm, checkVal: string): boolean {
 function isInputChanged (elm: any, newVal: string): boolean {
   const value = elm.value
   const modifiers = elm._vModifiers // injected by v-model runtime
-  if ((isDef(modifiers) && modifiers.number) || elm.type === 'number') {
+  if ((modifiers && modifiers.number) || elm.type === 'number') {
     return toNumber(value) !== toNumber(newVal)
   }
-  if (isDef(modifiers) && modifiers.trim) {
+  if (modifiers && modifiers.trim) {
     return value.trim() !== newVal.trim()
   }
   return value !== newVal

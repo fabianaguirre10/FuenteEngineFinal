@@ -37,6 +37,7 @@ namespace Mardis.Engine.Web.ViewModel.TaskViewModels
 
         public int SectionOrder { get; set; }
         public int? sequence { get; set; }
+        public int? sequenceSection { get; set ; }
 
         public Guid IdParentSection { get; set; }
 

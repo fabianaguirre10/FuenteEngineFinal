@@ -91,7 +91,7 @@ function genCheckboxModel (
           '$$i=_i($$a,$$v);' +
       `if($$c){$$i<0&&(${value}=$$a.concat($$v))}` +
       `else{$$i>-1&&(${value}=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}` +
-    `}else{${genAssignmentCode(value, '$$c')}}`,
+    `}else{${value}=$$c}`,
     null, true
   )
 }

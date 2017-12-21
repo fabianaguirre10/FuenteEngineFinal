@@ -5,8 +5,7 @@ import { parseHTML } from './html-parser'
 import { parseText } from './text-parser'
 import { parseFilters } from './filter-parser'
 import { cached, no, camelize } from 'shared/util'
-import { genAssignmentCode } from '../directives/model'
-import { isIE, isEdge, isServerRendering } from 'core/util/env'
+import { isIE, isServerRendering } from 'core/util/env'
 
 import {
   addProp,
@@ -31,7 +30,7 @@ const modifierRE = /\.[^.]+/g
 const decodeHTMLCached = cached(decode)
 
 // configurable state
-export let warn
+let warn
 let delimiters
 let transforms
 let preTransforms
@@ -85,7 +84,6 @@ export function parse (
     warn,
     expectHTML: options.expectHTML,
     isUnaryTag: options.isUnaryTag,
-    canBeLeftOpenTag: options.canBeLeftOpenTag,
     shouldDecodeNewlines: options.shouldDecodeNewlines,
     start (tag, attrs, unary) {
       // check namespace.
@@ -252,7 +250,7 @@ export function parse (
       }
       const children = currentParent.children
       text = inPre || text.trim()
-        ? isTextTag(currentParent) ? text : decodeHTMLCached(text)
+        ? decodeHTMLCached(text)
         // only preserve whitespace if its not right after a starting tag
         : preserveWhitespace && children.length ? ' ' : ''
       if (text) {
@@ -463,13 +461,6 @@ function processAttrs (el) {
           if (modifiers.camel) {
             name = camelize(name)
           }
-          if (modifiers.sync) {
-            addHandler(
-              el,
-              `update:${camelize(name)}`,
-              genAssignmentCode(value, `$event`)
-            )
-          }
         }
         if (isProp || platformMustUseProp(el.tag, el.attrsMap.type, name)) {
           addProp(el, name, value)
@@ -478,7 +469,7 @@ function processAttrs (el) {
         }
       } else if (onRE.test(name)) { // v-on
         name = name.replace(onRE, '')
-        addHandler(el, name, value, modifiers, false, warn)
+        addHandler(el, name, value, modifiers)
       } else { // normal directives
         name = name.replace(dirRE, '')
         // parse arg
@@ -533,20 +524,12 @@ function parseModifiers (name: string): Object | void {
 function makeAttrsMap (attrs: Array<Object>): Object {
   const map = {}
   for (let i = 0, l = attrs.length; i < l; i++) {
-    if (
-      process.env.NODE_ENV !== 'production' &&
-      map[attrs[i].name] && !isIE && !isEdge
-    ) {
+    if (process.env.NODE_ENV !== 'production' && map[attrs[i].name] && !isIE) {
       warn('duplicate attribute: ' + attrs[i].name)
     }
     map[attrs[i].name] = attrs[i].value
   }
   return map
-}
-
-// for script (e.g. type="x/template") or style, do not decode content
-function isTextTag (el): boolean {
-  return el.tag === 'script' || el.tag === 'style'
 }
 
 function isForbiddenTag (el): boolean {

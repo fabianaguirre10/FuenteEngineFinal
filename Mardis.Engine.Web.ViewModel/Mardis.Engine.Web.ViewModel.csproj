@@ -305,6 +305,7 @@
     <Compile Include="TaskViewModels\MyTaskQuestionsViewModel.cs" />
     <Compile Include="TaskViewModels\MyTaskServicesDetailViewModel.cs" />
     <Compile Include="TaskViewModels\MyTaskServicesViewModel.cs" />
+    <Compile Include="TaskViewModels\MyTaskViewAnswer.cs" />
     <Compile Include="TaskViewModels\MyTaskViewModel.cs" />
     <Compile Include="TaskViewModels\TaskListItemViewModel.cs" />
     <Compile Include="TaskViewModels\TaskListViewModel.cs" />

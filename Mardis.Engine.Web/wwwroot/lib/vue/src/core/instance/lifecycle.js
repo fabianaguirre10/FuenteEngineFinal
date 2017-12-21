@@ -119,9 +119,6 @@ export function lifecycleMixin (Vue: Class<Component>) {
     }
     // call the last hook...
     vm._isDestroyed = true
-    // invoke destroy hooks on current rendered tree
-    vm.__patch__(vm._vnode, null)
-    // fire destroyed hook
     callHook(vm, 'destroyed')
     // turn off all instance listeners.
     vm.$off()
@@ -129,8 +126,8 @@ export function lifecycleMixin (Vue: Class<Component>) {
     if (vm.$el) {
       vm.$el.__vue__ = null
     }
-    // remove reference to DOM nodes (prevents leak)
-    vm.$options._parentElm = vm.$options._refElm = null
+    // invoke destroy hooks on current rendered tree
+    vm.__patch__(vm._vnode, null)
   }
 }
 
@@ -167,9 +164,8 @@ export function mountComponent (
   if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
     updateComponent = () => {
       const name = vm._name
-      const id = vm._uid
-      const startTag = `vue-perf-start:${id}`
-      const endTag = `vue-perf-end:${id}`
+      const startTag = `start ${name}`
+      const endTag = `end ${name}`
 
       mark(startTag)
       const vnode = vm._render()
@@ -270,7 +266,7 @@ export function activateChildComponent (vm: Component, direct?: boolean) {
   } else if (vm._directInactive) {
     return
   }
-  if (vm._inactive || vm._inactive === null) {
+  if (vm._inactive || vm._inactive == null) {
     vm._inactive = false
     for (let i = 0; i < vm.$children.length; i++) {
       activateChildComponent(vm.$children[i])

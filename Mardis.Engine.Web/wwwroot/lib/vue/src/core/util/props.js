@@ -129,16 +129,23 @@ function assertProp (
   }
 }
 
-const simpleCheckRE = /^(String|Number|Boolean|Function|Symbol)$/
-
+/**
+ * Assert the type of a value
+ */
 function assertType (value: any, type: Function): {
-  valid: boolean;
-  expectedType: string;
+  valid: boolean,
+  expectedType: ?string
 } {
   let valid
-  const expectedType = getType(type)
-  if (simpleCheckRE.test(expectedType)) {
-    valid = typeof value === expectedType.toLowerCase()
+  let expectedType = getType(type)
+  if (expectedType === 'String') {
+    valid = typeof value === (expectedType = 'string')
+  } else if (expectedType === 'Number') {
+    valid = typeof value === (expectedType = 'number')
+  } else if (expectedType === 'Boolean') {
+    valid = typeof value === (expectedType = 'boolean')
+  } else if (expectedType === 'Function') {
+    valid = typeof value === (expectedType = 'function')
   } else if (expectedType === 'Object') {
     valid = isPlainObject(value)
   } else if (expectedType === 'Array') {
@@ -159,7 +166,7 @@ function assertType (value: any, type: Function): {
  */
 function getType (fn) {
   const match = fn && fn.toString().match(/^\s*function (\w+)/)
-  return match ? match[1] : ''
+  return match && match[1]
 }
 
 function isType (type, fn) {

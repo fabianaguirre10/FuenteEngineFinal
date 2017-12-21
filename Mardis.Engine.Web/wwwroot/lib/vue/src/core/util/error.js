@@ -1,15 +1,13 @@
-/* @flow */
-
 import config from '../config'
 import { warn } from './debug'
 import { inBrowser } from './env'
 
-export function handleError (err: Error, vm: any, info: string) {
+export function handleError (err, vm, info) {
   if (config.errorHandler) {
     config.errorHandler.call(null, err, vm, info)
   } else {
     if (process.env.NODE_ENV !== 'production') {
-      warn(`Error in ${info}: "${err.toString()}"`, vm)
+      warn(`Error in ${info}:`, vm)
     }
     /* istanbul ignore else */
     if (inBrowser && typeof console !== 'undefined') {

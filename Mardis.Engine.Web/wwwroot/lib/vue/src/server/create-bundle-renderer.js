@@ -1,7 +1,7 @@
 /* @flow */
 
 import { createBundleRunner } from './create-bundle-runner'
-import type { Renderer, RenderOptions } from '../create-renderer'
+import type { Renderer, RenderOptions } from './create-renderer'
 import { createSourceMapConsumers, rewriteErrorTrace } from './source-map-support'
 
 const fs = require('fs')
@@ -24,16 +24,17 @@ type RenderBundle = {
   entry: string;
   files: { [filename: string]: string; };
   maps: { [filename: string]: string; };
-  modules?: { [filename: string]: Array<string> };
 };
 
 export function createBundleRendererCreator (createRenderer: () => Renderer) {
   return function createBundleRenderer (
     bundle: string | RenderBundle,
-    rendererOptions?: RenderOptions = {}
+    rendererOptions?: RenderOptions
   ) {
+    const renderer = createRenderer(rendererOptions)
+
     let files, entry, maps
-    let basedir = rendererOptions.basedir
+    let basedir = rendererOptions && rendererOptions.basedir
 
     // load bundle if given filepath
     if (
@@ -73,14 +74,7 @@ export function createBundleRendererCreator (createRenderer: () => Renderer) {
       throw new Error(INVALID_MSG)
     }
 
-    const renderer = createRenderer(rendererOptions)
-
-    const run = createBundleRunner(
-      entry,
-      files,
-      basedir,
-      rendererOptions.runInNewContext
-    )
+    const run = createBundleRunner(entry, files, basedir)
 
     return {
       renderToString: (context?: Object, cb: (err: ?Error, res: ?string) => void) => {
@@ -93,10 +87,10 @@ export function createBundleRendererCreator (createRenderer: () => Renderer) {
           cb(err)
         }).then(app => {
           if (app) {
-            renderer.renderToString(app, context, (err, res) => {
+            renderer.renderToString(app, (err, res) => {
               rewriteErrorTrace(err, maps)
               cb(err, res)
-            })
+            }, context)
           }
         })
       },

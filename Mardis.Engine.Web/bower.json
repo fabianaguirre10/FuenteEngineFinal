@@ -36,14 +36,15 @@
     "x-editable": "1.5.1",
     "bootstrap": "v3.3.7",
     "jQuery": "3.2.1",
-    "store2": "2.5.9",
+    "store2": "store#2.5.9",
     "bower": "*",
-    "vue": "v2.2.1"
+    "vue": "v2.2.3"
   },
   "resolutions": {
     "bootstrap": "v3.3.7",
     "jquery": ">=1.8",
     "font-awesome": "4.6.1",
-    "vue": "v2.3.1"
+    "vue": "v2.2.3",
+    "store2": "store#2.5.9"
   }
 }
