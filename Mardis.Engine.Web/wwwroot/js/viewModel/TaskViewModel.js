@@ -18,7 +18,9 @@ function LoadTaskById(idTask) {
         dataType: "json",
         success: function (data) {
             if (data) {
+                store.clearAll();
                 ApplyBindingTaskService(data);
+               
             } else {
                 alert("Error! no se ha encontrado la tarea" + error);
                 window.location.href = "/Task/MyTasks";
@@ -73,7 +75,8 @@ Vue.directive('info-sender', {
                     type: "post",
                     data: {
                         AnswerQuestion: ko.toJSON(infoList),
-                        fintransaccion: "no"
+                        fintransaccion: "no",
+                        Idtask: getParameterByName('idTask')
                     },
                     success: function (data) {
                         if (data) {
@@ -301,12 +304,15 @@ function Save() {
                 }
 
             }
+            var a = infoList;
+
             $.ajax({
                 url: "/Task/SaveAnswerQuestion",
                 type: "post",
                 data: {
                     AnswerQuestion: ko.toJSON(infoList),
-                    fintransaccion: "ok"
+                    fintransaccion: "ok",
+                    Idtask: getParameterByName('idTask')
                 },
                 success: function (data) {
                     if (data) {
@@ -319,6 +325,7 @@ function Save() {
 
                 }
             });
+
             //$.ajax({
             //    url: "/Task/Save",
             //    type: "post",

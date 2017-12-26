@@ -593,7 +593,7 @@ namespace Mardis.Engine.Business.MardisCore
 
         /*Crear Respuestas para gurdar informacion por seccion*/
         #region AnswerQuestion
-        public void CrearAnswerQuestion(List<MyTaskViewAnswer> model, Guid idAccount, Guid IdMerchant, Guid idProfile, String fintransaccion)
+        public void CrearAnswerQuestion(List<MyTaskViewAnswer> model, Guid idAccount, Guid IdMerchant, Guid idProfile, String fintransaccion, String Idtask)
         {
             Guid idtask = new Guid();
             foreach (var answerquestion in model)
@@ -611,7 +611,7 @@ namespace Mardis.Engine.Business.MardisCore
                             IdMerchant = IdMerchant,
                             IdQuestion = question.Id,
                             IdServiceDetail = question.IdServiceDetail,
-                            IdTask = answerquestion.idTask,
+                            IdTask = Guid.Parse(Idtask),
                             DateCreation = DateTime.Now,
                             StatusRegister = CStatusRegister.Active
                         };
@@ -634,7 +634,7 @@ namespace Mardis.Engine.Business.MardisCore
                             CreateAnswerDetailQuestion(answer, question, Guid.Parse("00000000-0000-0000-0000-000000000000"), answerquestion.AnswerQuestion);
                         answerquestion.idAnswer = answer.Id.ToString();
                         answerquestion.estado = "I";
-                        idtask = answerquestion.idTask;
+                        idtask = Guid.Parse(Idtask);
                     }
                     catch (Exception ex)
                     {
@@ -645,7 +645,7 @@ namespace Mardis.Engine.Business.MardisCore
             }
             if (fintransaccion == "ok")
             {
-                FinalizeTaskAnswerQuestion(idtask, idAccount, idProfile, IdMerchant);
+                FinalizeTaskAnswerQuestion(Guid.Parse(Idtask), idAccount, idProfile, IdMerchant);
             }
 
         }

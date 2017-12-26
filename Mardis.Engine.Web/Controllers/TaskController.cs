@@ -278,13 +278,13 @@ namespace Mardis.Engine.Web.Controllers
             }
         }
         [HttpPost]
-        public JsonResult SaveAnswerQuestion(String AnswerQuestion,String fintransaccion)
+        public JsonResult SaveAnswerQuestion(String AnswerQuestion, String fintransaccion, String Idtask)
         {
             try
             {
                 var model = JSonConvertUtil.Deserialize<List<MyTaskViewAnswer>>(AnswerQuestion);
                 if (model == null) return null;
-                _taskCampaignBusiness.CrearAnswerQuestion(model, ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId), ApplicationUserCurrent.ProfileId, fintransaccion);
+                _taskCampaignBusiness.CrearAnswerQuestion(model, ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId), ApplicationUserCurrent.ProfileId, fintransaccion, Idtask);
                 return Json(model);
             }
             catch (Exception ex)
