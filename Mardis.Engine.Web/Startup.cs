@@ -113,8 +113,8 @@ namespace Mardis.Engine.Web
             services.AddDistributedMemoryCache();
 
             services.AddMemoryCache();
-          
-         
+
+            services.AddSession();
 
             services.AddSingleton<RedisCache, RedisCache>();
 
