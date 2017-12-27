@@ -1,5 +1,6 @@
 ﻿using System;
 using Mardis.Engine.DataAccess.MardisSecurity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Mardis.Engine.Web.Libraries.Model

@@ -60,16 +60,24 @@ namespace Mardis.Engine.Web
 
             var sessionTimeOut = Configuration.GetValue<int>("SessionTimeOut");
 
-            services.AddIdentity<ApplicationUser, ApplicationRole>(config =>
-                {
-                    config.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromMinutes(sessionTimeOut);
-                    config.Lockout = new LockoutOptions()
-                    {
-                        DefaultLockoutTimeSpan = TimeSpan.FromHours(2)
-                    };
-                })
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromSeconds(10));
+            services.AddAuthentication()
+                .Services.ConfigureApplicationCookie(options =>
+                {
+                    options.SlidingExpiration = true;
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                });
+
+            // Cookie settings
+
+            services.ConfigureApplicationCookie(options => {
+                options.LoginPath = "/Account/LogIn";
+                options.LogoutPath = "/Account/LogIn";
+            });
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -79,13 +87,7 @@ namespace Mardis.Engine.Web
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = true;
                 options.Password.RequireLowercase = false;
-
                 
-
-                // Cookie settings
-                options.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
-                options.Cookies.ApplicationCookie.LogoutPath = "/Account/Login";
-
                 // User settings
                 options.User.RequireUniqueEmail = true;
                
@@ -111,12 +113,7 @@ namespace Mardis.Engine.Web
             services.AddDistributedMemoryCache();
 
             services.AddMemoryCache();
-            services.AddSession(options =>
-            {
-                // Set a short timeout for easy testing.
-              
-            });
-
+          
          
 
             services.AddSingleton<RedisCache, RedisCache>();
@@ -153,7 +150,7 @@ namespace Mardis.Engine.Web
             app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
             app.UseStaticFiles();
 
-            app.UseIdentity();
+            app.UseAuthentication();
             app.UseDefaultFiles();
 
             app.UseSession();
