@@ -604,7 +604,8 @@ namespace Mardis.Engine.Business.MardisCore
                     {
                         var question = _questionDao.GetOne(answerquestion.Idquestion);
 
-
+                        idtask = Guid.Parse(Idtask);
+                        Idtask = idtask.ToString();
                         var answer = new Answer()
                         {
                             IdAccount = idAccount,
@@ -634,7 +635,7 @@ namespace Mardis.Engine.Business.MardisCore
                             CreateAnswerDetailQuestion(answer, question, Guid.Parse("00000000-0000-0000-0000-000000000000"), answerquestion.AnswerQuestion);
                         answerquestion.idAnswer = answer.Id.ToString();
                         answerquestion.estado = "I";
-                        idtask = Guid.Parse(Idtask);
+
                     }
                     catch (Exception ex)
                     {
