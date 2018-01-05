@@ -88,7 +88,7 @@ namespace Mardis.Engine.Web.Controllers
             {
                 model.IdCampaign = _protectorCampaign.Protect(model.IdCampaign);
             }
-
+            ViewBag.Account = ApplicationUserCurrent.AccountId;
             return View(model);
         }
 
