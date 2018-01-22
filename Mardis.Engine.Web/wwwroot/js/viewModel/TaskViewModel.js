@@ -1,6 +1,7 @@
 ﻿guidEmpty = "00000000-0000-0000-0000-000000000000";
 
 var vueVM;
+var vueVMS;
 var idTask = "";
 var espera = 0;
 
@@ -99,6 +100,62 @@ Vue.directive('info-sender', {
         });
     }
 });
+
+Vue.directive('for-events', {
+    bind: function (el, binding, vnode) {
+        el.addEventListener("change", function () {
+            $.ajax({
+                url: '/Task/SaveAnswerQuestionMultiple',
+                type: "POST",
+                content: "application/json; charset=utf-8",
+                data: {
+                    id: el.id,
+                    value: el.value,
+                    idanswer: el.name
+                    , Idtask: getParameterByName('idTask')
+                },
+                success: function (data) {
+
+                },
+
+                error: function () {
+
+
+                }
+                ,
+                async: true, // La petición es síncrona
+            });
+        });
+
+    }
+      
+});
+
+
+function onToggle(question) {
+ 
+    //$.ajax({
+    //    url: '/Task/SaveAnswerQuestionMultiple',
+    //    type: "POST",
+    //    content: "application/json; charset=utf-8",
+    //    data: {
+    //        id: question.id,
+    //        value: question.value,
+    //        idanswer: question.name
+    //        , Idtask: getParameterByName('idTask')
+    //    },
+    //    success: function (data) {
+
+    //    },
+
+    //    error: function () {
+
+
+    //    }
+    //    ,
+    //    async: true, // La petición es síncrona
+    //});
+}
 function ApplyBindingTaskService(data) {
     vueVM = new Vue({
         el: "#divPoll",

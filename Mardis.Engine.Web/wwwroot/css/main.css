@@ -5973,3 +5973,27 @@ body.lock-screen .user-info {
 .tabs-right > .nav-tabs > li {
     float: none;
 }
+.mardis-check {
+    display: -webkit-inline-box;
+    font-size: 13px;
+    margin: 10px 0px 0px 15px;
+    font-weight: 700;
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+
+.inputcheck {
+    height: 18px;
+    padding: 2px 5px;
+    /* font-size: 10px; */
+    line-height: 1.5;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+    width: 90%;
+    background-color: #cccccc;
+    /* text-align: center; */
+    /* margin: 0; */
+    font-weight: bold;
+    display: block;
+    margin-left: 2px !important;
+}

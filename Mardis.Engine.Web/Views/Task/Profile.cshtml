@@ -264,7 +264,7 @@
 
                                                     <div class="row">
                                                         <div v-for="(question, j) in section.QuestionCollection">
-                                                            <div class="col-sm-3" v-if="question.CodeTypePoll=='ONE'||question.CodeTypePoll=='OPEN'||question.CodeTypePoll=='MANY'">
+                                                            <div class="col-sm-3" v-if="question.CodeTypePoll=='ONE'||question.CodeTypePoll=='OPEN'">
 
                                                                 <div class="panel panel-mardis-grey" style="margin-bottom: 5px;">
                                                                     <div class="panel-heading" style="padding-bottom: 0; padding-top: 0; height: 10%; color: white;">
@@ -272,17 +272,33 @@
                                                                     </div>
                                                                     <div class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
 
-                                                                        <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" v-model="question.Answer" class="form-control inputmardis subsec" v-bind:id="question.Id" v-bind:name="question.IdAnswer"  style="margin: 0 auto; float: none; background-color: #cccccc;" onchange="valorseleccion(this)"/>
+                                                                        <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" v-model="question.Answer" class="form-control inputmardis subsec" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" onchange="valorseleccion(this)" />
 
-                                                                        <select  v-info-sender  v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer"   style="margin: 0 auto; float: none;" onchange="valorseleccion(this)">
+                                                                        <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" v-bind:id="question.Id" v-bind:name="question.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)">
                                                                             <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
                                                                         </select>
+
 
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="col-sm-2" v-if="question.CodeTypePoll=='MANY'" style="text-align:-webkit-center;">
+                                                                <div class="panel panel-mardis-grey" style="margin-bottom: 5px;">
+                                                                    <div class="panel-heading" style="padding-bottom: 0; padding-top: 0; height: 10%; color: white;">
+                                                                        {{question.Title}}
+                                                                    </div>
+
+                                                                    <div v-for="answer in question.QuestionDetailCollection">
+                                                                        <div class="form-check">
+                                                                            <label for="answer.Id" class="col-sm-6 mardis-check">
+                                                                                {{ answer.Answer }}
+                                                                                <input v-for-events type="checkbox" class="inputcheck subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)">
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        
                                                     </div>
                                                     <div v-for="(subSection, ix) in section.Sections">
                                                         @* Cuando se tiene mas de 11 preguntas se cambia el modo de visualización *@
@@ -367,7 +383,7 @@
                                                                         style="margin: 0 auto; float: none;"  onchange="valorseleccion(this)">
                                                                     <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id" >{{answer.Answer}}</option>
                                                                 </select>
-
+                                                            
                                                             </div>
 
                                                             </div>
@@ -451,6 +467,7 @@
            
 
         }
+     
         
         //function multiplicarInputs(text) {
         //    var num = text.value

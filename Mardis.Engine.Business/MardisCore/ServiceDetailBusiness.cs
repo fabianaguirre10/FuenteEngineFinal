@@ -151,6 +151,7 @@ namespace Mardis.Engine.Business.MardisCore
             List<MyTaskServicesDetailViewModel> Section = new List<MyTaskServicesDetailViewModel>();
             foreach (var answer in answers)
             {
+               
                 foreach (var answerDetail in answer.AnswerDetails)
                 {
                     //tomar todas las secciones lista para tomar todas las secciones duplicadas
@@ -179,8 +180,16 @@ namespace Mardis.Engine.Business.MardisCore
                     foreach (var n in Section)
                     {
                         pregunta = new MyTaskQuestionsViewModel();
+                        //if (n.QuestionCollection.Where(x=> x.Id == answer.IdQuestion).FirstOrDefault().CodeTypePoll == CTypePoll.Many)
+                        //{
+                        //    pregunta = n?.QuestionCollection.Where(q => q.QuestionDetailCollection.Where(y=>y.IdQuestion == answer.IdQuestion && y.Id==answerDetail.IdQuestionDetail).First().Id == answerDetail.IdQuestionDetail).FirstOrDefault();                           //pregunta = n?.QuestionCollection.Where(q => q.Id == answer.IdQuestion &&).FirstOrDefault();
+                        //}
+                        //else {
+                        //    pregunta = n?.QuestionCollection.Where(q => q.Id == answer.IdQuestion).FirstOrDefault();
+                        //}
                         pregunta = n?.QuestionCollection.Where(q => q.Id == answer.IdQuestion).FirstOrDefault();
                         questionList.Add(pregunta);
+
 
                     }
 
@@ -200,10 +209,18 @@ namespace Mardis.Engine.Business.MardisCore
                                 answer.Question.sequence = 0;
 
 
-
                             var question = Section[i]?.QuestionCollection.FirstOrDefault(q => q.Id == answer.IdQuestion);
                             var answerquestion = answers.Where(x => x.IdQuestion == questionList[i].Id && (x.sequenceSection == i + 1 || x.sequenceSection == 0 || x.sequenceSection == null)).ToList();
 
+                            //if (answer.Question.TypePoll.Code == CTypePoll.Many) {
+                            //     question = Section[i]?.QuestionCollection.FirstOrDefault(q => q.QuestionDetailCollection.Where(y => y.IdQuestion == answer.IdQuestion && y.Id == answerDetail.IdQuestionDetail).First().Id == answerDetail.IdQuestionDetail);
+                            //     answerquestion = answers.Where(x => x.IdQuestion == questionList[i].Id && (x.sequenceSection == 1)).ToList();
+                            //    answerquestion = answers.Where(x => x.IdQuestion == questionList[i].Id && (x.sequenceSection == 2)).ToList();
+
+                            //}
+                         
+
+                         
                             if (answerquestion.Count() > 0)
                             {
                                 var resp = answerquestion[0].AnswerDetails.ToList();
@@ -221,16 +238,32 @@ namespace Mardis.Engine.Business.MardisCore
                                             question.Answer = resp[0].AnswerValue;
                                             question.IdAnswer = answerquestion[0].Id;
                                             break;
+
+                                        case CTypePoll.Many:
+                                            question.IdQuestionDetail = (Guid)resp[0].IdQuestionDetail;
+                                            question.IdAnswer = answerquestion[0].Id;
+                                            if (question.QuestionDetailCollection.Where(x => x.Id == answerDetail.IdQuestionDetail).Count() > 0)
+                                                question.QuestionDetailCollection.Where(x => x.Id == answerDetail.IdQuestionDetail).First().Checked=true ;
+                                            break;
                                     }
                                 }
                             }
-
+                          
                         }
 
 
 
                     }
                 }
+           
+                if (answer.AnswerDetails.Count() == 0 && answer.Question.TypePoll.Code == CTypePoll.Many)
+                {
+                    var  Sectiona = model.Where(m => m.Id == answer.IdServiceDetail);
+                    var question =Sectiona.FirstOrDefault().QuestionCollection.FirstOrDefault(q => q.Id == answer.IdQuestion);
+                    question.IdAnswer = answer.Id;
+                }
+
+
 
             }
 

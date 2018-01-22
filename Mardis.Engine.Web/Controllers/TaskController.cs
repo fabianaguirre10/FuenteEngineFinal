@@ -293,6 +293,28 @@ namespace Mardis.Engine.Web.Controllers
                 return null;
             }
         }
+        public JsonResult SaveAnswerQuestionMultiple( String id, String value , String idanswer, String Idtask)
+        {
+            try
+            {
+                List<MyTaskViewAnswer> model = new List<MyTaskViewAnswer>();
+                model.Add(new MyTaskViewAnswer {Idquestion = Guid.Parse(value),
+                                                AnswerQuestion = id,
+                                                estado = "P",
+                                                idTask = Guid.Parse(Idtask),
+                                                 idAnswer= idanswer
+                });
+                //JSonConvertUtil.Deserialize<List<MyTaskViewAnswer>>(AnswerQuestion);
+                if (model == null) return null;
+                _taskCampaignBusiness.CrearAnswerQuestion(model, ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId), ApplicationUserCurrent.ProfileId, "ok", Idtask);
+                return Json(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), ex.Message);
+                return null;
+            }
+        }
         #endregion
 
         public void LoadSelectItems()

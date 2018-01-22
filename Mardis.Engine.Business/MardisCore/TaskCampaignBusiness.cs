@@ -598,6 +598,7 @@ namespace Mardis.Engine.Business.MardisCore
             Guid idtask = new Guid();
             foreach (var answerquestion in model)
             {
+
                 if (answerquestion.estado == "P")
                 {
                     try
@@ -614,29 +615,45 @@ namespace Mardis.Engine.Business.MardisCore
                             IdServiceDetail = question.IdServiceDetail,
                             IdTask = Guid.Parse(Idtask),
                             DateCreation = DateTime.Now,
-                            StatusRegister = CStatusRegister.Active
+                            StatusRegister = CStatusRegister.Active,
+                            sequenceSection=0
                         };
                         if (answerquestion.idAnswer != "")
                         {
                             if (Guid.Parse(answerquestion.idAnswer) != Guid.Empty)
+
+                            {
+
                                 answer.Id = Guid.Parse(answerquestion.idAnswer);
+                            }
                             else
                             {
                                 var answ = _answerDao.GetAnswerValueByQuestion(answerquestion.Idquestion, answerquestion.idTask, idAccount);
                                 if (answ != null)
                                     answer.Id = answ.Id;
+
+
+                                if (answ == null)
+                                    answer = _answerDao.InsertOrUpdate(answer);
                             }
+                           
                         }
-                        answer = _answerDao.InsertOrUpdate(answer);
+
+                    
 
                         if (question.TypePoll.Code == CTypePoll.One)
                             CreateAnswerDetailQuestion(answer, question, Guid.Parse(answerquestion.AnswerQuestion), "");
                         if (question.TypePoll.Code == CTypePoll.Open)
                             CreateAnswerDetailQuestion(answer, question, Guid.Parse("00000000-0000-0000-0000-000000000000"), answerquestion.AnswerQuestion);
+                        if (question.TypePoll.Code == CTypePoll.Many)
+                            CreateAnswerDetailQuestionMany(answer, question, Guid.Parse(answerquestion.AnswerQuestion), answerquestion.AnswerQuestion);
                         answerquestion.idAnswer = answer.Id.ToString();
                         answerquestion.estado = "I";
 
                     }
+
+
+
                     catch (Exception ex)
                     {
                         answerquestion.idAnswer = "";
@@ -669,12 +686,39 @@ namespace Mardis.Engine.Business.MardisCore
                 answerDetail.IdQuestionDetail = Idquestiondetail;
             }
 
-            if (question.TypePoll.Code == CTypePoll.Open)
+            if (question.TypePoll.Code == CTypePoll.Open  )
             {
                 answerDetail.AnswerValue = Answervalue;
             }
 
             _answerDetailDao.InsertOrUpdate(answerDetail);
+        }
+        private void CreateAnswerDetailQuestionMany(Answer answer, Question question, Guid Idquestiondetail, String Answervalue)
+        {
+            Context.AnswerDetails.RemoveRange(Context.AnswerDetails.Where(a => a.Answer.Id == answer.Id && a.IdQuestionDetail== Idquestiondetail));
+         var status=   Context.SaveChanges();
+            //if (Context.AnswerDetails.Where(a => a.Answer.Id == answer.Id ).Count() > 0) {
+            //    Context.Answers.RemoveRange(Context.Answers.Where(a => a.Id == answer.Id));
+            //    var status2 = Context.SaveChanges();
+            //}
+            if (status == 0) {
+            var answerDetail =
+                new AnswerDetail()
+                {
+                    DateCreation = DateTime.Now,
+                    IdAnswer = answer.Id,
+                    CopyNumber = 0,
+                    StatusRegister = CStatusRegister.Active
+                };
+
+
+            if (Idquestiondetail != Guid.Empty)
+            {
+                answerDetail.IdQuestionDetail = Idquestiondetail;
+            }
+
+            _answerDetailDao.InsertOrUpdate(answerDetail);
+            }
         }
         #endregion
 
