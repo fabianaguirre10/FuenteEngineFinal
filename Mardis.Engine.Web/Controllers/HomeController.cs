@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Mardis.Engine.Business;
 using Mardis.Engine.Business.MardisCore;
 using Mardis.Engine.Business.MardisSecurity;
@@ -77,9 +78,9 @@ namespace Mardis.Engine.Web.Controllers
             }
 
             ViewBag.CampaignList =
-                _campaignBusiness.GetActiveCampaignsList(ApplicationUserCurrent.AccountId)
+                _campaignBusiness.GetActiveCampaignsListDasboard(ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId))
                     .Select(c => new SelectListItem() { Value = _protectorCampaign.Protect(c.Id.ToString()), Text = c.Name });
-
+                  
             var filters = GetFilters(filterValues, deleteFilter);
 
             model = _homeBusiness.GetDashBoard(model, filters, pageIndex, pageSize, ApplicationUserCurrent.AccountId, _protectorCampaign);
@@ -89,6 +90,7 @@ namespace Mardis.Engine.Web.Controllers
                 model.IdCampaign = _protectorCampaign.Protect(model.IdCampaign);
             }
             ViewBag.Account = ApplicationUserCurrent.AccountId;
+            ViewBag.user = ApplicationUserCurrent.UserId;
             return View(model);
         }
 

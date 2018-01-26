@@ -72,10 +72,28 @@ namespace Mardis.Engine.DataObject.MardisCore
         public List<Campaign> GetActiveCampaignsList(Guid idAccount)
         {
             return Context.Campaigns
-                .Where(c => c.StatusRegister == CStatusRegister.Active &&
-                c.IdAccount == idAccount)
-                .ToList();
+               .Where(c => c.StatusRegister == CStatusRegister.Active &&
+               c.IdAccount == idAccount)
+               .ToList();
+
+
+
         }
+        public List<Campaign> GetActiveCampaignsListDasboard(Guid idAccount, Guid idusr)
+        {
+            var innerJoinQuery =
+             from c in Context.Campaigns
+             join u in Context.UserCanpaign on c.Id equals u.idCanpaign
+             where u.idUser == idusr && c.IdAccount == idAccount
+             select c; //produces flat sequence
+            List<Campaign> result = innerJoinQuery.ToList<Campaign>();
+
+            return result;
+
+
+
+        }
+        
 
         public List<Campaign> GetPaginatedCampaignList(List<FilterValue> filterValues, int pageSize, int pageNumber, Guid idAccount)
         {

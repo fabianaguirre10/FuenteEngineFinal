@@ -20,10 +20,24 @@
             <div class="col-sm-8"><h3>Panel de Productividad</h3> </div>
 
             <div class="col-sm-2">
+                @if (ViewBag.user == "b72beff7-7635-4d75-86da-04b6bb58964f")
+                    {
                 <select id="selCampaigns" class="form-control input-sm" asp-for="IdCampaign" asp-items="@ViewBag.CampaignList">
                     <option>Campaña</option>
+
+                    <option>Unificado</option>
                 </select>
-            </div>
+                    }
+                    else{
+
+                    <select id="selCampaigns" class="form-control input-sm" asp-for="IdCampaign" asp-items="@ViewBag.CampaignList">
+                        <option>Campaña</option>
+
+                    </select>
+                 }
+                 
+                  
+</div>
             <div class="col-sm-2">
                
                 @if (ViewBag.Account == Guid.Parse("22BFD943-8047-445A-BB20-533D69D52C92"))
@@ -84,7 +98,7 @@
             if (p == 'TOPSY BABAHOYO TALLERES XAVIER TITO FLORES') {
                 $(".contenido").append("<img src='/images/cuadro-de-total-censados-1.png' />");
             }
-            if (p == 'Campaña') {
+            if (p == 'Unificado') {
                 $(".contenido").append("<img src='/images/cuadro-de-total-censados.png' />");
             }
 

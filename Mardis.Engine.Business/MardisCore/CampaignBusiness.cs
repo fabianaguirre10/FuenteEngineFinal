@@ -223,10 +223,15 @@ namespace Mardis.Engine.Business.MardisCore
             return itemResult;
         }
 
-        public List<Campaign> GetActiveCampaignsList(Guid idAccount)
+        public List<Campaign> GetActiveCampaignsList(Guid idAccount , Guid idUser)
         {
             return _campaignDao.GetActiveCampaignsList(idAccount);
         }
+        public List<Campaign> GetActiveCampaignsListDasboard(Guid idAccount, Guid idUser)
+        {
+            return _campaignDao.GetActiveCampaignsListDasboard(idAccount, idUser);
+        }
+
 
         public Campaign GetSimpleCampaignById(Guid idCampaign, Guid idAccount)
         {
