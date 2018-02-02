@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Mardis.Engine.Business;
 using Mardis.Engine.Business.MardisCore;
 using Mardis.Engine.DataAccess;
@@ -12,10 +13,12 @@ using Mardis.Engine.Web.Model;
 using Mardis.Engine.Web.ViewModel.ServiceViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Mardis.Engine.Web.Controllers
 {
@@ -31,14 +34,15 @@ namespace Mardis.Engine.Web.Controllers
         private readonly IDataProtector _protector;
         private readonly ChannelBusiness _channelBusiness;
         private readonly QuestionBusiness _questionBusiness;
-
+        private IHostingEnvironment _Env;
         public ServiceController(
                                 UserManager<ApplicationUser> userManager,
                                 IHttpContextAccessor httpContextAccessor,
                                 MardisContext mardisContext,
                                 ILogger<ServiceController> logger,
                                 ILogger<ServicesFilterController> loggerFilter,
-                                IDataProtectionProvider protectorProvider)
+                                IDataProtectionProvider protectorProvider,
+                                IHostingEnvironment envrnmt)
             : base(userManager, httpContextAccessor, mardisContext, logger)
         {
             _typeServiceBusiness = new TypeServiceBusiness(mardisContext);
@@ -48,6 +52,7 @@ namespace Mardis.Engine.Web.Controllers
             _protector = protectorProvider.CreateProtector(GetType().FullName);
             _channelBusiness = new ChannelBusiness(mardisContext);
             _questionBusiness = new QuestionBusiness(mardisContext);
+            _Env = envrnmt;
         }
 
         #endregion
@@ -213,7 +218,46 @@ namespace Mardis.Engine.Web.Controllers
             _serviceBusiness.Save(model, ApplicationUserCurrent.AccountId);
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public JsonResult Massive(IFormFile fileBranch)
+        {
+            try
+            {
+                DateTime localDate = DateTime.Now;
+                if (fileBranch == null)
+                {
 
+                    ViewBag.error = "Verfique si el archivo fue cargado";
+                    return Json("-1");
+                }
+
+                string LogFile = localDate.ToString("yyyyMMddHHmmss");
+                var Filepath = _Env.WebRootPath + "\\form\\ " + LogFile + "_" + fileBranch.FileName.ToString();
+                using (var fileStream = new FileStream(Filepath, FileMode.Create))
+                {
+                    fileBranch.CopyTo(fileStream);
+                }
+
+              var success=  _serviceBusiness.GenerateXml(Filepath, ApplicationUserCurrent.AccountId, "Encuesta Pruebas");
+                return Json(success.ToString());
+            }
+            catch (Exception)
+            {
+
+                return Json("3");
+            }
+           
+        }
+        [HttpGet]
+        public IActionResult xml(Guid idBranch, string returnUrl = null)
+        {
+
+            ViewData["ReturnUrl"] = returnUrl;
+         
+            ViewData[CBranch.IdRegister] = idBranch;
+
+            return View();
+        }
         [HttpGet]
         public IActionResult Delete(string service)
         {

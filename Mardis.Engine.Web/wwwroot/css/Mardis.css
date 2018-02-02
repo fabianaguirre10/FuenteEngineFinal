@@ -1,0 +1,117 @@
+﻿/*Estilos para mardis subir archivos*/
+.mardisStyle {
+    background-color: #fff !important;
+}
+
+
+    .mardisStyle .text-form {
+        margin-left: 33% !important;
+    }
+
+
+    .mardisStyle .btn-primary {
+        background-color: RGBA(213,6,19,1);
+        border-color: RGBA(213,6,19,1);
+        min-height: 35px !important;
+        min-width: 80px !important;
+        margin: 15px;
+        border-radius: 0px !important
+    }
+
+        .mardisStyle .btn-primary:hover {
+            background-color: RGBA(227,6,19,1);
+            border-color: RGBA(227,6,19,1);
+        }
+
+    .mardisStyle .btn-default {
+        background-color: RGBA(102,102,102,1);
+        border-color: RGBA(102,102,102,1);
+        color: white;
+        min-height: 35px !important;
+        min-width: 80px !important;
+        margin: 15px;
+        border-radius: 0px !important
+    }
+
+        .mardisStyle .btn-default:hover {
+            background-color: RGBA(90,90,102,1);
+            border-color: RGBA(102,102,102,1);
+            color: white;
+            min-height: 35px !important;
+            min-width: 80px !important;
+            margin: 15px;
+            border-radius: 0px !important
+        }
+
+
+    .mardisStyle .file-input {
+        text-align: center !important;
+    }
+
+    .mardisStyle .file-footer-buttons {
+        display: none !important;
+    }
+
+.text-gray-m {
+    padding: 30px 0px 0px 30px;
+    color: #adadad;
+    font-weight: 600;
+    font-size: 25px;
+}
+
+.text-black-m {
+    padding: 1px 0px 0px 30px;
+    color: #000;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.mardisStyle .Content-file .text-form {
+    margin-left: 2% !important;
+}
+
+.mardisStyle .Content-file {
+    /*border-right: 10px solid #ecf0f5 !important;*/
+    width: 25%;
+    display: inline-block;
+    margin: 0px !important;
+    /* height: -webkit-fill-available;*/
+}
+
+#content-file {
+    padding: 0px;
+    border: none !important;
+}
+
+.mardisStyle .text-gray-ms {
+    padding: 30px 0px 0px 5px;
+    color: #adadad;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+
+.mardisStyle .Content-load {
+    border-left: 10px solid #ecf0f5 !important;
+    width: 74%;
+    display: inline-block;
+    margin: 0px !important;
+    min-height: 350px;
+}
+
+.mardisStyle .tb-result {
+}
+
+.tb-result, .tb-result th, .tb-result td {
+    border: 1px solid #CCCCCC;
+    text-align: center;
+}
+
+    .tb-result thead {
+        border-bottom: 2px solid;
+        border-color: RGBA(227,6,19,1);
+    }
+
+.form-inline {
+    padding-top: 5% !important;
+}

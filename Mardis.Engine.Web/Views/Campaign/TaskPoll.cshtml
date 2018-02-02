@@ -282,7 +282,7 @@
                                                                         <div class="form-check">
                                                                             <label for="answer.Id" class="col-sm-7 mardis-check">
                                                                                 {{ answer.Answer }}
-                                                                                <input v-for-events type="checkbox" class="inputcheck subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)">
+                                                                                <input v-for-events type="checkbox" class="inputcheck subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)" disabled="disabled">
                                                                             </label>
                                                                         </div>
                                                                     </div>

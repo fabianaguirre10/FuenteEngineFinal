@@ -30,6 +30,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public Guid IdTypePoll { get; set; }
 
         public string HasPhoto { get; set; }
+        public string Aggregatefield { get; set; }
 
         public int CountPhoto { get;set; }
 

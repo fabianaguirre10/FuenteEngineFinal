@@ -22,7 +22,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public string IsNext { get; set; }
         public Guid? IdQuestionLink { get; set; }
         public string IdQuestionRequired { get; set; }
-
+        public string Aggregatefield { get; set; }
         [ForeignKey("IdQuestion")]
         public virtual Question Question { get; set; }
 
