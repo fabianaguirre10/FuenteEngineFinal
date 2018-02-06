@@ -23,6 +23,10 @@ using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using Microsoft.Extensions.Caching.Distributed;
+using iTextSharp;
+using iTextSharp.text;
+using System.IO;
+using iTextSharp.text.pdf;
 
 namespace Mardis.Engine.Business.MardisCore
 {
@@ -616,7 +620,7 @@ namespace Mardis.Engine.Business.MardisCore
                             IdTask = Guid.Parse(Idtask),
                             DateCreation = DateTime.Now,
                             StatusRegister = CStatusRegister.Active,
-                            sequenceSection=0
+                            sequenceSection = 0
                         };
                         if (answerquestion.idAnswer != "")
                         {
@@ -636,10 +640,10 @@ namespace Mardis.Engine.Business.MardisCore
                                 if (answ == null)
                                     answer = _answerDao.InsertOrUpdate(answer);
                             }
-                           
+
                         }
 
-                    
+
 
                         if (question.TypePoll.Code == CTypePoll.One)
                             CreateAnswerDetailQuestion(answer, question, Guid.Parse(answerquestion.AnswerQuestion), "");
@@ -686,7 +690,7 @@ namespace Mardis.Engine.Business.MardisCore
                 answerDetail.IdQuestionDetail = Idquestiondetail;
             }
 
-            if (question.TypePoll.Code == CTypePoll.Open  )
+            if (question.TypePoll.Code == CTypePoll.Open)
             {
                 answerDetail.AnswerValue = Answervalue;
             }
@@ -695,29 +699,29 @@ namespace Mardis.Engine.Business.MardisCore
         }
         private void CreateAnswerDetailQuestionMany(Answer answer, Question question, Guid Idquestiondetail, String Answervalue)
         {
-            Context.AnswerDetails.RemoveRange(Context.AnswerDetails.Where(a => a.Answer.Id == answer.Id && a.IdQuestionDetail== Idquestiondetail));
-         var status=   Context.SaveChanges();
+            Context.AnswerDetails.RemoveRange(Context.AnswerDetails.Where(a => a.Answer.Id == answer.Id && a.IdQuestionDetail == Idquestiondetail));
+            var status = Context.SaveChanges();
             //if (Context.AnswerDetails.Where(a => a.Answer.Id == answer.Id ).Count() > 0) {
             //    Context.Answers.RemoveRange(Context.Answers.Where(a => a.Id == answer.Id));
             //    var status2 = Context.SaveChanges();
             //}
             if (status == 0) {
-            var answerDetail =
-                new AnswerDetail()
+                var answerDetail =
+                    new AnswerDetail()
+                    {
+                        DateCreation = DateTime.Now,
+                        IdAnswer = answer.Id,
+                        CopyNumber = 0,
+                        StatusRegister = CStatusRegister.Active
+                    };
+
+
+                if (Idquestiondetail != Guid.Empty)
                 {
-                    DateCreation = DateTime.Now,
-                    IdAnswer = answer.Id,
-                    CopyNumber = 0,
-                    StatusRegister = CStatusRegister.Active
-                };
+                    answerDetail.IdQuestionDetail = Idquestiondetail;
+                }
 
-
-            if (Idquestiondetail != Guid.Empty)
-            {
-                answerDetail.IdQuestionDetail = Idquestiondetail;
-            }
-
-            _answerDetailDao.InsertOrUpdate(answerDetail);
+                _answerDetailDao.InsertOrUpdate(answerDetail);
             }
         }
         #endregion
@@ -1004,5 +1008,152 @@ namespace Mardis.Engine.Business.MardisCore
 
             return questions.OrderBy(q => q.Order).ToList();
         }
+        #region Impresion
+        public string PrintFile(Guid idtask, string path, Guid idaccount) {
+            try
+            {
+                var task = _taskCampaignDao.Get(idtask, idaccount);
+                var branchImge = _branchImageBusiness.GetBranchesImagesList(task.IdBranch, idaccount,task.IdCampaign);
+                var branch = _branchDao.GetOne(task.IdBranch, idaccount);
+                
+                #region variable de estilo
+
+                var normalFont = FontFactory.GetFont(FontFactory.HELVETICA, 12);
+                var boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12);
+
+                #endregion
+                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+                string pathFull = path + "\\form\\ " + idtask.ToString() + ".pdf";
+                System.IO.FileStream fs = new FileStream(pathFull, FileMode.Create);
+                Document document = new Document(PageSize.A4, 10, 10, 10, 10);
+
+                PdfWriter writer = PdfWriter.GetInstance(document, fs);
+                document.AddAuthor("Mardis Research");
+                document.AddCreator("Mardis Research");
+                document.AddKeywords("Mardis");
+                document.AddSubject("Documentacion Pruebas");
+                document.AddTitle("Documentacion Pruebas");
+                document.AddHeader("Header", "Header Text");
+                document.Open();
+                #region CuerpoPDF
+
+                var logo = iTextSharp.text.Image.GetInstance((path + "\\M_MARDIS.png"));
+                logo.Alignment = 1;
+                logo.ScaleAbsoluteHeight(55);
+                logo.ScaleAbsoluteWidth(55);
+                document.Add(logo);
+
+                // Cabecera
+                PdfPTable table = new PdfPTable(2);
+                //actual width of table in points
+                table.TotalWidth = 216f;
+                table.LockedWidth = true;
+
+                float[] widths = new float[] { 1f, 2f };
+                table.SetWidths(widths);
+                table.HorizontalAlignment = 1;
+                //leave a gap before and after the table
+                table.SpacingBefore = 20f;
+                table.SpacingAfter = 30f;
+                PdfPCell cell = new PdfPCell(new Phrase("Mardis Research", boldFont));
+                PdfPCell cell1 = new PdfPCell(new Phrase("Documentación Engine"));
+                cell.Colspan = 2;
+                cell.Border = 0;
+                cell.HorizontalAlignment = 1;
+                cell1.Colspan = 2;
+                cell1.Border = 0;
+                cell1.HorizontalAlignment = 1;
+                table.AddCell(cell);
+                table.AddCell(cell1);
+                table.HorizontalAlignment = 1;
+                document.Add(table);
+                PdfPTable tbDatos = new PdfPTable(1);
+                tbDatos.AddCell(new PdfPCell(new Phrase("Codigo :" + branch.ExternalCode, boldFont))
+                {
+                    Border = 0,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    PaddingBottom = 40f
+                });
+                //   tbDatos.AddCell(new PdfPCell(new Phrase()) { Border = 0, HorizontalAlignment = Element.ALIGN_LEFT, PaddingBottom = 40f });
+
+                document.Add(tbDatos);
+                PdfPTable tbImge = new PdfPTable(2);
+                foreach (var item in branchImge)
+                {
+                    var img = iTextSharp.text.Image.GetInstance((item.UrlImage));
+                    img.Alignment = 1;
+                    img.ScaleAbsoluteHeight(230);
+                    img.ScaleAbsoluteWidth(216);
+
+                    PdfPCell imageCell = new PdfPCell(img);
+                    imageCell.HorizontalAlignment = 1;
+                    imageCell.VerticalAlignment = 1;
+                    imageCell.PaddingBottom = 10f;
+                    imageCell.Border = 0;
+                    tbImge.AddCell(imageCell);
+
+                }
+                if (branchImge.Count() % 2 != 0)
+                {
+                    PdfPCell imageCell = new PdfPCell();
+                    imageCell.HorizontalAlignment = 1;
+                    imageCell.VerticalAlignment = 1;
+                    imageCell.PaddingBottom = 10f;
+                    imageCell.Border = 0;
+                    tbImge.AddCell(imageCell);
+                }
+                tbImge.PaddingTop = 10f;
+                document.Add(tbImge);
+                PdfPTable tbUB = new PdfPTable(1);
+                PdfPCell cell2 = new PdfPCell(new Phrase("UBICACIÓN", boldFont));
+                cell2.Colspan = 2;
+                cell2.Border = 0;
+                cell2.PaddingBottom = 15f;
+                cell2.HorizontalAlignment = Element.ALIGN_LEFT;
+                tbUB.AddCell(cell2);
+                document.Add(tbUB);
+                var logos = iTextSharp.text.Image.GetInstance(("https://maps.googleapis.com/maps/api/staticmap?zoom=16&size=800x700&maptype=roadmap&markers=color:red%7Clabel:C%7C" + branch.LatitudeBranch + "," + branch.LenghtBranch + "&key=AIzaSyDC0qg4xC1qSUey6eFuhzuA1fJ2ZPFkO84"));
+                logos.Alignment = 1;
+                logos.ScaleAbsoluteHeight(300);
+                logos.ScaleAbsoluteWidth(300);
+                document.Add(logos);
+                BaseColor grey = new BaseColor(128, 128, 128);
+                iTextSharp.text.Font font = FontFactory.GetFont("Arial", 9, iTextSharp.text.Font.NORMAL, grey);
+                //tbl footer
+                PdfPTable footerTbl = new PdfPTable(1);
+                footerTbl.TotalWidth = document.PageSize.Width;
+
+
+
+                //numero de la page
+
+                //Chunk myFooter = new Chunk("Página " + (document.PageNumber), FontFactory.GetFont(FontFactory.HELVETICA_OBLIQUE, 8, grey));
+                //PdfPCell footer = new PdfPCell(new Phrase(myFooter));
+                //footer.Border = iTextSharp.text.Rectangle.NO_BORDER;
+                //footer.HorizontalAlignment = Element.ALIGN_CENTER;
+                //footerTbl.AddCell(footer);
+
+
+                footerTbl.WriteSelectedRows(0, -1, 0, (document.BottomMargin + 80), writer.DirectContent);
+
+                document.Close();
+
+                writer.Close();
+
+                fs.Close();
+                return pathFull;
+            }
+            catch (Exception ex)
+            {
+           
+                return "";
+            }
+         
+            #endregion
+
+
+        }
+
+        #endregion
     }
 }

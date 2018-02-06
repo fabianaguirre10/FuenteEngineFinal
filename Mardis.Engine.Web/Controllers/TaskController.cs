@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Memory;
 using Mardis.Engine.Web.App_code;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Mardis.Engine.Web.Controllers
 {
@@ -45,7 +46,7 @@ namespace Mardis.Engine.Web.Controllers
         private readonly QuestionDetailBusiness _questionDetailBusiness;
         private readonly IMemoryCache _cache;
         private readonly ServiceBusiness _serviceBusiness;
-
+        private IHostingEnvironment _Env;
         public TaskController(UserManager<ApplicationUser> userManager,
                                 IHttpContextAccessor httpContextAccessor,
                                 MardisContext mardisContext,
@@ -53,7 +54,7 @@ namespace Mardis.Engine.Web.Controllers
                                 ILogger<ServicesFilterController> loggeFilter,
                                     IDataProtectionProvider protectorProvider,
                                     IMemoryCache memoryCache,
-                                    RedisCache distributedCache)
+                                    RedisCache distributedCache, IHostingEnvironment envrnmt)
             : base(userManager, httpContextAccessor, mardisContext, logger)
         {
             _protector = protectorProvider.CreateProtector(GetType().FullName);
@@ -69,7 +70,7 @@ namespace Mardis.Engine.Web.Controllers
             _questionDetailBusiness = new QuestionDetailBusiness(mardisContext);
             _cache = memoryCache;
             _serviceBusiness = new ServiceBusiness(mardisContext);
-
+            _Env = envrnmt;
             if (ApplicationUserCurrent.UserId != null)
             {
                 _userId = new Guid(ApplicationUserCurrent.UserId);
@@ -485,5 +486,28 @@ namespace Mardis.Engine.Web.Controllers
             return true;
         }
 
+        #region Impresion
+        [HttpPost]
+        public JsonResult UploadFile(String Idtask)
+        {
+            try
+            {
+                var Filepath = _Env.WebRootPath ;
+                var outs = "";
+                if (Idtask !=null)
+                    outs = _taskCampaignBusiness.PrintFile( Guid.Parse (Idtask), Filepath, ApplicationUserCurrent.AccountId);
+
+
+
+                return Json(outs);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), ex.Message);
+
+                return Json("");
+            }
+        }
+        #endregion
     }
 }

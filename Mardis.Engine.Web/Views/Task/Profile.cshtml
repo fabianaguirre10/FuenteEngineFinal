@@ -80,7 +80,7 @@
 
             <div class="col-sm-9">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-5">
                         <h3 style="margin-top: 0;">
                             {{poll.BranchExternalCode + ' - ' + poll.BranchName}}
                         </h3>
@@ -101,6 +101,13 @@
                         <div class="col-sm-8">
                             <h4>{{poll.Route}}</h4>
                         </div>
+                    </div>
+                    <div class="col-sm-1">
+            
+
+                        <a href="#"  class="btn btn-default" id="btnImprimir" onclick="UploadFilesNew();">
+                            <i class="fa fa-print"></i> Imprimir
+                        </a>
                     </div>
                 </div>
             </div>
@@ -224,7 +231,10 @@
 
     <div id="divPollServices">
         <div class="row">
-            <div class="col-sm-12">@Html.Partial("PollImageViewerPartial")</div>
+
+
+            <div class="col-sm-12 ">@Html.Partial("PollImageViewerPartial")</div>
+
         </div>
         <div class="row" style="height: 350px; overflow-y: scroll">
            
@@ -404,8 +414,14 @@
 
                                         <div class="row">
                                             <div class="col-sm-12" style="text-align: center">
-                                                <button class="btn btn-primary" id="btnGuardar" onclick="Save();">Guardar</button>
-                                                <a class="btn btn-default btn-sm" id="btnCancelar" href="@Url.Action("MyTasks", "Task")">>Salir</a>
+                                                @*<button class="btn btn-primary" id="btnGuardar" onclick="Save();">Guardar</button>*@
+                                                @*<a class="btn btn-default btn-sm" id="btnCancelar" href="@Url.Action("MyTasks", "Task")">Salir</a>*@
+                                                <a href="#" class="btn btn-primary" id="btnGuardar" onclick="Save();">
+                                                    <i class="fa fa-save"></i> Guardar
+                                                </a>
+                                                <a href="@Url.Action("MyTasks", "Task")" class="btn btn-default" id="btnCancelar" style="min-width: 100px;">
+                                                    <i class="clip-exit"></i> Salir  
+                                                </a>
                                             </div>
                                         </div>
 
@@ -468,7 +484,36 @@
 
         }
      
-        
+        function UploadFilesNew() {
+            $.blockUI({ message: "Generando..." });
+               $.ajax({
+                   url: '/Task/UploadFile',
+                type: "POST",
+                content: "application/json; charset=utf-8",
+                data: {
+
+                     Idtask: getParameterByName('idTask')
+                },
+                success: function (data) {
+                    if (data != '' || data != null) {
+
+                        location.href = data;
+
+                    } else { 
+                        bootbox.alert("Existió un problema, comuníquese con el administrador");
+
+                    }
+                    $.unblockUI();
+                },
+
+                error: function () {
+
+                    $.unblockUI();
+                }
+                ,
+                async: true, // La petición es síncrona
+            });
+        }
         //function multiplicarInputs(text) {
         //    var num = text.value
         //    var div = '';

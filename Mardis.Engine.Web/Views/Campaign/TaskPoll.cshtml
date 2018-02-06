@@ -64,7 +64,6 @@
 
         <div style="margin-top: 7px;"></div>
         <hr style="border-color: #CCCCCC; margin-top: 7px;" />
-
         <div class="row">
             <div class="col-sm-1 pull-left" style="text-align: center;">
                 <img src="~/images/ISOTIPO_ENGINE.png" class="img-circle" alt="BranchImage" style="width: 50px;" />
@@ -72,7 +71,7 @@
 
             <div class="col-sm-9">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-5">
                         <h3 style="margin-top: 0;">
                             {{poll.BranchExternalCode + ' - ' + poll.BranchName}}
                         </h3>
@@ -83,7 +82,7 @@
                         </div>
                         <div class="col-sm-8">
                             <select id="selStatusTask" v-model="poll.IdStatusTask" class="form-control input-sm"
-                                    asp-items="ViewBag.StatusList" disabled="disabled"></select>
+                                    asp-items="ViewBag.StatusList"></select>
                         </div>
                     </div>
                     <div class="col-sm-3">
@@ -93,6 +92,13 @@
                         <div class="col-sm-8">
                             <h4>{{poll.Route}}</h4>
                         </div>
+                    </div>
+                    <div class="col-sm-1">
+
+
+                        <a href="#" class="btn btn-default" id="btnImprimir" onclick="UploadFilesNew();">
+                            <i class="fa fa-print"></i> Imprimir
+                        </a>
                     </div>
                 </div>
             </div>
@@ -437,6 +443,36 @@
 
             $("#panelD_" + text.id).html(div);
         }
+        function UploadFilesNew() {
+            $.blockUI({ message: "Generando..." });
+            $.ajax({
+                url: '/Task/UploadFile',
+                type: "POST",
+                content: "application/json; charset=utf-8",
+                data: {
 
+                    Idtask: getParameterByName('idTask')
+                },
+                success: function (data) {
+                    if (data != '' || data != null) {
+
+                        location.href = data;
+
+                    } else { 
+
+                        bootbox.alert("Existió un problema, comuníquese con el administrador");
+
+                    }
+                    $.unblockUI();
+                },
+
+                error: function () {
+
+                    $.unblockUI();
+                }
+                ,
+                async: true, // La petición es síncrona
+            });
+        }
     </script>
 }
