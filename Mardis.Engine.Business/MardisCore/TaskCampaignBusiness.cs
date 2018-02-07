@@ -33,7 +33,7 @@ namespace Mardis.Engine.Business.MardisCore
     public class TaskCampaignBusiness : ABusiness
     {
         #region VARIABLES Y CONSTRUCTORES
-
+        static AzureStorageUtil azureStorageUtil;
         private readonly TaskCampaignDao _taskCampaignDao;
         private readonly QuestionDao _questionDao;
         private readonly QuestionDetailDao _questionDetailDao;
@@ -76,7 +76,7 @@ namespace Mardis.Engine.Business.MardisCore
             _questionDao = new QuestionDao(mardisContext);
             _redisCache = distributedCache;
             _serviceDetailBusiness = new ServiceDetailBusiness(mardisContext);
-
+            azureStorageUtil = new AzureStorageUtil();
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Service, MyTaskServicesViewModel>()
@@ -1012,6 +1012,7 @@ namespace Mardis.Engine.Business.MardisCore
         public string PrintFile(Guid idtask, string path, Guid idaccount) {
             try
             {
+               
                 var task = _taskCampaignDao.Get(idtask, idaccount);
                 var branchImge = _branchImageBusiness.GetBranchesImagesList(task.IdBranch, idaccount,task.IdCampaign);
                 var branch = _branchDao.GetOne(task.IdBranch, idaccount);
@@ -1023,7 +1024,7 @@ namespace Mardis.Engine.Business.MardisCore
 
                 #endregion
                 if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-                string pathFull = path + "\\form\\ " + idtask.ToString() + ".pdf";
+                string pathFull = path + "\\form\\" + idtask.ToString() + ".pdf";
                 System.IO.FileStream fs = new FileStream(pathFull, FileMode.Create);
                 Document document = new Document(PageSize.A4, 10, 10, 10, 10);
 
@@ -1138,10 +1139,31 @@ namespace Mardis.Engine.Business.MardisCore
 
                 document.Close();
 
-                writer.Close();
 
+                writer.Close();
                 fs.Close();
-                return pathFull;
+                //System.IO.FileStream fs2 = fs;
+             
+                //MemoryStream memStream = new MemoryStream();
+                //using (FileStream fss = File.Open(pathFull, FileMode.Open))
+                //{
+
+                //    fss.Position = 0;
+                //    fss.CopyTo(memStream);
+            
+                //}
+                byte[] by2tes = System.IO.File.ReadAllBytes(pathFull);
+                File.WriteAllBytes("myfile.pdf", by2tes);
+
+                MemoryStream stream = new MemoryStream(by2tes);
+                AzureStorageUtil.UploadFromStream(stream, "evidencias", idtask + ".pdf").Wait();
+                var uri = AzureStorageUtil.GetUriFromBlob("evidencias", idtask + ".pdf");
+                // loading bytes from a file is very easy in C#. The built in System.IO.File.ReadAll* methods take care of making sure every byte is read properly.
+                if (File.Exists(pathFull))
+                {
+                    File.Delete(pathFull);
+                }
+                return uri;
             }
             catch (Exception ex)
             {
@@ -1153,7 +1175,27 @@ namespace Mardis.Engine.Business.MardisCore
 
 
         }
+        public byte[] ReadPDF(string filePath)
+        {
+            byte[] buffer;
+            FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            try
+            {
+                int length = (int)fileStream.Length;  // get file length
+                buffer = new byte[length];            // create buffer
+                int count;                            // actual number of bytes read
+                int sum = 0;                          // total number of bytes read
 
+                // read until Read method returns 0 (end of the stream has been reached)
+                while ((count = fileStream.Read(buffer, sum, length - sum)) > 0)
+                    sum += count;  // sum is a buffer offset for next reading
+            }
+            finally
+            {
+                fileStream.Close();
+            }
+            return buffer;
+        }
         #endregion
     }
 }
