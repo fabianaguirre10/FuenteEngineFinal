@@ -33,7 +33,7 @@ namespace Mardis.Engine.Business.MardisCore
     public class TaskCampaignBusiness : ABusiness
     {
         #region VARIABLES Y CONSTRUCTORES
-        static AzureStorageUtil azureStorageUtil;
+        static  AzureStorageUtil azureStorageUtil;
         private readonly TaskCampaignDao _taskCampaignDao;
         private readonly QuestionDao _questionDao;
         private readonly QuestionDetailDao _questionDetailDao;
