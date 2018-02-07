@@ -33,7 +33,7 @@ namespace Mardis.Engine.DataObject
             {
                 var stateRegister = Guid.Empty == entity.Id ? EntityState.Added : EntityState.Modified;
 
-                if (Context.Entry(entity).State == EntityState.Detached && stateRegister == EntityState.Added)
+                if (Context.Entry(entity).State == EntityState.Detached && ( stateRegister == EntityState.Added ||  stateRegister == EntityState.Modified))
                 {
                     Context.Set<T>().Add(entity);
                 }

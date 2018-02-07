@@ -221,6 +221,7 @@
     <Compile Include="MardisCore\Campaign.cs" />
     <Compile Include="MardisCore\CampaignServices.cs" />
     <Compile Include="MardisCore\Channel.cs" />
+    <Compile Include="MardisCore\ColdEquipment_Tospy.cs" />
     <Compile Include="MardisCore\Customer.cs" />
     <Compile Include="MardisCore\FilterController.cs" />
     <Compile Include="MardisCore\FilterCriteria.cs" />

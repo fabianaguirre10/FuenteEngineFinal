@@ -379,7 +379,7 @@ namespace Mardis.Engine.Web.Controllers
         [HttpGet]
         public string GetActiveCampaignsList()
         {
-            var listResult = _campaignBusiness.GetActiveCampaignsList(ApplicationUserCurrent.AccountId);
+            var listResult = _campaignBusiness.GetActiveCampaignsList(ApplicationUserCurrent.AccountId, Guid.Parse( ApplicationUserCurrent.UserId));
 
             return JSonConvertUtil.Convert(listResult);
         }
