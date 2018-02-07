@@ -117,9 +117,7 @@ namespace Mardis.Engine.Web
               
             });
 
-
-
-
+         
 
             services.AddSingleton<RedisCache, RedisCache>();
 

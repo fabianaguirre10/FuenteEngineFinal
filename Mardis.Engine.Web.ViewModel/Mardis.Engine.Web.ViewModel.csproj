@@ -312,12 +312,8 @@
     <Compile Include="TaskViewModels\TaskPerCampaignViewModel.cs" />
     <Compile Include="TaskViewModels\TaskRegisterModelView.cs" />
     <Compile Include="TaskViewModels\TaskRegisterViewModel.cs" />
-    <Compile Include="TaskViewModels\TaskViewQuestionModelMul.cs" />
     <Compile Include="UserViewModels\UserIndexViewModel.cs" />
     <Compile Include="UserViewModels\UserVIewModel.cs" />
-    <Compile Include="Utility\StructXmlModel.cs" />
-    <Compile Include="Utility\StructXmlModelQuestion.cs" />
-    <Compile Include="Utility\StructXmlModelQuestionDetail.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mardis.Engine.DataAccess\Mardis.Engine.DataAccess.csproj">

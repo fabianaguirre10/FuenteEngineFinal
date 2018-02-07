@@ -135,7 +135,6 @@
     <Build Include="Sms.sql" />
     <Build Include="Map.sql" />
     <Build Include="UserCanpaign.sql" />
-    <Build Include="coldEquipment_Tospy.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

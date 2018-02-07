@@ -317,10 +317,6 @@ namespace Mardis.Engine.DataAccess
         /// Tabla de Detalle de Filtros
         /// </summary>
         public DbSet<CoreFilterDetail> CoreFilterDetails { get; set; }
-        /// <summary>
-        /// Tabla de reporteria de equipos de frio
-        /// </summary>
-        public DbSet<ColdEquipment_Tospy> ColdEquipment_Tospys { get; set; }
         public DbSet<Region> Regions { get; set; }
 
         public IEnumerable<T> Query<T>(string query) where T:class

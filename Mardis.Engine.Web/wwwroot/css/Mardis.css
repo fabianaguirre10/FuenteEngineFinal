@@ -100,7 +100,6 @@
 }
 
 .mardisStyle .tb-result {
-    padding: 0px;
 }
 
 .tb-result, .tb-result th, .tb-result td {
@@ -116,6 +115,3 @@
 .form-inline {
     padding-top: 5% !important;
 }
-/*#divImages-sticky-wrapper {
-    height: 40px !important;
-}*/

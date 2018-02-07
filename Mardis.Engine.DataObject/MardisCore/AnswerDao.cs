@@ -49,16 +49,7 @@ namespace Mardis.Engine.DataObject.MardisCore
 
             return itemReturn;
         }
-        //public Guid IdAswer(Guid id)
-        //{
-        //    if (Context.Answers.Where(x => x.IdQuestion == id).Count() > 0) { }
-        //    else {
-        //        return gui;
-        //    }
-        //    var itemReturn = Context.Answers.Where(x => x.IdQuestion == id).First().Id;
 
-            
-        //}
         public List<Answer> GetAnswerListByQuestion(Guid idQuestion, Guid idTask, Guid idAccount)
         {
             var listResult = Context.Answers
