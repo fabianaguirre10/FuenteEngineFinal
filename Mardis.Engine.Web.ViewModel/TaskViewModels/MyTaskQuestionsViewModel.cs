@@ -46,7 +46,7 @@ namespace Mardis.Engine.Web.ViewModel.TaskViewModels
         public string GroupName { get; set; }
 
         public List<MyTaskQuestionDetailsViewModel> QuestionDetailCollection { get; set; }
-        public List<TaskViewQuestionModelMul> DetailQuestion { get; set; }
+     //   public List<TaskViewQuestionModelMul> DetailQuestion { get; set; }
         public override string ToString()
         {
             return SectionTitle + " " + Title;

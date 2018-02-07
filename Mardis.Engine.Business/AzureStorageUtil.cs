@@ -5,7 +5,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 namespace Mardis.Engine.Business
 {
-   public class AzureStorageUtil
+    public class AzureStorageUtil
     {
 
 
