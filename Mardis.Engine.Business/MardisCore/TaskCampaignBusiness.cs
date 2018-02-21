@@ -430,7 +430,8 @@ namespace Mardis.Engine.Business.MardisCore
                     );
                 }
             }
-            return images;
+             var orderImg = images.OrderBy(x => x.Order).ToList();
+            return orderImg; ;
         }
 
         private MyTaskViewModel AnswerTheQuestionsFromTaskPoll(Guid idTask, MyTaskViewModel taskWithPoll)
