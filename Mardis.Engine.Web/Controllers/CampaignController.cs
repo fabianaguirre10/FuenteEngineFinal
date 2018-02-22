@@ -409,12 +409,12 @@ namespace Mardis.Engine.Web.Controllers
             }
         }
 
-        public IActionResult Index(string filterValues, bool deleteFilter, int pageSize = 20, int pageNumber = 1)
+        public IActionResult Index(string filterValues, bool deleteFilter, int pageSize = 10, int pageIndex = 1)
         {
             try
             {
                 var filters = GetFilters(filterValues, deleteFilter);
-                var campaigns = _campaignBusiness.GetPaginatedCampaigns(filters, pageSize, pageNumber, ApplicationUserCurrent.AccountId, Protector, _userId, _typeuser);
+                var campaigns = _campaignBusiness.GetPaginatedCampaigns(filters, pageSize, pageIndex, ApplicationUserCurrent.AccountId, Protector, _userId, _typeuser);
                 return View(campaigns);
             }
             catch (Exception e)

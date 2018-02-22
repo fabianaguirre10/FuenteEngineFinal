@@ -117,11 +117,13 @@ namespace Mardis.Engine.DataObject.MardisCore
 
             strPredicate += GetFilterPredicate(filterValues);
 
+            //var resultList = Context.Campaigns
+            //    .Skip((pageNumber) * pageSize)
+            //    .Take(pageSize)
+            //    .Count(strPredicate);
             var resultList = Context.Campaigns
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .Count(strPredicate);
-
+                 .Where(strPredicate)
+                .Count();
             return resultList;
         }
 
