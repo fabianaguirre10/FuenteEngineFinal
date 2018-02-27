@@ -194,11 +194,14 @@
     <Compile Include="ADao.cs" />
     <Compile Include="CatalogDao.cs" />
     <Compile Include="Dto\TaskPerViewDto.cs" />
+    <Compile Include="IEntityId.cs" />
     <Compile Include="MardisCommon\CodigoReservadosDao.cs" />
     <Compile Include="MardisCommon\MapDao.cs" />
     <Compile Include="MardisCore\AccountDao.cs" />
     <Compile Include="MardisCore\ChannelDao.cs" />
     <Compile Include="MardisCore\CustomerDao.cs" />
+    <Compile Include="MardisCore\DashboardDao.cs" />
+    <Compile Include="MardisCore\EquipmentDao.cs" />
     <Compile Include="MardisCore\FilterControllerDao.cs" />
     <Compile Include="MardisCore\FilterCriteriaDao.cs" />
     <Compile Include="MardisCore\FilterExecutionDao.cs" />

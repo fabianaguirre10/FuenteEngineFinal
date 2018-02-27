@@ -222,6 +222,10 @@
     <Compile Include="MardisCore\CampaignServices.cs" />
     <Compile Include="MardisCore\Channel.cs" />
     <Compile Include="MardisCore\Customer.cs" />
+    <Compile Include="MardisCore\Dashboard.cs" />
+    <Compile Include="MardisCore\Equipament.cs" />
+    <Compile Include="MardisCore\Equipament_status.cs" />
+    <Compile Include="MardisCore\Equipament_type.cs" />
     <Compile Include="MardisCore\FilterController.cs" />
     <Compile Include="MardisCore\FilterCriteria.cs" />
     <Compile Include="MardisCore\FilterExecution.cs" />

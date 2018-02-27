@@ -115,3 +115,93 @@
 .form-inline {
     padding-top: 5% !important;
 }
+/*Style Equipos*/
+.mardis_profile {
+    background-color: white;
+    padding: 15px 8px 15px 8px;
+}
+
+    .mardis_profile .img-circle {
+        border-radius: 100% !important;
+        width: 130px;
+        height: 130px;
+        border: 3px solid #cacaca;
+        padding: 4px;
+    }
+
+    .mardis_profile h3 {
+        font-weight: 700;
+        font-size: 12px;
+        font-family: Helvetica;
+        font-style: normal;
+        font-variant: normal;
+    }
+.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #706a6a !important;
+    border-color: #706a6a !important;
+}
+#table-mardis th {
+    border-bottom: 2px solid #E20613;
+    color: #000;
+}
+#table-mardis thead {
+    border-bottom: 2px solid #E20613;
+}
+/*#table-mardis thead tr {
+    border: 2px solid ##042b78;
+}*/
+#table-mardis {
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+}
+
+    #table-mardis span {
+        color: #527878;
+    }
+
+.form-inline .btn-default {
+    background-color: #666666;
+    border-color: #666666;
+    color: #FFFFFF;
+    min-height: 35px !important;
+    min-width: 40px !important;
+    margin: 15px;
+    font-weight: 500;
+    font-size: 14px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-variant: normal;
+    margin-right: 0px;
+    border-radius: 3px !important
+}
+
+.text-title {
+    font-weight: 700;
+    font-size: 12px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-variant: normal;
+    color: #666666;
+    text-align: right !important
+}
+/*casos preguntas*/
+.caso3 {
+    width: 33%;
+    float: left;
+}
+.caso4 {
+    width: 25%;
+    float: left;
+}
+.caso5 {
+    width: 20%;
+    float: left;
+}
+.inputmardis {
+ 
+    min-width: 70px !important;
+}

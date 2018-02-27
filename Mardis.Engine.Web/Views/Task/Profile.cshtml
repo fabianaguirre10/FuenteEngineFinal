@@ -274,7 +274,7 @@
 
                                                     <div class="row">
                                                         <div v-for="(question, j) in section.QuestionCollection">
-                                                            <div class="col-sm-3" v-if="question.CodeTypePoll=='ONE'||question.CodeTypePoll=='OPEN'">
+                                                            <div class="col-sm-3" v-if="(question.CodeTypePoll=='ONE'||question.CodeTypePoll=='OPEN' ) && question.Weight=='0'">
 
                                                                 <div class="panel panel-mardis-grey" style="margin-bottom: 5px;">
                                                                     <div class="panel-heading" style="padding-bottom: 0; padding-top: 0; height: 10%; color: white;">
@@ -293,8 +293,8 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-2" v-if="question.CodeTypePoll=='MANY'" style="text-align:-webkit-center;">
-                                                                <div class="panel panel-mardis-grey" style="margin-bottom: 5px;">
-                                                                    <div class="panel-heading" style="padding-bottom: 0; padding-top: 0; height: 10%; color: white;">
+                                                                <div class="panel panel-mardis-grey" style="margin-bottom: 1px;">
+                                                                    <div class="panel-heading" style="padding-bottom: 12px; padding-top: 0; height: 10%; color: white;">
                                                                         {{question.Title}}
                                                                     </div>
 
@@ -309,6 +309,67 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+
+                                                        @*Seleccion multiple con preguntas*@
+                                                        <div class="col-sm-8 row">
+                                                            <div v-for="(questionS, jf) in section.QuestionCollection">
+                                                                <div v-if="questionS.CodeTypePoll=='MANY'">
+
+
+
+                                                                    <div v-if="questionS.QuestionDetailCollection.length < 11">
+                                                                        <div v-for="(questionM, jf) in section.QuestionCollection">
+                                                                            <div v-bind:class="{
+                                                                                 'col-sm-6' : questionS.Weight==2,
+                                                                                 'col-sm-8' : questionS.Weight==1,
+                                                                                 'col-sm-4' : questionS.Weight==3,
+                                                                                 'col-sm-3' : questionS.Weight==4,
+                                                                                 'col-sm-2' : questionS.Weight==6,
+                                                                                 'casounasem' : questionS.Weight>
+                                                                                7}" v-if="questionM.CodeTypePoll=='ONE'||questionM.CodeTypePoll=='OPEN'"  style="word-wrap: break-word ;padding-left: 5px; font-size: 10px;padding-left: 5px; text-align: center;">
+                                                                                <div v-if="jf < questionS.Weight+1">
+                                                                                    {{questionM.Title}}
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <br>
+                                                                        <div class="row">
+                                                                            <div v-for="(questionM, jf) in section.QuestionCollection">
+                                                                                <div v-bind:class="{
+                                                                                     'col-sm-6' : questionS.Weight==2,
+                                                                                     'col-sm-8' : questionS.Weight==1,
+                                                                                     'col-sm-4' : questionS.Weight==3,
+                                                                                     'col-sm-3' : questionS.Weight==4,
+                                                                                     'col-sm-2' : questionS.Weight==6,
+                                                                                     'casounasem' : questionS.Weight>
+                                                                                    7}"  v-if="questionM.CodeTypePoll=='ONE'||questionM.CodeTypePoll=='OPEN'">
+
+                                                                                    <div class="panel-heading center" style="margin-bottom: 1px;">
+
+                                                                                        <div class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
+
+                                                                                            <input v-info-sender v-if="questionM.CodeTypePoll=='OPEN'" v-model="questionM.Answer" class="form-control inputmardis subsec" v-bind:id="questionM.Id" v-bind:name="questionM.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" onchange="valorseleccion(this)" />
+
+                                                                                            <select v-info-sender v-if="questionM.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="questionM.IdQuestionDetail" v-bind:id="questionM.Id" v-bind:name="questionM.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)">
+                                                                                                <option v-for="answer in questionM.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
+                                                                                            </select>
+
+
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        @*Seleccion multiple con preguntas*@
+
                                                     </div>
                                                     <div v-for="(subSection, ix) in section.Sections">
                                                         @* Cuando se tiene mas de 11 preguntas se cambia el modo de visualización *@
@@ -326,10 +387,10 @@
                                                                                     {{question.Title}}
                                                                                 </div>
 
-                                                                                <div  v-if="question.CodeTypePoll=='MANY'||question.CodeTypePoll=='OPEN'||question.CodeTypePoll=='ONE'" class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
-                                                                                    <input v-info-sender  v-if="question.CodeTypePoll=='OPEN'"  class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer"  v-bind:id="question.Id" v-bind:name="question.IdAnswer"/>
+                                                                                <div v-if="question.CodeTypePoll=='MANY'||question.CodeTypePoll=='OPEN'||question.CodeTypePoll=='ONE'" class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
+                                                                                    <input v-info-sender v-if="question.CodeTypePoll=='OPEN'" class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" v-bind:id="question.Id" v-bind:name="question.IdAnswer" />
 
-                                                                                    <select v-info-sender  v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" style="margin: 0 auto; float: none;" v-bind:id="question.Id" v-bind:name="question.IdAnswer">
+                                                                                    <select v-info-sender v-if="question.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail" style="margin: 0 auto; float: none;" v-bind:id="question.Id" v-bind:name="question.IdAnswer">
                                                                                         <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
                                                                                     </select>
                                                                                 </div>
@@ -341,20 +402,20 @@
                                                         </div>
 
                                                         @* Cuando se tiene menos de 11 preguntas *@
-                                                  
+
                                                         <div v-if="subSection.QuestionCollection.length > 0">
 
                                                             <br />
 
                                                             <div class="row">
-                                                                <div  class="col-sm-1" ></div>
+                                                                <div class="col-sm-1"></div>
 
                                                                 <div v-for="(question,i) in subSection.QuestionCollection">
                                                                     <div v-if="ix===0">
                                                                         <div v-bind:class="{
-                                                                             'col-sm-6' : subSection.QuestionCollection.length == 1,
-                                                                             'col-sm-5' : subSection.QuestionCollection.length == 2,
-                                                                             'col-sm-3' : subSection.QuestionCollection.length == 3 || (subSection.QuestionCollection.length == 4 && i < 2 ),
+                                                                             'col-sm-6' : subSection.QuestionCollection.length==1,
+                                                                             'col-sm-5' : subSection.QuestionCollection.length==2,
+                                                                             'col-sm-3' : subSection.QuestionCollection.length==3 || (subSection.QuestionCollection.length==4 && i < 2 ),
                                                                              'col-sm-2' : subSection.QuestionCollection.length == 5 || (subSection.QuestionCollection.length == 4 && i > 1 ) || (subSection.QuestionCollection.length == 6 && i < 4 ) || (subSection.QuestionCollection.length == 7 && i <3 ),
                                                                              'casounasem' : subSection.QuestionCollection.length >  7 || (subSection.QuestionCollection.length == 6 && i > 3 ) || (subSection.QuestionCollection.length == 7 && i > 2 )
                                                                              }"
@@ -374,33 +435,33 @@
                                                                 <h6 v-if="subSection.GroupName != section.Sections[ix - 1].GroupName"><strong>{{subSection.GroupName}}</strong></h6>
                                                             </div>
 
-                                                            <div  class="col-sm-1"  style="font-size: 10px;">{{subSection.SectionTitle}}</div>
+                                                            <div class="col-sm-1" style="font-size: 10px;">{{subSection.SectionTitle}}</div>
 
                                                             <div v-for="(question, i) in subSection.QuestionCollection">
-                                                             
+
                                                                 <div v-bind:class="{
-                                                                     'col-sm-6' : subSection.QuestionCollection.length == 1,
-                                                                     'col-sm-5' : subSection.QuestionCollection.length == 2,
-                                                                     'col-sm-3' : subSection.QuestionCollection.length == 3 || (subSection.QuestionCollection.length == 4 && i < 2 ),
+                                                                     'col-sm-6' : subSection.QuestionCollection.length==1,
+                                                                     'col-sm-5' : subSection.QuestionCollection.length==2,
+                                                                     'col-sm-3' : subSection.QuestionCollection.length==3 || (subSection.QuestionCollection.length==4 && i < 2 ),
                                                                      'col-sm-2' : subSection.QuestionCollection.length == 5 || (subSection.QuestionCollection.length == 4 && i > 1 ) || (subSection.QuestionCollection.length == 6 && i < 4 ) || (subSection.QuestionCollection.length == 7 && i <3 ),
                                                                      'casounasem' : subSection.QuestionCollection.length >  7 || (subSection.QuestionCollection.length == 6 && i > 3 ) || (subSection.QuestionCollection.length == 7 && i > 2 )
                                                                  }"
                                                                  style="padding-left: 5px; padding-right: 0;">
-                                                                   
+
                                                                 <input v-info-sender  v-if="question.CodeTypePoll == 'OPEN'"  class="form-control inputmardis subsec" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" v-bind:id="question.Id"  v-bind:name="question.IdAnswer"/>
 
-                                                                <select v-info-sender  v-if="question.CodeTypePoll == 'ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail"  v-bind:id="question.Id" v-bind:name="question.IdAnswer" 
+                                                                <select v-info-sender  v-if="question.CodeTypePoll == 'ONE'" class="inputmardis subsec" v-model="question.IdQuestionDetail"  v-bind:id="question.Id" v-bind:name="question.IdAnswer"
                                                                         style="margin: 0 auto; float: none;"  onchange="valorseleccion(this)">
                                                                     <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id" >{{answer.Answer}}</option>
                                                                 </select>
-                                                            
+
                                                             </div>
 
                                                             </div>
 
                                                         </div>
                                                     </div>
-                                                 
+                                                </div>
                                                 </div>
                                            
                                             </div>

@@ -94,6 +94,13 @@ namespace Mardis.Engine.Web.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public JsonResult GetDashBord(string idCampaign) {
+
+          var id= _protectorCampaign.Unprotect(idCampaign);
+            var url=_campaignBusiness.GetDashOne(Guid.Parse(id)).url;
+            return Json(url);
+        }
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";

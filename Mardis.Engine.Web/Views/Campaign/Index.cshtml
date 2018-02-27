@@ -138,15 +138,14 @@
     <script src="~/js/viewModel/FilterHelper.js"></script>
     <script src="~/js/Helpers/CampaignHelper.js"></script>
     <script>
-
         window.controllerName = "@Model.Properties.ControllerName";
         window.actionName = "@Model.Properties.ActionName";
         var filters = [];
 
         @foreach (var filter in Model.Properties.FilterValues)
         {
-            @:var point = { 'IdFilter': "@filter.IdFilter", 'NameFilter': "@filter.NameFilter", 'Criteria': "@filter.Criteria", 'Value': "@filter.Value", 'Visible': '@filter.Visible' };
-                                    @:filters.push(point);
+            @:var point = { 'IdFilter': "@filter.IdFilter", 'NameFilter': "@filter.NameFilter", 'Criteria': "@filter.Criteria", 'Value': "@filter.Value", 'Visible':'@filter.Visible' };
+            @:filters.push(point);
         }
     </script>
 }

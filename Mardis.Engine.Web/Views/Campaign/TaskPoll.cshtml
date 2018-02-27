@@ -261,7 +261,7 @@
 
                                                     <div class="row">
                                                         <div v-for="(question, j) in section.QuestionCollection">
-                                                            <div class="col-sm-6" v-if="question.CodeTypePoll=='ONE'||question.CodeTypePoll=='OPEN'">
+                                                            <div class="col-sm-6" v-if="(question.CodeTypePoll=='ONE'||question.CodeTypePoll=='OPEN' )&& question.Weight=='0' ">
 
                                                                 <div class="panel panel-mardis-grey" style="margin-bottom: 5px;">
                                                                     <div class="panel-heading" style="padding-bottom: 0; padding-top: 0; height: 10%; color: white;">
@@ -280,7 +280,7 @@
                                                             </div>
                                                             <div class="col-sm-4" v-if="question.CodeTypePoll=='MANY'" style="text-align:-webkit-center;">
                                                                 <div class="panel panel-mardis-grey" style="margin-bottom: 5px;">
-                                                                    <div class="panel-heading" style="padding-bottom: 0; padding-top: 0; height: 10%; color: white;">
+                                                                    <div class="panel-heading" style="padding-bottom: 15px; padding-top: 0; height: 10%; color: white;">
                                                                         {{question.Title}}
                                                                     </div>
 
@@ -294,7 +294,68 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+
+
+
                                                         </div>
+
+                                                        @*Seleccion multiple con preguntas*@
+                                                        <div class="col-sm-6 row " >
+
+                                                            <div v-for="(questionS, jf) in section.QuestionCollection">
+                                                                <div v-if="questionS.CodeTypePoll=='MANY'">
+                                                                    <div v-if="questionS.QuestionDetailCollection.length < 11">
+                                                                        <div class="row"  style="width: 115%;padding-left: 10%;">
+                                                                            <div v-for="(questionM, jf) in section.QuestionCollection">
+                                                                                <div v-bind:class="{
+                                                                                     'col-sm-8' : questionS.Weight==1,
+                                                                                     'col-sm-6' : questionS.Weight==2,
+                                                                                     'caso3' : questionS.Weight==3,
+                                                                                     'caso4' : questionS.Weight==4,
+                                                                                     'caso5' : questionS.Weight==5,
+                                                                                     'casounasem' : questionS.Weight>
+                                                                                    8 } "  v-if="questionM.CodeTypePoll=='ONE'||questionM.CodeTypePoll=='OPEN'"  style="word-wrap: break-word ;padding-left: 5px; font-size: 10px;padding-left: 5px; text-align: center;">
+                                                                                    <div v-if="jf < questionS.Weight+1">
+                                                                                        {{questionM.Title}}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                            <br>
+                                                                            <div class="row" style="width: 100%;     float: left;    position: relative;">
+                                                                                <div v-for="(questionM, jf) in section.QuestionCollection">
+                                                                                    <div v-bind:class="{
+                                                                                         'col-sm-8' : questionS.Weight==1,
+                                                                                         'col-sm-6' : questionS.Weight==2,
+                                                                                         'caso3' : questionS.Weight==3,
+                                                                                         'caso4' : questionS.Weight==4,
+                                                                                         'caso5' : questionS.Weight==5,
+                                                                                         'casounasem' : questionS.Weight>
+                                                                                        7}"  v-if="questionM.CodeTypePoll=='ONE'||questionM.CodeTypePoll=='OPEN'">
+
+                                                                                        <div class="panel-heading center" style="margin-bottom:0px;">
+
+                                                                                            <div class="panel-body" style="padding-bottom: 0px; padding-top: 0px;">
+
+                                                                                                <input v-info-sender v-if="questionM.CodeTypePoll=='OPEN'" v-model="questionM.Answer" class="form-control inputmardis subsec" v-bind:id="questionM.Id" v-bind:name="questionM.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" onchange="valorseleccion(this)"  disabled="disabled"/ >
+
+                                                                                                <select v-info-sender v-if="questionM.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="questionM.IdQuestionDetail" v-bind:id="questionM.Id" v-bind:name="questionM.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this) " disabled="disabled">
+                                                                                                    <option v-for="answer in questionM.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
+                                                                                                </select>
+
+
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        @*Seleccion multiple con preguntas*@
 
                                                     </div>
                                                     <div v-for="(subSection, ix) in section.Sections">

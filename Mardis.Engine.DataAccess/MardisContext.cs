@@ -164,7 +164,7 @@ namespace Mardis.Engine.DataAccess
         /// <summary>
         /// Tabla de Mapas por cuentas
         /// </summary>
-        public DbSet<Map> Map{ get; set; }
+        public DbSet<Map> Map { get; set; }
 
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace Mardis.Engine.DataAccess
         /// <summary>
         /// Tabla de Categorias de Producto
         /// </summary>
-        public DbSet<ProductCategory> ProductCategories { get; set; } 
+        public DbSet<ProductCategory> ProductCategories { get; set; }
 
         /// <summary>
         /// Tabla de Productos
@@ -296,7 +296,7 @@ namespace Mardis.Engine.DataAccess
         /// <summary>
         /// Tabla de Status de Carga Masiva
         /// </summary>
-        public DbSet<BulkLoadStatus> BulksLoadStatus  { get; set; }
+        public DbSet<BulkLoadStatus> BulksLoadStatus { get; set; }
 
         /// <summary>
         /// Tabla de Catalogos de Carga Masiva
@@ -317,9 +317,31 @@ namespace Mardis.Engine.DataAccess
         /// Tabla de Detalle de Filtros
         /// </summary>
         public DbSet<CoreFilterDetail> CoreFilterDetails { get; set; }
+
+
         public DbSet<Region> Regions { get; set; }
 
-        public IEnumerable<T> Query<T>(string query) where T:class
+
+        /// <summary>
+        /// Tabla de Equipament
+        /// </summary>
+        public DbSet<Equipament> Equipaments { get; set; }
+
+        /// <summary>
+        /// Tabla de Equipament_status
+        /// </summary>
+        public DbSet<Equipament_status> Equipaments_status { get; set; }
+
+        /// <summary>
+        /// Tabla de Equipament_type
+        /// </summary>
+        public DbSet<Equipament_type> Equipaments_type { get; set; }
+
+        /// <summary>
+        /// Tabla de Equipament_type
+        /// </summary>
+        public DbSet<Dashboard> Dashboards { get; set; }
+        public IEnumerable<T> Query<T>(string query) where T : class
         {
             return connection.Query<T>(query);
         }

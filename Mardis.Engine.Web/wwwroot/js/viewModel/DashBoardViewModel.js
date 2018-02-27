@@ -102,6 +102,24 @@ function GetBranchesByCampaign(idCampaign) {
         }
     });
 }
+function GetDashbord(idCampaign) {
+    var url;
+    $.ajax({
+        url: "/Home/GetDashBord",
+        type: "Post",
+        async: false,
+        data: {
+            idCampaign: idCampaign
+        },
+        success: function (data) {
+            url = data;
+        
+        },
+        error: function () {
+        }
+    });
+    return url;
+}
 
 function PushBranchesList(data) {
 

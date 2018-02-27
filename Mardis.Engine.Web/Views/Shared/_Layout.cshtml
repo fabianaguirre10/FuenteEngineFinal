@@ -195,6 +195,7 @@
     </div>
 
     <environment names="Development">
+
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
@@ -210,7 +211,7 @@
         <script type="text/javascript" src="~/lib/sweetalert/dist/sweetalert.min.js"></script>
         <script type="text/javascript" src="~/js/min/main.min.js"></script>
         <script src="~/js/main.js"></script>
-
+        <script type="text/javascript" src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
         <script src="~/bower_components/Flot/jquery.flot.js"></script>
         <script src="~/bower_components/Flot/jquery.flot.pie.js"></script>
         <script src="~/bower_components/Flot/jquery.flot.resize.js"></script>
@@ -239,6 +240,7 @@
         <script src="~/lib/store2/dist/store2.js"></script>
     </environment>
     <environment names="Staging,Production">
+        <script type="text/javascript" src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery">

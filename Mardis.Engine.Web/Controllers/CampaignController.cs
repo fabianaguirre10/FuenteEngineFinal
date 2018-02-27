@@ -409,7 +409,7 @@ namespace Mardis.Engine.Web.Controllers
             }
         }
 
-        public IActionResult Index(string filterValues, bool deleteFilter, int pageSize = 10, int pageIndex = 1)
+        public IActionResult Index(string filterValues, bool deleteFilter, int pageSize = 12, int pageIndex = 1)
         {
             try
             {

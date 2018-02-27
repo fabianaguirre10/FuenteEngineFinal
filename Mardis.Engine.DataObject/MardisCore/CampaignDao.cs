@@ -116,7 +116,7 @@ namespace Mardis.Engine.DataObject.MardisCore
             var strPredicate = $" StatusRegister == \"{CStatusRegister.Active}\" && IdAccount ==\"{idAccount.ToString()}\" ";
 
             strPredicate += GetFilterPredicate(filterValues);
-
+            /*Error*/
             //var resultList = Context.Campaigns
             //    .Skip((pageNumber) * pageSize)
             //    .Take(pageSize)

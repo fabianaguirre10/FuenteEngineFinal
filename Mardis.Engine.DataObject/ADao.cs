@@ -49,7 +49,28 @@ namespace Mardis.Engine.DataObject
 
             return entity;
         }
+        public T InsertOrUpdateID<T>(T entity) where T : class, IEntityId
+        {
+            try
+            {
+                var stateRegister = 0 == entity.Id ? EntityState.Added : EntityState.Modified;
 
+                if (Context.Entry(entity).State == EntityState.Detached && stateRegister == EntityState.Added)
+                {
+                    Context.Set<T>().Add(entity);
+                }
+
+                Context.Entry(entity).State = stateRegister;
+
+                Context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new ExceptionMardis(ex.Message, ex);
+            }
+
+            return entity;
+        }
         public List<T> GetPaginatedList<T>(int pageIndex, int pageSize) where T : class, IEntity
         {
             var sortedList = Context.Set<T>()

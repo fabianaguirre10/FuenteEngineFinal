@@ -73,23 +73,27 @@ namespace Mardis.Engine.Web
 
             services.Configure<IdentityOptions>(options =>
             {
+           
                 // Password settings
                 options.Password.RequireDigit = true;
                 options.Password.RequiredLength = 8;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = true;
                 options.Password.RequireLowercase = false;
-
-                
-
+                //options.SecurityStampValidationInterval = new TimeSpan(1, 12, 23, 62);
+                options.SecurityStampValidationInterval = TimeSpan.FromMinutes(sessionTimeOut);
                 // Cookie settings
                 options.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
                 options.Cookies.ApplicationCookie.LogoutPath = "/Account/Login";
-
+                
                 // User settings
                 options.User.RequireUniqueEmail = true;
+
                
+
+
             });
+        
 
             services.Configure<FormOptions>(x => x.ValueCountLimit = 8192);
 

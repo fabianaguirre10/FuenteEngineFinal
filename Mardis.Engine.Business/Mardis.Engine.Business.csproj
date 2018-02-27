@@ -366,6 +366,7 @@
     <Compile Include="MardisCore\BulkLoadStatusBusiness.cs" />
     <Compile Include="MardisCore\CampaignBusiness.cs" />
     <Compile Include="MardisCore\ChannelBusiness.cs" />
+    <Compile Include="MardisCore\EquipmentBusiness.cs" />
     <Compile Include="MardisCore\FilterControllerBusiness.cs" />
     <Compile Include="MardisCore\FilterCriteriaBusiness.cs" />
     <Compile Include="MardisCore\FilterExecutionBusiness.cs" />

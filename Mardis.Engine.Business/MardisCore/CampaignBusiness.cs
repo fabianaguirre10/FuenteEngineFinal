@@ -29,6 +29,7 @@ namespace Mardis.Engine.Business.MardisCore
         private readonly ServiceDao _serviceDao;
         private readonly BranchDao _branchDao;
         private readonly UserCanpaignDao _userCanpaignDao;
+        private readonly DashboardDao _dashboardDao;
         public CampaignBusiness(MardisContext mardisContext) : base(mardisContext)
         {
             _campaignDao = new CampaignDao(mardisContext);
@@ -40,6 +41,7 @@ namespace Mardis.Engine.Business.MardisCore
             _serviceDao = new ServiceDao(mardisContext);
             _branchDao = new BranchDao(mardisContext);
             _userCanpaignDao = new UserCanpaignDao(mardisContext);
+            _dashboardDao = new DashboardDao(mardisContext);
         }
 
         public Campaign GetCampaignById(Guid idCampaign, Guid idAccount)
@@ -232,6 +234,10 @@ namespace Mardis.Engine.Business.MardisCore
             return _campaignDao.GetActiveCampaignsListDasboard(idAccount, idUser);
         }
 
+        public Dashboard GetDashOne(Guid Id)
+        {
+            return _dashboardDao.GetOne(Id);
+        }
 
         public Campaign GetSimpleCampaignById(Guid idCampaign, Guid idAccount)
         {
