@@ -111,20 +111,36 @@ namespace Mardis.Engine.DataObject.MardisCore
             return resultList;
         }
 
-        public int GetPaginatedCampaignCount(List<FilterValue> filterValues, int pageSize, int pageNumber, Guid idAccount)
+        public int GetPaginatedCampaignCount(List<FilterValue> filterValues, int pageSize, int pageNumber, Guid idAccount ,Guid _typeuser, Guid _iduser)
         {
-            var strPredicate = $" StatusRegister == \"{CStatusRegister.Active}\" && IdAccount ==\"{idAccount.ToString()}\" ";
+           
 
-            strPredicate += GetFilterPredicate(filterValues);
             /*Error*/
             //var resultList = Context.Campaigns
             //    .Skip((pageNumber) * pageSize)
             //    .Take(pageSize)
             //    .Count(strPredicate);
-            var resultList = Context.Campaigns
+            if (_typeuser.Equals(new Guid("30DB815C-8B82-47EE-9279-B28922BEB616")))
+            {
+                var strPredicate = $" status == \"{CStatusRegister.Active}\" && idUser ==\"{_iduser.ToString()}\" ";
+
+                strPredicate += GetFilterPredicate(filterValues);
+                var resultList = Context.UserCanpaign
+
                  .Where(strPredicate)
                 .Count();
-            return resultList;
+                return resultList;
+            }
+            else {
+                var strPredicate = $" StatusRegister == \"{CStatusRegister.Active}\" && IdAccount ==\"{idAccount.ToString()}\" ";
+
+                strPredicate += GetFilterPredicate(filterValues);
+                var resultList = Context.Campaigns
+
+                               .Where(strPredicate)
+                              .Count();
+                return resultList;
+            }
         }
 
         public List<GeoPositionViewModel> GetCampaignGeopositionBranches(List<FilterValue> filterValues,
