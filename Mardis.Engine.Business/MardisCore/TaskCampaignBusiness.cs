@@ -1197,6 +1197,14 @@ namespace Mardis.Engine.Business.MardisCore
             }
             return buffer;
         }
+        public string UploadFile(byte[] file, string name) {
+            MemoryStream stream = new MemoryStream(file);
+            AzureStorageUtil.UploadFromStream(stream, "localexcel", name ).Wait();
+            var uri = AzureStorageUtil.GetUriFromBlob("localexcel", name );
+            // loading bytes from a file is very easy in C#. The built in System.IO.File.ReadAll* methods take care of making sure every byte is read properly.
+          
+            return uri;
+        }
         #endregion
     }
 }

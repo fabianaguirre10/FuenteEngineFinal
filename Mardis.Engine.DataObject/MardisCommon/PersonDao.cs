@@ -90,5 +90,12 @@ namespace Mardis.Engine.DataObject.MardisCommon
                           .FirstOrDefault(tb => tb.Code == code &&
                                  tb.StatusRegister == CStatusRegister.Active);
         }
+
+        public Person GetPersonByCodeAccount(string code, Guid idaccount)
+        {
+            return Context.Persons
+                          .FirstOrDefault(tb => tb.Code == code && tb.IdAccount == idaccount &&
+                                 tb.StatusRegister == CStatusRegister.Active);
+        }
     }
 }

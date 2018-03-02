@@ -17,20 +17,22 @@ namespace Mardis.Engine.DataAccess.MardisCore
         [Key]
         public int Id { get; set; }
 
-        public int IdType { get; set; } = 1;
+        public int? IdType { get; set; } = 0;
 
-        public string Sticker { get; set; }
+        public string  Sticker { get; set; }
         public string EQplate { get; set; }
-        public string Series { get; set; }
+        public string Series { get; set; }="";
         public string brand { get; set; }
 
         public string Model { get; set; }
-        public int NDoor { get; set; }
+        public int? NDoor { get; set; } = 0;
 
-        public Guid Idbranch { get; set; } = Guid.Empty;
+        public Guid? Idbranch { get; set; } = Guid.Empty;
         public int Status { get; set; }
 
         public string description { get; set; }
+
+        public string maker { get; set; }
         public DateTime CreationDate { get; set; }
         public string usr_web { get; set; }
         public Guid? IdAccount { get; set; } = Guid.Empty;

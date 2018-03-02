@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mardis.Engine.DataAccess.MardisCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,8 @@ namespace Mardis.Engine.Web.ViewModel.EquipmentViewModels
         public string Series { get; set; }
         public string brand { get; set; }
         public string Model { get; set; }
-
+        public virtual Equipament_status Equipament_statuss { get; set; }
+        public string maker { get; set; }
         public int NDoor { get; set; }
         public int Status { get; set; }
         public string description { get; set; }

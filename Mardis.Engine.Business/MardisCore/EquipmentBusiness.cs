@@ -47,7 +47,7 @@ namespace Mardis.Engine.Business.MardisCore
             var countequipments = _equipmentDao.GetPaginatedEquipmentsCount(filterValues, pageSize, pageIndex, idAccount);
 
             itemResult.EquipmentList = Mapper.Map<List<EquipmentItemViewModel>>(equipments);
-
+            
             return ConfigurePagination(itemResult, pageIndex, pageSize, filterValues, countequipments);
 
         }
@@ -61,8 +61,10 @@ namespace Mardis.Engine.Business.MardisCore
             var equipmentsmodel = new Equipament();
             equipmentsmodel = _equipmentDao.GetEquipament_Edit(Id);
             model = Mapper.Map<EquipmentRegisterViewModel>(equipmentsmodel);
-            model.BranchName = _branchDao.GetOne(model.Idbranch, Idaccount).Name;
 
+            if (_branchDao.GetOne(model.Idbranch, Idaccount) != null)
+              model.BranchName = _branchDao.GetOne(model.Idbranch, Idaccount).Name;
+         
             return model;
 
         }

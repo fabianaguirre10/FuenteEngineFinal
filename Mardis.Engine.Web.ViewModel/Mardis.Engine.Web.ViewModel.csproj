@@ -254,6 +254,7 @@
     <Compile Include="BranchViewModels\BranchItemViewModel.cs" />
     <Compile Include="BranchViewModels\BranchListViewModel.cs" />
     <Compile Include="BranchViewModels\BranchLoadViewModel.cs" />
+    <Compile Include="BranchViewModels\BranchMigrate.cs" />
     <Compile Include="BranchViewModels\BranchProfileViewModel.cs" />
     <Compile Include="BranchViewModels\branchtask.cs" />
     <Compile Include="BranchViewModels\BranchRegisterViewModel.cs" />
@@ -312,6 +313,7 @@
     <Compile Include="TaskViewModels\MyTaskViewModel.cs" />
     <Compile Include="TaskViewModels\TaskListItemViewModel.cs" />
     <Compile Include="TaskViewModels\TaskListViewModel.cs" />
+    <Compile Include="TaskViewModels\TaskMigrateResultViewModel.cs" />
     <Compile Include="TaskViewModels\TaskPerCampaignViewModel.cs" />
     <Compile Include="TaskViewModels\TaskRegisterModelView.cs" />
     <Compile Include="TaskViewModels\TaskRegisterViewModel.cs" />

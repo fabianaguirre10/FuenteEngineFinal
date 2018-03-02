@@ -23,12 +23,17 @@
                 <ul class="dropdown-menu" role="menu">
                     <li>
                         <a href="@Url.Action("Register", "Task", new { idCampaign = Model.IdCampaign })">
-                        <i class="clip-plus-circle-2"></i> Nuevo
+                            <i class="clip-plus-circle-2"></i> Nuevo
                         </a>
                     </li>
                     <li>
                         <a href="#" onclick="DeleteSelection();">
                             <i class="clip-minus-circle-2"></i> Borrar
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Massive","BulkLoad", new { idCampaign = Model.IdCampaign })">
+                            <i class="clip-stack-empty" aria-hidden="true"></i> Carga de locales
                         </a>
                     </li>
                 </ul>

@@ -1,0 +1,178 @@
+@{
+    ViewData["Title"] = "Registro de Local";
+
+}
+
+@section buttons{
+
+}
+@section filters{}
+
+<div id="divRegisterTask">
+
+    <div class="row" style="margin-left: 5%">
+        <h1> Subir Archivo</h1>
+    </div>
+    <div class="mardisStyle">
+        <div id="divHeader">
+            <div class="tab-content clearfix" id="content-file">
+
+                <div class="Content-file col-md-4">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <p class="text-gray-ms">   @ViewBag.file </p>
+                            <input type="text" id="idPath" value="@ViewBag.path" hidden />
+                            <input type="text" id="idcampaign" value="@ViewBag.idcampingn" hidden />
+                        </div>
+                        <div class="col-md-offset-2">
+                            <div class="radio">
+                                <label style=" color: #adadad;     font-size: 15px;   font-weight: 600;"><input type="radio" name="optradio" value="2"> Cargar y Adicionar </label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-offset-2">
+                            <div class="radio">
+                                <label style=" color: #adadad;     font-size: 15px;   font-weight: 600;"><input type="radio" name="optradio" value="1"> Verificar Errores </label>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="border-color: #CCCCCC; margin-top: 7px; margin-right: 20px ; margin-left: 20px ;padding-top  :90px" />
+                    <div class="form-group">
+                        <div class="col-md-offset-4">
+                            <button class="btn btn-primary" id="btnGuardar" onclick="getLoad()" type="submit">Procesar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="Content-load col-md-4">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-1">
+                                <p class="text-gray-ms" style="color:black !important">   Estado </p>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div id="status">
+                                    <h4 style="  display: flex; padding: 21px;"> <span class="label label-default" style="border-radius: 20px;  height: 20px !important;  display: inline-block;"> </span>Pendiente</h4>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-offset-4">
+                            <table class="tb-result">
+                                <thead>
+                                    <tr>
+                                        <th style="min-width: 200px;">Resultado</th>
+                                        <th style="min-width: 70px;">#</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbdResult">
+                                    <tr>
+                                        <th>Ninguna</th>
+                                        <th> </th>
+                                    </tr>
+
+                                </tbody>
+                                <tfoot>
+
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <hr style="border-color: transparent; margin-top: 7px; margin-right: 20px ; margin-left: 20px ;padding-top  :90px" />
+                    <div class="form-group">
+                        <div class="col-md-offset-4 ">
+                            <button class="btn btn-default" onclick="history.back();" id="btnGuardar" type="submit">Cancelar</button>
+                            <button class="btn btn-primary" id="btnGuardar" type="submit">Salir y Continuar</button>
+                            <button class="btn btn-default" id="btnGuardar" type="submit">Salir</button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+</div>
+
+
+@section Scripts {
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/Helpers/TaskHelper.js"></script>
+    <script>
+        function getLoad() {
+        
+            LoadTaskFile();
+        }
+       
+        function LoadTaskFile() {
+            //alert($("#idPath").val());
+            alert($("#idcampaign").val());
+            $.blockUI({ message: "" });
+            var opcion = $('input[name=optradio]:checked').val();
+            if (opcion == 1 || opcion == 2) {
+
+
+                $('#status').empty();
+                $('#status').append("<h4 style='  display: flex; padding: 21px; '> <span class='label label-warning' style='border-radius: 20px; height: 20px !important; display: inline - block; '> </span>En ejecucion...</h4>");
+
+                $.ajax({
+                    url: "/BulkLoad/LoadTask",
+                    type: "post",
+                    data: {
+                        idcampaign: $("#idcampaign").val(),
+                        idpath: $("#idPath").val(),
+                        idstatus: opcion
+                    },
+                    success: function (data) {
+
+                        if (data.length < 1) {
+
+
+                            $('#status').empty();
+                            $('#status').append("<h4 style='  display: flex; padding: 21px; '> <span class='label label-success' style='border-radius: 20px; height: 20px !important; display: inline - block; '> </span>Finalizado Exitoso</h4>");
+
+                        } else {
+
+                            $('#tbdResult').empty();
+                            $.each(data, function (index, value) {
+
+                                $("#tbdResult").append("<tr>  <th> " + value.description + "  </th>  " +
+                                    "  <th> " + value.data + "  </th> </tr> ");
+                            });
+
+                            $('#status').empty();
+                            $('#status').append("<h4 style='  display: flex; padding: 21px; '> <span class='label label-danger' style='border-radius: 20px; height: 20px !important; display: inline - block; background-color:#ea000f !important;'> </span> Finalizado con errores.</h4>");
+
+
+
+                        }
+                        $.unblockUI();
+                    },
+                    error: function (xhr) {
+                        console.log(xhr);
+                        $('#status').empty();
+                        $('#status').append("<h4 style='  display: flex; padding: 21px; '> <span class='label label-danger' style='border-radius: 20px; height: 20px !important; display: inline - block; background-color:#ea000f !important;'> </span> Finalizado con errores.</h4>");
+
+                        $.unblockUI();
+                        //Do Something to handle error
+                    }
+                });
+
+            } else {
+
+                bootbox.alert('Debe seleccionar una opcion para realizar acciones');
+            }
+
+
+        }
+    </script>
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
