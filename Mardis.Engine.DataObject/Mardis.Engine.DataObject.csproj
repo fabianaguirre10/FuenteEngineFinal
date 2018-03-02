@@ -198,7 +198,6 @@
     <Compile Include="MardisCommon\CodigoReservadosDao.cs" />
     <Compile Include="MardisCommon\MapDao.cs" />
     <Compile Include="MardisCore\AccountDao.cs" />
-    <Compile Include="MardisCore\BranchMigrateDao.cs" />
     <Compile Include="MardisCore\ChannelDao.cs" />
     <Compile Include="MardisCore\CustomerDao.cs" />
     <Compile Include="MardisCore\DashboardDao.cs" />

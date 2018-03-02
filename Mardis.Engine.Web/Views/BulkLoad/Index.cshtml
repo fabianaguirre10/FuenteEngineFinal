@@ -26,22 +26,17 @@
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     @foreach (var itemTempCatalog in itemsBulkCatalog)
-    {
-                <li>
-                    <a href="#" onclick="CreateNewLoad('@itemTempCatalog.Id');">
-                        <i class="clip-stack-empty" aria-hidden="true"></i> Carga de @itemTempCatalog.Name
-                    </a>
-                </li>
-}
-
+                    {
+                        <li>
+                            <a href="#" onclick="CreateNewLoad('@itemTempCatalog.Id');">
+                                <i class="clip-stack-empty" aria-hidden="true"></i> Carga de @itemTempCatalog.Name
+                            </a>
+                        </li>
+                    }
+                   
                     <li>
                         <a href="#">
                             <i class="clip-spinner-6" aria-hidden="true"></i> Refrescar
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Massive","BulkLoad")">
-                            <i class="clip-stack-empty" aria-hidden="true"></i> Carga de locales
                         </a>
                     </li>
                 </ul>

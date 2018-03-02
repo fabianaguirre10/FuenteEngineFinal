@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Mardis.Engine.Web.ViewModel.BranchViewModels;
 using Mardis.Engine.Web.ViewModel.EquipmentViewModels;
 using Mardis.Engine.Framework;
-using AutoMapper;
 
 namespace Mardis.Engine.DataObject.MardisCore
 {
@@ -28,19 +27,17 @@ namespace Mardis.Engine.DataObject.MardisCore
         public List<Equipament> GetPaginatedEquipmentList(List<FilterValue> filterValues, int pageSize, int pageIndex, Guid idAccount)
         {
             var strPredicate = $" IdAccount == \"{idAccount.ToString()}\" ";
-           
+
             strPredicate += GetFilterPredicate(filterValues);
 
             var resultList = Context.Equipaments
-                .Include(x=>x.Equipament_statuss)
                 .Where(strPredicate)
                 .OrderBy(b => b.Id)
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
-                 ;
-              var result=resultList.ToList<Equipament>();
+                .ToList();
 
-            return result;
+            return resultList;
         }
         public int GetPaginatedEquipmentsCount(List<FilterValue> filterValues, int pageSize, int pageIndex, Guid idAccount)
         {

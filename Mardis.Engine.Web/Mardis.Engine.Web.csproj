@@ -128,8 +128,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\Form\" />
-  </ItemGroup>
-
 </Project>

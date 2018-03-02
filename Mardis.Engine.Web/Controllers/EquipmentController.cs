@@ -97,7 +97,7 @@ namespace Mardis.Engine.Web.Controllers
                 var filters = GetFilters(filterValues, deleteFilter);
 
                 var equipments = _equipmentBusiness.GetPaginatedEquipments(filters, pageSize, pageIndex, ApplicationUserCurrent.AccountId);
-                
+
                 return View(equipments);
             }
             catch (Exception e)
