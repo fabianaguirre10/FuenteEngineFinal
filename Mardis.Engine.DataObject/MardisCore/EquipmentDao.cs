@@ -11,10 +11,11 @@ using Microsoft.EntityFrameworkCore;
 using Mardis.Engine.Web.ViewModel.BranchViewModels;
 using Mardis.Engine.Web.ViewModel.EquipmentViewModels;
 using Mardis.Engine.Framework;
+using AutoMapper;
 
 namespace Mardis.Engine.DataObject.MardisCore
 {
-  public  class EquipmentDao : ADao
+    public class EquipmentDao : ADao
     {
 
         public EquipmentDao(MardisContext mardisContext)
@@ -31,13 +32,15 @@ namespace Mardis.Engine.DataObject.MardisCore
             strPredicate += GetFilterPredicate(filterValues);
 
             var resultList = Context.Equipaments
+                .Include(x => x.Equipament_statuss)
                 .Where(strPredicate)
                 .OrderBy(b => b.Id)
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
-                .ToList();
+                 ;
+            var result = resultList.ToList<Equipament>();
 
-            return resultList;
+            return result;
         }
         public int GetPaginatedEquipmentsCount(List<FilterValue> filterValues, int pageSize, int pageIndex, Guid idAccount)
         {
@@ -75,10 +78,10 @@ namespace Mardis.Engine.DataObject.MardisCore
         public Equipament GetEquipament_Edit(int Id)
         {
             var resultList = Context.Equipaments.Where(x => x.Id.Equals(Id)).First();
-                //.Where(usr => usr.Equipaments. == typeUser &&
-                //              usr.StatusRegister == CStatusRegister.Active &&
-                //              usr.IdAccount == idAccount)
-             
+            //.Where(usr => usr.Equipaments. == typeUser &&
+            //              usr.StatusRegister == CStatusRegister.Active &&
+            //              usr.IdAccount == idAccount)
+
             return resultList;
         }
 
@@ -87,10 +90,10 @@ namespace Mardis.Engine.DataObject.MardisCore
             entity.CreationDate = DateTime.Now;
             Context.Equipaments.Add(entity);
 
-            if (entity.Id <1) Context.Entry(entity).State = EntityState.Added;
+            if (entity.Id < 1) Context.Entry(entity).State = EntityState.Added;
             else Context.Entry(entity).State = EntityState.Modified;
 
-       
+
             Context.SaveChanges();
 
             return null;
