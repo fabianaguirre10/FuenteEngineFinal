@@ -350,6 +350,7 @@
     <Compile Include="AzureStorageUtil.cs" />
     <Compile Include="CatalogBusiness.cs" />
     <Compile Include="CommonBusiness.cs" />
+    <Compile Include="EquipamentTimeBusiness.cs" />
     <Compile Include="HomeBusiness.cs" />
     <Compile Include="MardisCommon\AccountBusiness.cs" />
     <Compile Include="MardisCommon\CodigoReservadosBusiness.cs" />
@@ -366,6 +367,7 @@
     <Compile Include="MardisCore\BulkLoadStatusBusiness.cs" />
     <Compile Include="MardisCore\CampaignBusiness.cs" />
     <Compile Include="MardisCore\ChannelBusiness.cs" />
+    <Compile Include="MardisCore\Equipament_timeBusiness.cs" />
     <Compile Include="MardisCore\EquipmentBusiness.cs" />
     <Compile Include="MardisCore\FilterControllerBusiness.cs" />
     <Compile Include="MardisCore\FilterCriteriaBusiness.cs" />
@@ -376,6 +378,7 @@
     <Compile Include="MardisCore\ServiceBusiness.cs" />
     <Compile Include="MardisCore\ServiceDetailBusiness.cs" />
     <Compile Include="MardisCore\ServiceDetailTaskBusiness.cs" />
+    <Compile Include="MardisCore\EquipamentImagesBusiness.cs" />
     <Compile Include="MardisCore\SmsBusiness.cs" />
     <Compile Include="MardisCore\StatusCampaignBusiness.cs" />
     <Compile Include="MardisCore\StatusTaskBusiness.cs" />

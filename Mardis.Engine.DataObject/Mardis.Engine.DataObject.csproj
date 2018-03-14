@@ -201,6 +201,8 @@
     <Compile Include="MardisCore\ChannelDao.cs" />
     <Compile Include="MardisCore\CustomerDao.cs" />
     <Compile Include="MardisCore\DashboardDao.cs" />
+    <Compile Include="MardisCore\EquipamentImagesDao.cs" />
+    <Compile Include="MardisCore\Equipament_timeDao.cs" />
     <Compile Include="MardisCore\EquipmentDao.cs" />
     <Compile Include="MardisCore\FilterControllerDao.cs" />
     <Compile Include="MardisCore\FilterCriteriaDao.cs" />
