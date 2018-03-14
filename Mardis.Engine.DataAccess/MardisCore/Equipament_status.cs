@@ -13,6 +13,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public Equipament_status()
         {
             Equipaments = new HashSet<Equipament>();
+            Equipaments_time = new HashSet<Equipament_time>();
         }
 
         [Key]
@@ -22,5 +23,6 @@ namespace Mardis.Engine.DataAccess.MardisCore
       
 
         public ICollection<Equipament> Equipaments { get; set; }
+        public ICollection<Equipament_time> Equipaments_time { get; set; }
     }
 }

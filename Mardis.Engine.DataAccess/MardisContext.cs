@@ -287,7 +287,14 @@ namespace Mardis.Engine.DataAccess
         /// Tabla de Imagenes por local
         /// </summary>
         public DbSet<BranchImages> BranchImageses { get; set; }
-
+        /// <summary>
+        /// Tabla de Imagenes por Equipos
+        /// </summary>
+        public DbSet<EquipamentImages> EquipamentImages { get; set; }
+        /// <summary>
+        /// Tabla de estados de equipos
+        /// </summary>
+        public DbSet<Equipament_time> Equipament_times { get; set; }
         /// <summary>
         /// Tabla de Archivos de Carga Masiva
         /// </summary>

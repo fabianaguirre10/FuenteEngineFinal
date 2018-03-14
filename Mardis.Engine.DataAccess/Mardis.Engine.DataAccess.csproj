@@ -224,6 +224,7 @@
     <Compile Include="MardisCore\Customer.cs" />
     <Compile Include="MardisCore\Dashboard.cs" />
     <Compile Include="MardisCore\Equipament.cs" />
+    <Compile Include="MardisCore\Equipament_time.cs" />
     <Compile Include="MardisCore\Equipament_status.cs" />
     <Compile Include="MardisCore\Equipament_type.cs" />
     <Compile Include="MardisCore\FilterController.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="MardisCore\Service.cs" />
     <Compile Include="MardisCore\ServiceDetail.cs" />
     <Compile Include="MardisCore\ServiceDetailTask.cs" />
+    <Compile Include="MardisCore\EquipamentImages.cs" />
     <Compile Include="MardisCore\Sms.cs" />
     <Compile Include="MardisCore\StatusCampaign.cs" />
     <Compile Include="MardisCore\StatusCustomer.cs" />

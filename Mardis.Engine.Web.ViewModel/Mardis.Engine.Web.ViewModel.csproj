@@ -274,6 +274,7 @@
     <Compile Include="CustomerViewModels\CustomerRegisterViewModel.cs" />
     <Compile Include="DashBoardViewModels\DashBoardMerchantViewModel.cs" />
     <Compile Include="DashBoardViewModels\DashBoardViewModel.cs" />
+    <Compile Include="EquipmentViewModels\EquipImage.cs" />
     <Compile Include="EquipmentViewModels\EquipmentItemViewModel.cs" />
     <Compile Include="EquipmentViewModels\EquipmentListViewModel.cs" />
     <Compile Include="EquipmentViewModels\EquipmentRegisterViewModel.cs" />

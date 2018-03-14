@@ -26,6 +26,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Memory;
 using Mardis.Engine.Web.App_code;
 using Microsoft.AspNetCore.Hosting;
+using Mardis.Engine.DataObject.MardisCore;
 
 namespace Mardis.Engine.Web.Controllers
 {
@@ -48,6 +49,9 @@ namespace Mardis.Engine.Web.Controllers
         private readonly QuestionDetailBusiness _questionDetailBusiness;
         private readonly IMemoryCache _cache;
         private readonly ServiceBusiness _serviceBusiness;
+        private readonly EquipamentImagesBusiness _equipamentImagesBusiness;
+        // private readonly Equipament_TimeB  _equipamentImagesBusiness;
+        private readonly Equipament_timeBusiness _equipament_timeBusiness;
         private IHostingEnvironment _Env;
         public EquipmentController(UserManager<ApplicationUser> userManager,
                                 IHttpContextAccessor httpContextAccessor,
@@ -73,7 +77,8 @@ namespace Mardis.Engine.Web.Controllers
             _cache = memoryCache;
             _serviceBusiness = new ServiceBusiness(mardisContext);
             _equipmentBusiness = new EquipmentBusiness(mardisContext);
-
+            _equipamentImagesBusiness = new EquipamentImagesBusiness(mardisContext);
+            _equipament_timeBusiness = new Equipament_timeBusiness(mardisContext);
             _Env = envrnmt;
             if (ApplicationUserCurrent.UserId != null)
             {
@@ -106,19 +111,25 @@ namespace Mardis.Engine.Web.Controllers
                 return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
             }
         }
-        public IActionResult  Register(int idEQ, string returnUrl = null)
+        public IActionResult Register(int idEQ, string returnUrl = null)
         {
             try
             {
 
                 ViewData["ReturnUrl"] = returnUrl;
-                var model = idEQ!=0? _equipmentBusiness.GetEquipment(idEQ, ApplicationUserCurrent.AccountId):null;
-                if (model == null) {
+                var model = idEQ != 0 ? _equipmentBusiness.GetEquipment(idEQ, ApplicationUserCurrent.AccountId) : null;
+                if (model == null)
+                {
                     model = new EquipmentRegisterViewModel();
                     model.CreationDate = DateTime.Now;
                 }
+                else
+                {
+                    GetDataSelectOne();
+                    _SaveImages(35);
+                }
                 model.ReturnUrl = returnUrl;
-                GetDataSelectOne();
+               
 
                 return View(model);
             }
@@ -128,8 +139,47 @@ namespace Mardis.Engine.Web.Controllers
                 return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
             }
         }
-        [HttpPost]
+        async Task<int> _SaveImages(int code)
+        {
+            var result = await Task.Run(() => {
+            var model = code != 0 ? _equipmentBusiness.GetEquipment(code, ApplicationUserCurrent.AccountId) : null;
+            var equipmenturi =  _equipament_timeBusiness.GetEquipamentTimeImages(model.Id);
+            foreach (var eu in equipmenturi)
+            {
+                var FotosEqu = _equipament_timeBusiness.GetEquipamentidtype(eu.Idequipament, Convert.ToInt32(eu.idstatus));
+                if (FotosEqu.Count == 0)
+                {
+                    string sql = $@"select _uri Uri, _TOP_LEVEL_AURI, [Table], orden, valor from [dbo].[vw_FotosTopsy_P]  where _TOP_LEVEL_AURI = '{eu.aggregateuri}'";
+                    var images = _equipamentImagesBusiness.GetImageEquipamentusri(sql);
+                    MemoryStream imageStream = null;
+                    foreach (var i in images)
+                    {
 
+                        imageStream = new MemoryStream(i.valor.ToArray());
+                        AzureStorageUtil.UploadFromStream(imageStream, "implementacion", i.Uri + ".jpg").Wait();
+                        var uri = AzureStorageUtil.GetUriFromBlob("implementacion", i.Uri + ".jpg");
+                        var equipamentImages = new EquipamentImages()
+                        {
+                            IdEquipament = model.Id,
+                            NameContainer = i.Uri,
+                            NameFile = i.Uri + ".jpg",
+                            UrlImage = uri,
+                            IdAccount = Global.AccountId,
+                            ORDER = i.orden,
+                            ContentType = eu.idstatus.ToString()
+
+                        };
+                        _equipamentImagesBusiness.InsertImageEquipament(equipamentImages);
+
+                    }
+                }
+            }
+            return 1;
+            });
+            return result;
+
+        }
+        [HttpPost]
         public ActionResult Register(EquipmentRegisterViewModel models, string returnUrl = null)
         {
             try
@@ -139,13 +189,13 @@ namespace Mardis.Engine.Web.Controllers
                     GetDataSelectOne();
                     return View(models);
                 }
-                _equipmentBusiness.SaveEquipment(models , ApplicationUserCurrent.AccountId);
+                _equipmentBusiness.SaveEquipment(models, ApplicationUserCurrent.AccountId);
                 if (!string.IsNullOrEmpty(models.ReturnUrl))
                 {
                     return Redirect(models.ReturnUrl);
                 }
                 return RedirectToAction("Index");
-             
+
             }
             catch (Exception e)
             {
@@ -165,7 +215,7 @@ namespace Mardis.Engine.Web.Controllers
         {
             ViewBag.TypeEq =
                 _equipmentBusiness.GetUserListByType()
-                    .Select(c => new SelectListItem() { Text = c.Description , Value = c.Id.ToString() })
+                    .Select(c => new SelectListItem() { Text = c.Description, Value = c.Id.ToString() })
                     .ToList();
 
             ViewBag.Estado =

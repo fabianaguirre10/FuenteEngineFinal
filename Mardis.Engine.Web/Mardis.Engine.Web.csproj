@@ -119,6 +119,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Mardis.Engine.Business\Mardis.Engine.Business.csproj" />
     <ProjectReference Include="..\Mardis.Engine.DataAccess\Mardis.Engine.DataAccess.csproj" />
+    <ProjectReference Include="..\Mardis.Engine.DataObject\Mardis.Engine.DataObject.csproj" />
     <ProjectReference Include="..\Mardis.Engine.Web.ViewModel\Mardis.Engine.Web.ViewModel.csproj" />
   </ItemGroup>
 
