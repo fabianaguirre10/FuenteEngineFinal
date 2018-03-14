@@ -33,6 +33,8 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public string description { get; set; }
 
         public string maker { get; set; }
+
+        public string guide { get; set; }
         public DateTime CreationDate { get; set; }
         public string usr_web { get; set; }
         public Guid? IdAccount { get; set; } = Guid.Empty;

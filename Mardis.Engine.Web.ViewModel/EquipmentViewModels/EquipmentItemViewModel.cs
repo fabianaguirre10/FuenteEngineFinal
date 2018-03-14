@@ -21,6 +21,7 @@ namespace Mardis.Engine.Web.ViewModel.EquipmentViewModels
         public string Model { get; set; }
         public virtual Equipament_status Equipament_statuss { get; set; }
         public string maker { get; set; }
+        public string guide { get; set; }
         public int NDoor { get; set; }
         public int Status { get; set; }
         public string description { get; set; }

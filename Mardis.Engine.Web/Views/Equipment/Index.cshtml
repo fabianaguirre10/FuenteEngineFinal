@@ -60,44 +60,46 @@
                         <th>Modelo</th>
                         <th>#Puertas</th>
                         <th>Fabricante</th>
+                        <th>Guia</th>
                         @*<th>Estado</th>*@
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model.EquipmentList)
                     {
-                        <tr id="@("row" + item.Id)">
-                            @*<td>
+                    <tr id="@("row" + item.Id)">
+                        @*<td>
 
-                                    <input id="@item.Id" onchange="SelectItem(this);" type="checkbox" value="@item.Id" />
-                                </td>*@
-                            <td>@item.Id</td>
-                            <td>@item.Equipament_statuss.Description</td>
-                            <td>@item.Sticker </td>
-                            <td>@item.EQplate </td>
-                            <td><a href="@Url.Action("Profile", "Branch", new {idBranch = item.Id})">@item.Series </a></td>
-                            <td>@item.brand</td>
-                            <td>@item.Model</td>
-                            <td>@item.NDoor</td>
+            <input id="@item.Id" onchange="SelectItem(this);" type="checkbox" value="@item.Id" />
+        </td>*@
+                        <td>@item.Id</td>
+                        <td>@item.Equipament_statuss.Description</td>
+                        <td>@item.Sticker </td>
+                        <td>@item.EQplate </td>
+                        <td><a href="@Url.Action("Profile", "Branch", new {idBranch = item.Id})">@item.Series </a></td>
+                        <td>@item.brand</td>
+                        <td>@item.Model</td>
+                        <td>@item.NDoor</td>
 
-                            <td>@item.maker</td>
-                            @*<td>
-                                    <a href="@Url.Action("Delete", "Equipment", new {idEQ = item.Id})">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                    </a>
-                                </td>*@
-                            <td>
-                                <a href="@Url.Action("Register", "Equipment", new {idEQ = item.Id})">
-                                    <span class="glyphicon glyphicon-edit"></span>
-                                </a>
-                            </td>
+                        <td>@item.maker</td>
+                        <td>@item.guide</td>
+                        @*<td>
+            <a href="@Url.Action("Delete", "Equipment", new {idEQ = item.Id})">
+                <span class="glyphicon glyphicon-trash"></span>
+            </a>
+        </td>*@
+                        <td>
+                            <a href="@Url.Action("Register", "Equipment", new {idEQ = item.Id})">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </a>
+                        </td>
 
-                            <td>
-                                <a href="@Url.Action("Register", "Equipment", new {idEQ = item.Id})">
-                                    <span class="glyphicon glyphicon-eye-open"></span>
-                                </a>
-                            </td>
-                        </tr>
+                        <td>
+                            <a href="@Url.Action("Register", "Equipment", new {idEQ = item.Id})">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </a>
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
