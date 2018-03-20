@@ -205,3 +205,21 @@
  
     min-width: 70px !important;
 }
+
+/*timeline mardis*/
+
+#timeline .box {
+    position: relative;
+    border-radius: 3px;
+    background: #ffffff;
+    border-top: none !important;
+    margin-bottom: 1px !important;
+    width: 100%;
+    box-shadow: none !important;
+    margin-top: 10px;
+}
+
+.timeline:before {
+  
+    top: -16px !important;
+}

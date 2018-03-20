@@ -125,9 +125,10 @@ namespace Mardis.Engine.Web.Controllers
                 }
                 else
                 {
-                    GetDataSelectOne();
-                    _SaveImages(35);
+                    //GetDataSelectOne();
+                    //_SaveImages(35);
                 }
+                GetDataSelectOne();
                 model.ReturnUrl = returnUrl;
                
 
@@ -224,6 +225,44 @@ namespace Mardis.Engine.Web.Controllers
                  .ToList();
         }
         #endregion
+        #region equipos Visualizador
+
+        public IActionResult ViewEquipment(int idEQ, string returnUrl = null)
+        {
+            try
+            {
+
+                ViewData[CTask.IdEquipment] = idEQ.ToString();
+
+
+                return View();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), e.Message);
+                return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
+            }
+        }
+
+
+        [HttpGet]
+        public JsonResult Get(int IdEq)
+        {
+            try
+            {
+                var model = IdEq != 0 ? _equipmentBusiness.GetEquipment_Profile(IdEq, ApplicationUserCurrent.AccountId) : null;
+              
+                JSonConvertUtil.Convert(model);
+                return Json(model);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), e.Message);
+                return null;
+            }
+        }
+        #endregion
+
 
     }
 }
