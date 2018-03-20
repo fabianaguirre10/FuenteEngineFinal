@@ -139,9 +139,9 @@ namespace Mardis.Engine.Web.Controllers
                 return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
             }
         }
-        async Task<int> _SaveImages(int code)
+        public int _SaveImages(int code)
         {
-            var result = await Task.Run(() => {
+            //var result = await Task.Run(() => {
             var model = code != 0 ? _equipmentBusiness.GetEquipment(code, ApplicationUserCurrent.AccountId) : null;
             var equipmenturi =  _equipament_timeBusiness.GetEquipamentTimeImages(model.Id);
             foreach (var eu in equipmenturi)
@@ -175,8 +175,8 @@ namespace Mardis.Engine.Web.Controllers
                 }
             }
             return 1;
-            });
-            return result;
+           // });
+            //return result;
 
         }
         [HttpPost]
