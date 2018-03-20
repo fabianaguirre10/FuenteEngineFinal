@@ -33,6 +33,7 @@ namespace Mardis.Engine.DataObject.MardisCore
 
             var resultList = Context.Equipaments
                 .Include(x => x.Equipament_statuss)
+                .Include(z=>z.Branches)
                 .Where(strPredicate)
                 .OrderBy(b => b.Id)
                 .Skip((pageIndex - 1) * pageSize)
@@ -77,7 +78,25 @@ namespace Mardis.Engine.DataObject.MardisCore
 
         public Equipament GetEquipament_Edit(int Id)
         {
-            var resultList = Context.Equipaments.Where(x => x.Id.Equals(Id)).First();
+            var resultList = Context.Equipaments
+                 .Include(u =>u.Equipament_statuss)
+                .Where(x => x.Id.Equals(Id)).First();
+            //.Where(usr => usr.Equipaments. == typeUser &&
+            //              usr.StatusRegister == CStatusRegister.Active &&
+            //              usr.IdAccount == idAccount)
+
+            return resultList;
+        }
+        public Equipament GetEquipamentProfile(int Id)
+        {
+            var resultList = Context.Equipaments
+                .Include(u => u.Branches)
+                 .Include(u => u.Branches.TaskCampaigns)
+               .Include(u => u.Equipament_statuss)
+               .Include(u => u.Branches.BranchImages)
+               .Include(u=>u.EquipamentImg)
+               
+                .Where(x => x.Id.Equals(Id)).First();
             //.Where(usr => usr.Equipaments. == typeUser &&
             //              usr.StatusRegister == CStatusRegister.Active &&
             //              usr.IdAccount == idAccount)
@@ -87,6 +106,8 @@ namespace Mardis.Engine.DataObject.MardisCore
 
         public Equipament SaveEquipment(Equipament entity)
         {
+
+            if (entity.Idbranch == Guid.Parse("00000000-0000-0000-0000-000000000000")) entity.Idbranch = null;
             entity.CreationDate = DateTime.Now;
             Context.Equipaments.Add(entity);
 

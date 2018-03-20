@@ -27,7 +27,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public string Model { get; set; }
         public int? NDoor { get; set; } = 0;
 
-        public Guid? Idbranch { get; set; } = Guid.Empty;
+        public Guid? Idbranch { get; set; } = null;
         public int Status { get; set; }
 
         public string description { get; set; }
@@ -50,6 +50,8 @@ namespace Mardis.Engine.DataAccess.MardisCore
 
         [ForeignKey("IdType")]
         public virtual Equipament_type Equipament_types { get; set; }
+        public ICollection<EquipamentImages> EquipamentImg { get; set; } = new HashSet<EquipamentImages>();
+
     }
 
     public interface IEntityId

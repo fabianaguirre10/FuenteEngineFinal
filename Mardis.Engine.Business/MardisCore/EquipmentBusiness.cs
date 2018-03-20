@@ -25,6 +25,7 @@ namespace Mardis.Engine.Business.MardisCore
         private readonly BranchCustomerDao _branchCustomerDao;
         private readonly TaskCampaignDao _taskCampaignDao;
         private readonly EquipmentDao _equipmentDao;
+        private readonly CampaignDao _CampaignDao;
         public EquipmentBusiness(MardisContext mardisContext) : base(mardisContext)
         {
             _branchDao = new BranchDao(mardisContext);
@@ -33,6 +34,7 @@ namespace Mardis.Engine.Business.MardisCore
             _branchCustomerDao = new BranchCustomerDao(mardisContext);
             _taskCampaignDao = new TaskCampaignDao(mardisContext);
             _equipmentDao = new EquipmentDao(mardisContext);
+            _CampaignDao = new CampaignDao(mardisContext);
         }
 
         public EquipmentListViewModel GetPaginatedEquipments(List<FilterValue> filterValues, int pageSize, int pageIndex, Guid idAccount)
@@ -65,6 +67,35 @@ namespace Mardis.Engine.Business.MardisCore
 
             if (_branchDao.GetOne(model.Idbranch, Idaccount) != null)
                 model.BranchName = _branchDao.GetOne(model.Idbranch, Idaccount).Name;
+
+            return model;
+
+        }
+        public EquipmentRegisterViewModel GetEquipment_Profile(int Id, Guid Idaccount)
+        {
+
+            var model = new EquipmentRegisterViewModel();
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Equipament, EquipmentRegisterViewModel>();
+            });
+            var equipmentsmodel = new Equipament();
+            equipmentsmodel = _equipmentDao.GetEquipamentProfile(Id);
+            model = Mapper.Map<EquipmentRegisterViewModel>(equipmentsmodel);
+         
+            if (_branchDao.GetOne(model.Idbranch, Idaccount) != null)
+                model.BranchName = _branchDao.GetOne(model.Idbranch, Idaccount).Name;
+            if (model.Branches != null) { 
+            if (model.Branches.TaskCampaigns.Count()>0)
+            {
+                foreach (var item in model.Branches.TaskCampaigns) {
+
+                   var camp= _CampaignDao.GetOne(item.IdCampaign ,Idaccount);
+                    model.Branches.TaskCampaigns.Where(x => x.IdCampaign == item.IdCampaign).First().Campaign = camp;
+                }
+
+            }
+            }
 
             return model;
 

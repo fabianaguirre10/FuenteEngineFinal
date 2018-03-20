@@ -61,7 +61,8 @@
                         <th>#Puertas</th>
                         <th>Fabricante</th>
                         <th>Guia</th>
-                        @*<th>Estado</th>*@
+                        <th>Local</th>
+                        <th>Fecha</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,13 +77,22 @@
                         <td>@item.Equipament_statuss.Description</td>
                         <td>@item.Sticker </td>
                         <td>@item.EQplate </td>
-                        <td><a href="@Url.Action("Profile", "Branch", new {idBranch = item.Id})">@item.Series </a></td>
+                        <td>@item.Series</td>
                         <td>@item.brand</td>
                         <td>@item.Model</td>
                         <td>@item.NDoor</td>
 
                         <td>@item.maker</td>
                         <td>@item.guide</td>
+                        <td>@item.CreationDate</td>
+                        @if (item.Branches != null)
+    {
+                    <td><a href="@Url.Action("Profile", "Branch", new {idBranch = item.Id})">@item.Branches.Name </a></td>
+}
+else
+{
+                    <td>No asignado</td>}
+
                         @*<td>
             <a href="@Url.Action("Delete", "Equipment", new {idEQ = item.Id})">
                 <span class="glyphicon glyphicon-trash"></span>
@@ -95,7 +105,7 @@
                         </td>
 
                         <td>
-                            <a href="@Url.Action("Register", "Equipment", new {idEQ = item.Id})">
+                            <a href="@Url.Action("ViewEquipment", "Equipment", new {idEQ = item.Id})">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                             </a>
                         </td>

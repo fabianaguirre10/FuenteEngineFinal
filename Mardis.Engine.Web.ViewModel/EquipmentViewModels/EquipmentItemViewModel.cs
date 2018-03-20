@@ -29,5 +29,6 @@ namespace Mardis.Engine.Web.ViewModel.EquipmentViewModels
         public DateTime CreationDate { get; set; }
 
         public string usr_web { get; set; }
+        public virtual Branch Branches { get; set; }
     }
 }
