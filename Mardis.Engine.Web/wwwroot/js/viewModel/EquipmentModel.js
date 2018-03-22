@@ -21,8 +21,41 @@ function LoadEquipment(idEq) {
         dataType: "json",
         success: function (data) {
             if (data) {
-       
+                LoadImages(idEq)
                 ApplyBindingEquipment(data);
+
+
+            } else {
+                bootbox.alert("Error! no se ha encontrado la tarea" + error);
+                window.location.href = "/Equipment/Index";
+            }
+        },
+        error: function (error) {
+            console.log(error);
+            bootbox.alert("Error! no se ha encontrado la tarea" + error);
+            window.location.href = "/Equipment/Index";
+        }
+    });
+}
+
+function LoadImages(idEq)
+{
+    idQeu = idEq;
+    $.blockUI({ message: "cargando imagenes..." });
+    $.ajax({
+        type: "GET",
+        url: "/Equipment/_SaveImagesAsync",
+        // async: false,
+        data: {
+            code: idQeu
+        },
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            if (data) {
+
+                //ApplyBindingEquipment(data);
+
 
             } else {
                 bootbox.alert("Error! no se ha encontrado la tarea" + error);

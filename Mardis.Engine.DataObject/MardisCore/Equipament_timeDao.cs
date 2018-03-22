@@ -19,6 +19,10 @@ namespace Mardis.Engine.DataObject.MardisCore
         {
             return Context.Equipament_times.Where(cs => cs.Idequipament == idEquipament).ToList();
         }
+        public List<Equipament_time> GetEquipamentTimeImagesFotos(int idEquipament)
+        {
+            return Context.Equipament_times.Where(cs => cs.Idequipament > idEquipament).ToList();
+        }
         public List<EquipamentImages> GetEquipamentImagesIdType(int idEquiment, int type)
         {
             return Context.EquipamentImages.Where(cs => cs.IdEquipament == idEquiment && cs.ContentType.Equals(type.ToString().Trim())).ToList();

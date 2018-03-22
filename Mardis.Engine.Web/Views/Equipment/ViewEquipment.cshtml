@@ -71,13 +71,13 @@
                         <hr>
                         <strong><i class="fa fa-tasks margin-r-5"></i> Implementacion</strong>
                         <br />
-                        <div v-if="poll.Branches">
-                            <img alt="..." v-for="(fotos, i) in poll.Branches.BranchImages" v-bind:src="fotos.UrlImage" class="margin " style="width:130px; height:100px;">
-                        </div>
+                       
+                            <img alt="..." v-for="(fotos, i) in poll.EquipamentImg" v-bind:src="fotos.UrlImage" v-if="fotos.ContentType =='1'" class="margin " style="width:130px; height:100px;">
+                        
                         <hr>
                         <strong><i class="fa fa-home  margin-r-5"></i> Bodegas</strong>
                         <br />
-                        <img alt="..." v-for="(fotos, i) in poll.EquipamentImg" v-bind:src="fotos.UrlImage" v-if="fotos.ContentType =='4'  && fotos.ContentType =='5'" class="margin " style="width:130px; height:100px;">
+                        <img alt="..." v-for="(fotos, i) in poll.EquipamentImg" v-bind:src="fotos.UrlImage" v-if="fotos.ContentType =='4' " class="margin " style="width:130px; height:100px;">
 
                     </div>
                     <!-- /.box-body -->

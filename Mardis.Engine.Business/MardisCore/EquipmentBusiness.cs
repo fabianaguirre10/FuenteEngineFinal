@@ -71,6 +71,10 @@ namespace Mardis.Engine.Business.MardisCore
             return model;
 
         }
+        public List<Equipament> GetEquipamentFotos(int codigo)
+        {
+            return _equipmentDao.GetEquipamentFotos(codigo);
+        }
         public EquipmentRegisterViewModel GetEquipment_Profile(int Id, Guid Idaccount)
         {
 

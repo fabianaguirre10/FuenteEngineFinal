@@ -25,6 +25,10 @@ namespace Mardis.Engine.Business.MardisCore
         {
             return _Equipament_timeDao.GetEquipamentTimeImages(idEquipament);
         }
+        public List<Equipament_time> GetEquipamentTimeImagesFotos(int idEquipament)
+        {
+            return _Equipament_timeDao.GetEquipamentTimeImagesFotos(idEquipament);
+        }
 
         public List<EquipamentImages> GetEquipamentidtype(int idEquiment, int type)
         {

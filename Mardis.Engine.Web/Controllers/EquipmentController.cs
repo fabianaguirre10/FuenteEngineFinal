@@ -140,44 +140,50 @@ namespace Mardis.Engine.Web.Controllers
                 return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
             }
         }
-        public int _SaveImages(int code)
+        [HttpGet]
+        public int _SaveImagesAsync(int code)
         {
-            //var result = await Task.Run(() => {
-            var model = code != 0 ? _equipmentBusiness.GetEquipment(code, ApplicationUserCurrent.AccountId) : null;
-            var equipmenturi =  _equipament_timeBusiness.GetEquipamentTimeImages(model.Id);
-            foreach (var eu in equipmenturi)
-            {
-                var FotosEqu = _equipament_timeBusiness.GetEquipamentidtype(eu.Idequipament, Convert.ToInt32(eu.idstatus));
-                if (FotosEqu.Count == 0)
+            // var result = await Task.Run(() => {
+            //var equipos = _equipmentBusiness.GetEquipamentFotos(code);
+
+            //foreach (var mod in equipos)
+            //{
+                var model = code != 0 ? _equipmentBusiness.GetEquipment(code, ApplicationUserCurrent.AccountId) : null;
+                var equipmenturi = _equipament_timeBusiness.GetEquipamentTimeImages(model.Id);
+                foreach (var eu in equipmenturi)
                 {
-                    string sql = $@"select _uri Uri, _TOP_LEVEL_AURI, [Table], orden, valor from [dbo].[vw_FotosTopsy_P]  where _TOP_LEVEL_AURI = '{eu.aggregateuri}'";
-                    var images = _equipamentImagesBusiness.GetImageEquipamentusri(sql);
-                    MemoryStream imageStream = null;
-                    foreach (var i in images)
+                    var FotosEqu = _equipament_timeBusiness.GetEquipamentidtype(eu.Idequipament, Convert.ToInt32(eu.idstatus));
+                    if (FotosEqu.Count == 0)
                     {
-
-                        imageStream = new MemoryStream(i.valor.ToArray());
-                        AzureStorageUtil.UploadFromStream(imageStream, "implementacion", i.Uri + ".jpg").Wait();
-                        var uri = AzureStorageUtil.GetUriFromBlob("implementacion", i.Uri + ".jpg");
-                        var equipamentImages = new EquipamentImages()
+                        string sql = $@"select _uri Uri, _TOP_LEVEL_AURI, [Table], orden, valor from [dbo].[vw_FotosTopsy_P]  where _TOP_LEVEL_AURI = '{eu.aggregateuri}'";
+                        var images = _equipamentImagesBusiness.GetImageEquipamentusri(sql);
+                        MemoryStream imageStream = null;
+                        foreach (var i in images)
                         {
-                            IdEquipament = model.Id,
-                            NameContainer = i.Uri,
-                            NameFile = i.Uri + ".jpg",
-                            UrlImage = uri,
-                            IdAccount = Global.AccountId,
-                            ORDER = i.orden,
-                            ContentType = eu.idstatus.ToString()
 
-                        };
-                        _equipamentImagesBusiness.InsertImageEquipament(equipamentImages);
+                            imageStream = new MemoryStream(i.valor.ToArray());
+                            AzureStorageUtil.UploadFromStream(imageStream, "implementacion", i.Uri + ".jpg").Wait();
+                            var uri = AzureStorageUtil.GetUriFromBlob("implementacion", i.Uri + ".jpg");
+                            var equipamentImages = new EquipamentImages()
+                            {
+                                IdEquipament = model.Id,
+                                NameContainer = i.Uri,
+                                NameFile = i.Uri + ".jpg",
+                                UrlImage = uri,
+                                IdAccount = Global.AccountId,
+                                ORDER = i.orden,
+                                ContentType = eu.idstatus.ToString()
 
+                            };
+                            _equipamentImagesBusiness.InsertImageEquipament(equipamentImages);
+
+                        }
                     }
                 }
-            }
+            //}
             return 1;
-           // });
-            //return result;
+           /* });
+            return result;*/
 
         }
         [HttpPost]
@@ -253,6 +259,10 @@ namespace Mardis.Engine.Web.Controllers
                 var model = IdEq != 0 ? _equipmentBusiness.GetEquipment_Profile(IdEq, ApplicationUserCurrent.AccountId) : null;
               
                 JSonConvertUtil.Convert(model);
+                if (model != null)
+                {
+                   // _SaveImagesAsync(IdEq);
+                }
                 return Json(model);
             }
             catch (Exception e)

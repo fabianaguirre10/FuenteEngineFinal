@@ -87,6 +87,10 @@ namespace Mardis.Engine.DataObject.MardisCore
 
             return resultList;
         }
+        public List<Equipament> GetEquipamentFotos(int codigo)
+        {
+            return Context.Equipaments.Where(x => x.Id > codigo).ToList();
+        }
         public Equipament GetEquipamentProfile(int Id)
         {
             var resultList = Context.Equipaments

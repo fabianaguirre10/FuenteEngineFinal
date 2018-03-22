@@ -68,7 +68,9 @@ namespace Mardis.Engine.DataObject.MardisCore
                     x.IdDistrict,
                     x.IdParish,
                     x.RUTAAGGREGATE,
-                    x.IMEI_ID
+                    x.IMEI_ID,
+                    x.LatitudeBranch,
+                    x.LenghtBranch
                 });
             
         }
