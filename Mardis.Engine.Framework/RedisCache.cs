@@ -7,7 +7,7 @@ namespace Mardis.Engine.Framework
     public class RedisCache
     {
         private static readonly Lazy<ConnectionMultiplexer> LazyConnection = new Lazy<ConnectionMultiplexer>(
-            () => ConnectionMultiplexer.Connect("engine.redis.cache.windows.net:6380,password=0+gPTLWo+jkZGVZdrgcafHTkQi7cm50gXuBI/vGcrCg=,ssl=True,abortConnect=False,ConnectTimeout=1800000000, KeepAlive = 120")
+            () => ConnectionMultiplexer.Connect("engine.redis.cache.windows.net:6380,password=0+gPTLWo+jkZGVZdrgcafHTkQi7cm50gXuBI/vGcrCg=,ssl=True,abortConnect=False,ConnectTimeout=1800000000 , KeepAlive = 120")
             
             );
         //() => ConnectionMultiplexer.Connect("localhost"));

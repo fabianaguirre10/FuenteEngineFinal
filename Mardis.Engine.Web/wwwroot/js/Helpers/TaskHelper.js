@@ -153,6 +153,7 @@ function DeleteSelection() {
                 data: {
                     input: JSON.stringify(selectedItems)
                 },
+      
                 success: function (data) {
 
                     if (data) {
@@ -172,6 +173,75 @@ function DeleteSelection() {
             });
         }
     });
+}
+function LoadTaskFile() {
+    //alert($("#idPath").val());
+    //alert($("#idcampaign").val());
+    $.blockUI({ message: "Cargando.." });
+    var opcion = $('input[name=optradio]:checked').val();
+    if (opcion == 1 || opcion == 2) {
+
+        $("#IdProceso").prop('disabled', true);
+        $('#status').empty();
+        $('#status').append("<h4 style='  display: flex; padding: 21px; '> <span class='label label-warning' style='border-radius: 20px; height: 20px !important; display: inline - block; '> </span>En ejecucion...</h4>");
+
+        $.ajax({
+            url: "/Task/LoadTask",
+            type: "post",
+            data: {
+                idcampaign: $("#idcampaign").val(),
+                idpath: $("#idPath").val(),
+                idstatus: opcion
+            },
+           
+            success: function (data) {
+            
+                if (data[0].description !='Errores') {
+
+                    $('#tbdResult').empty();
+                    $.each(data, function (index, value) {
+
+                        $("#tbdResult").append("<tr>  <th> " + value.description + "  </th>  " +
+                            "  <th> " + value.data + "  </th> </tr> ");
+                    });
+                    $('#status').empty();
+                    $('#status').append("<h4 style='  display: flex; padding: 21px; '> <span class='label label-success' style='border-radius: 20px; height: 20px !important; display: inline - block; '> </span>Finalizado Exitoso</h4>");
+                    $("#IdProceso").prop('disabled', false);
+                } else {
+
+                    $('#tbdResult').empty();
+                    $.each(data, function (index, value) {
+
+                        $("#tbdResult").append("<tr>  <th> " + value.description + "  </th>  " +
+                            "  <th> " + value.data + "  </th> </tr> ");
+                    });
+            
+                    $("#errorbtn").attr('href', data[0].Code)
+                    $("#errorbtn").show();
+               
+                    $('#status').empty();
+                    $('#status').append("<h4 style='  display: flex; padding: 21px; '> <span class='label label-danger' style='border-radius: 20px; height: 20px !important; display: inline - block; background-color:#ea000f !important;'> </span> Finalizado con errores.</h4>");
+
+
+
+                }
+                $.unblockUI();
+            },
+            error: function (xhr) {
+                bootbox.alert(xhr)
+                $.unblockUI();
+                //Do Something to handle error
+            },
+           
+        });
+
+    } else {
+        $.unblockUI();
+        bootbox.alert('Debe seleccionar una opcion para realizar acciones');
+      
+    }
+
+ 
 }
 
 function InsertSection(sectionId) {

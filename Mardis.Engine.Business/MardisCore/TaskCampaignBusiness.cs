@@ -27,6 +27,11 @@ using iTextSharp;
 using iTextSharp.text;
 using System.IO;
 using iTextSharp.text.pdf;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Mardis.Engine.Web.ViewModel.BranchViewModels;
+using System.Net;
+using DocumentFormat.OpenXml;
 
 namespace Mardis.Engine.Business.MardisCore
 {
@@ -53,6 +58,9 @@ namespace Mardis.Engine.Business.MardisCore
         private readonly ServiceDetailDao _serviceDetailDao;
         private readonly RedisCache _redisCache;
         private readonly ServiceDetailBusiness _serviceDetailBusiness;
+        private readonly BranchMigrateDao _branchMigrateDao;
+        private readonly IList<TaskMigrateResultViewModel> lstTaskResult = new List<TaskMigrateResultViewModel>();
+        private readonly IList<BranchMigrate> lsBranch = new List<BranchMigrate>();
 
         public TaskCampaignBusiness(MardisContext mardisContext, RedisCache distributedCache)
             : base(mardisContext)
@@ -77,6 +85,7 @@ namespace Mardis.Engine.Business.MardisCore
             _redisCache = distributedCache;
             _serviceDetailBusiness = new ServiceDetailBusiness(mardisContext);
             azureStorageUtil = new AzureStorageUtil();
+            _branchMigrateDao = new BranchMigrateDao(mardisContext);
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Service, MyTaskServicesViewModel>()
@@ -1196,6 +1205,348 @@ namespace Mardis.Engine.Business.MardisCore
                 fileStream.Close();
             }
             return buffer;
+        }
+        #endregion
+        #region Rutas
+        public IList<TaskMigrateResultViewModel> taskMigrate(string fileBrachMassive, Guid idAccount, Guid idcampaing , string status)
+        {
+            int j = 0;
+            using (SpreadsheetDocument doc = SpreadsheetDocument.Open(fileBrachMassive, false))
+            {
+
+                //Read the first Sheets 
+                Sheet sheet = doc.WorkbookPart.Workbook.Sheets.GetFirstChild<Sheet>();
+                Worksheet worksheet = (doc.WorkbookPart.GetPartById(sheet.Id.Value) as WorksheetPart).Worksheet;
+                IEnumerable<Row> rows = worksheet.GetFirstChild<SheetData>().Descendants<Row>();
+
+                foreach (Row row in rows)
+                {
+                    j++;
+                    //Read the first row as header
+                    if (row.RowIndex.Value != 1)
+                    {
+
+                        BranchMigrate BranchModel = new BranchMigrate();
+                        int i = 0;
+                        foreach (Cell cell in row.Descendants<Cell>())
+                        {
+
+                            try
+                            {
+                                i++;
+                                switch (i)
+                                {
+                                    case 1:
+                                        BranchModel.Code = GetCellValue(doc, cell);
+                                        Isval(BranchModel.Code,1,j);
+                                        break;
+                                    case 2:
+                                        BranchModel.BranchType = GetCellValue(doc, cell);
+                                        break;
+                                    case 3:
+                                        BranchModel.BranchName = GetCellValue(doc, cell);
+                                        break;
+                                    case 4:
+                                        BranchModel.BranchStreet = GetCellValue(doc, cell);
+                                        break;
+                                    case 5:
+                                        BranchModel.BranchReference = GetCellValue(doc, cell);
+                                        break;
+                                    case 6:
+                                        BranchModel.PersonName = GetCellValue(doc, cell);
+                                        break;
+                                    case 7:
+                                        BranchModel.Document = GetCellValue(doc, cell);
+                                        break;
+                                    case 8:
+                                        BranchModel.phone = GetCellValue(doc, cell);
+                                        break;
+                                    case 9:
+                                        BranchModel.Mobil = GetCellValue(doc, cell);
+                                        break;
+                                    case 10:
+                                        string lat = GetCellValue(doc, cell);
+                                        BranchModel.LatitudeBranch = lat.Length <= 10 ? lat : lat.Substring(0, 11);
+
+                                        break;
+                                    case 11:
+                                        string len = GetCellValue(doc, cell);
+                                        BranchModel.LenghtBranch = len.Length <= 10 ? len : len.Substring(0, 11);
+
+                                        break;
+                                    case 12:
+                                        BranchModel.IdProvice = _branchMigrateDao.GetProviceByName(GetCellValue(doc, cell));
+                                        Isval(BranchModel.IdProvice.ToString(), 4, j);
+                                        break;
+                                    case 13:
+                                        BranchModel.IdDistrict = _branchMigrateDao.GetDistrictByName(GetCellValue(doc, cell), BranchModel.IdProvice);
+                                        Isval(BranchModel.IdProvice.ToString(), 5, j);
+                                        break;
+                                    case 14:
+                                        BranchModel.IdParish = _branchMigrateDao.GetParishByName(GetCellValue(doc, cell), BranchModel.IdDistrict);
+                                        Isval(BranchModel.IdProvice.ToString(), 6, j);
+                                        break;
+                                    case 15:
+                                        BranchModel.IdSector = _branchMigrateDao.GetSectorByName(GetCellValue(doc, cell), BranchModel.IdDistrict);
+                                        Isval(BranchModel.IdProvice.ToString(), 7, j);
+                                        break;
+                                    case 16:
+                                        BranchModel.Rute = GetCellValue(doc, cell);
+                                        break;
+                                    case 17:
+                                        BranchModel.IMEI = GetCellValue(doc, cell);
+                                  
+                                        break;
+
+                                }
+                            }
+                            catch (Exception e)
+                            {
+
+                                var ex = e.Message.ToString();
+
+                                int ne = -1;
+
+                                switch (ex)
+                                {
+                                    case "Error al consultar Cuidad":
+                                        ne = 2;
+                                        break;
+                                    case "Error al consultar Parroquias":
+                                        ne = 3;
+                                        break;
+                                    case "Error al consultar Sectores":
+                                        ne = 4;
+                                        break;
+
+                                }
+
+                            }
+
+                        }
+                        if (row.RowIndex.Value != 1)
+                        {
+                            lsBranch.Add(BranchModel);
+                        }
+                    }
+
+                }
+
+
+            }
+            // 
+            IList<TaskMigrateResultViewModel> result = new List<TaskMigrateResultViewModel>();
+            int numberError = lstTaskResult.Where(x => x.type == "E").Count();
+            if (numberError < 1)
+            {
+                if (status.Equals("2"))
+                {
+                    _branchMigrateDao.SaveBranchMigrate(lsBranch, idAccount, idcampaing);
+                    result.Add(new TaskMigrateResultViewModel { description = "Locales Cargados", Element = (j - 1).ToString() });
+                    result.Add(new TaskMigrateResultViewModel { description = "Errores", Element ="0" });
+                    if (File.Exists(fileBrachMassive))
+                    {
+                        File.Delete(fileBrachMassive);
+                    }
+
+                }
+                else {
+                    result.Add(new TaskMigrateResultViewModel { description = "Registro verificados", Element = (j - 1).ToString() });
+                    result.Add(new TaskMigrateResultViewModel { description = "Errores", Element ="0"});
+                }
+            }
+            else
+            {
+             string url=   urlError(lstTaskResult, fileBrachMassive);
+                result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = numberError.ToString(), Code= url });
+                result.Add(new TaskMigrateResultViewModel { description = "Registro verificados", Element = (j - 1).ToString() });
+           
+            }
+          
+            return result;
+        }
+        private string GetCellValue(SpreadsheetDocument doc, Cell cell)
+        {
+            string value = "";
+            if (cell.CellValue != null)
+            {
+
+                value = cell.CellValue.InnerText;
+                if (cell.DataType != null && cell.DataType.Value == CellValues.SharedString)
+                {
+                    return doc.WorkbookPart.SharedStringTablePart.SharedStringTable.ChildElements.GetItem(int.Parse(value)).InnerText;
+                }
+            }
+            else
+            {
+                value = "NA";
+
+            }
+            return value;
+
+        }
+        public string Isval(string data, int col, int fil)
+        {
+
+            switch (col)
+            {
+                case 1:
+                    if (data == null || data == " " || data == "NA")
+                        lstTaskResult.Add(new TaskMigrateResultViewModel { description = "El codigó se encuentra en vacio", line = fil, type = "E" });
+                    break;
+                case 2:
+                    if (data == null || data == " " || data == "NA")
+                        lstTaskResult.Add(new TaskMigrateResultViewModel { description = "La latitud se encuentra en vacia", line = fil, type = "E" });
+                    break;
+                case 3:
+                    if (data == null || data == " " || data == "NA")
+                        lstTaskResult.Add(new TaskMigrateResultViewModel { description = "La longitud se encuentra vacia ", line = fil, type = "E" });
+                    break;
+                case 4:
+                    if (data == null || data == "00000000-0000-0000-0000-000000000000")
+                        lstTaskResult.Add(new TaskMigrateResultViewModel { description = "La Provicia se encuentra vacia o no existe en la base de datos", line = fil, type = "E" });
+                    break;
+                case 5:
+                    if (data == null || data == "00000000-0000-0000-0000-000000000000") lstTaskResult.Add(new TaskMigrateResultViewModel
+                    { description = "La Cuidad se encuentra vacia o no existe en la base de datos", line = fil, type = "E" });
+                    break;
+                case 6:
+                    if (data == null || data == "00000000-0000-0000-0000-000000000000") lstTaskResult.Add(new TaskMigrateResultViewModel
+                    { description = "La Parroquia se encuentra vacia o no existe en la base de datos", line = fil, type = "E" });
+                    break;
+                case 7:
+                    if (data == null || data == "00000000-0000-0000-0000-000000000000") lstTaskResult.Add(new TaskMigrateResultViewModel
+                    { description = "El sector se encuentra vacio o no existe en la base de datos", line = fil, type = "E" });
+                    break;
+                case 8:
+                    if (_personDao.GetPersonByCode(data) == null) lstTaskResult.Add(new TaskMigrateResultViewModel
+                    { description = "El IMEI no se encuentra asignado a ningún encuestador", line = fil, type = "E" });
+                    break;
+            }
+            return "";
+        }
+
+        public string urlError(IList<TaskMigrateResultViewModel> item, string fileBrachMassive)
+        {
+            // Create a spreadsheet document by supplying the filepath.
+            // By default, AutoSave = true, Editable = true, and Type = xlsx.
+            string cadena = fileBrachMassive.Replace(".xlsx","");
+
+            string[] separadas;
+
+            separadas = cadena.Split();
+            string filepath = cadena+"_error.xlsx";
+            SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.
+                Create(filepath, SpreadsheetDocumentType.Workbook);
+
+            // Add a WorkbookPart to the document.
+            WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
+            workbookpart.Workbook = new Workbook();
+
+            // Add a WorksheetPart to the WorkbookPart.
+            WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
+            worksheetPart.Worksheet = new Worksheet(new SheetData());
+
+            // Add Sheets to the Workbook.
+            Sheets sheets = spreadsheetDocument.WorkbookPart.Workbook.
+                AppendChild<Sheets>(new Sheets());
+
+            // Append a new worksheet and associate it with the workbook.
+            Sheet sheetData = new Sheet()
+            {
+                Id = spreadsheetDocument.WorkbookPart.
+                GetIdOfPart(worksheetPart),
+                SheetId = 1,
+                Name = "Errores"
+            };
+            sheets.Append(sheetData);
+            worksheetPart.Worksheet.Save();
+
+            workbookpart.Workbook.Save();
+
+            // Close the document.
+            spreadsheetDocument.Close();
+
+            UpdateCell(filepath, "FILA", 1, "A", item) ;
+
+            byte[] by2tes = System.IO.File.ReadAllBytes(filepath);
+            DateTime localDate = DateTime.Now;
+            string LogFile = localDate.ToString("yyyyMMddHHmmss");
+            MemoryStream stream = new MemoryStream(by2tes);
+            AzureStorageUtil.UploadFromStream(stream, "evidencias", LogFile + ".xlsx").Wait();
+            var uri = AzureStorageUtil.GetUriFromBlob("evidencias", LogFile + ".xlsx");
+            // loading bytes from a file is very easy in C#. The built in System.IO.File.ReadAll* methods take care of making sure every byte is read properly.
+            if (File.Exists(filepath))
+            {
+                File.Delete(filepath);
+            }
+
+            return uri;
+        }
+        public static void UpdateCell(string docName, string text, uint rowIndex, string columnName, IList<TaskMigrateResultViewModel> item)
+        {
+            using (SpreadsheetDocument spreadSheet = SpreadsheetDocument.Open(docName, true))
+            {
+                Sheet sheet = spreadSheet.WorkbookPart.Workbook.Sheets.GetFirstChild<Sheet>();
+                WorksheetPart worksheetPart = (spreadSheet.WorkbookPart.GetPartById(sheet.Id.Value) as WorksheetPart);  
+           
+             
+                if (worksheetPart != null)
+                {
+                    // Create new Worksheet
+                    Worksheet worksheet = new Worksheet();
+                    worksheetPart.Worksheet = worksheet;
+
+                    // Create new SheetData
+                    SheetData sheetData = new SheetData();
+
+                    // Create new row
+                    Row row = new Row() { RowIndex = rowIndex };
+
+                    // Create new cell
+                    Cell cell = null;
+                    cell = new Cell() { CellReference = "A" + rowIndex, DataType = CellValues.Number, CellValue = new CellValue("FILA") };
+                    row.Append(cell);
+
+
+                    cell = new Cell() { CellReference = "B" + rowIndex, DataType = CellValues.Number, CellValue = new CellValue("OBSERVACION") };
+                    // Append cell to row
+                    row.Append(cell);
+
+                    sheetData.Append(row);
+                    uint i = 2;
+                    foreach (var data in item)
+                    {
+
+                        Row rows = new Row() { RowIndex = i };
+
+                        cell = new Cell() { CellReference = "A" + i, DataType = CellValues.Number, CellValue = new CellValue(data.line.ToString()) };
+                        rows.Append(cell);
+
+         
+                        cell = new Cell() { CellReference = "B" + i, DataType = CellValues.Number, CellValue = new CellValue(data.description.ToString()) };
+                        // Append cell to row
+                        rows.Append(cell);
+                  
+                        sheetData.Append(rows);
+                        i++;
+                    }
+
+
+                    // Append row to sheetData
+               
+
+                    // Append sheetData to worksheet
+                    worksheet.Append(sheetData);
+
+                    worksheetPart.Worksheet.Save();
+                }
+                spreadSheet.WorkbookPart.Workbook.Save();
+                spreadSheet.Close();
+
+             
+            }
+
         }
         #endregion
     }

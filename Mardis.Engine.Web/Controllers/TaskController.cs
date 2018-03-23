@@ -25,6 +25,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Memory;
 using Mardis.Engine.Web.App_code;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
 
 namespace Mardis.Engine.Web.Controllers
 {
@@ -506,6 +507,109 @@ namespace Mardis.Engine.Web.Controllers
                 _logger.LogError(new EventId(0, "Error Index"), ex.Message);
 
                 return Json("");
+            }
+        }
+        #endregion
+        #region cargaMasiva
+        [HttpGet]
+        public IActionResult Massive(Guid idTask, Guid? idCampaign = null, string returnUrl = null)
+        {
+
+            try
+            {
+                ViewData["ReturnUrl"] = returnUrl;
+
+                TempData["Idcampaing"] = JsonConvert.SerializeObject(idCampaign);
+                return View();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), e.Message);
+                return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
+            }
+        }
+        [HttpPost]
+        public IActionResult Massive(IFormFile fileBranch)
+        {
+            DateTime localDate = DateTime.Now;
+            if (fileBranch == null)
+            {
+
+                ViewBag.error = "Verfique si el archivo fue cargado";
+                return Json("-1");
+            }
+            Guid idcampaing = JsonConvert.DeserializeObject<Guid>(TempData["Idcampaing"].ToString());
+            string LogFile = localDate.ToString("yyyyMMddHHmmss");
+            var Filepath = _Env.WebRootPath + "\\Form\\ " + LogFile + "_" + fileBranch.FileName.ToString();
+           
+            using (var fileStream = new FileStream(Filepath, FileMode.Create))
+            {
+                fileBranch.CopyTo(fileStream);
+            }
+
+
+            return RedirectToAction("LoadTask", "Task", new { @idCampaign = idcampaing, @path = Filepath, @nameFile = fileBranch.FileName.ToString() });
+        }
+        [HttpGet]
+        public IActionResult LoadTask(Guid idCampaign, string path = null, string nameFile = null)
+        {
+
+            try
+            {
+                ViewBag.file = nameFile;
+                ViewBag.path = path;
+                ViewBag.idcampingn = idCampaign;
+                //Guid idAccount = ApplicationUserCurrent.AccountId;
+                //var msg =_taskCampaignBusiness.taskMigrate(path, idAccount, idCampaign);
+
+                return View();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), e.Message);
+                return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
+            }
+        }
+        [HttpPost]
+        public JsonResult LoadTask(string idcampaign, string idpath,string idstatus)
+        {
+
+            try
+            {
+                Guid idCampaignGuid = Guid.Parse(idcampaign);
+                Guid idAccount = ApplicationUserCurrent.AccountId;
+                var data = _taskCampaignBusiness.taskMigrate(idpath, idAccount, idCampaignGuid, idstatus);
+                var rows = from x in data
+                           select new
+                           {
+                               description = x.description,
+                               data = x.Element,
+                               Code = x.Code
+
+                           };
+          
+                var jsondata =  rows.ToArray();
+                return Json(jsondata);
+
+            }
+            catch (Exception e)
+            {
+                 
+                         _logger.LogError(new EventId(0, "Error Index"), e.Message);
+         IList<TaskMigrateResultViewModel> data = new List<TaskMigrateResultViewModel>();
+                data.Add(new TaskMigrateResultViewModel { description = e.Message, Element = "0", Code = "0" });
+              var rows = from x in data
+                           select new
+                           {
+                               description = x.description,
+                               data = x.Element,
+                               Code = x.Code
+
+                           };
+          
+                var jsondata =  rows.ToArray();
+                return Json(jsondata);
+              
             }
         }
         #endregion
