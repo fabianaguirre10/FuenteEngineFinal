@@ -1280,15 +1280,15 @@ namespace Mardis.Engine.Business.MardisCore
                                         break;
                                     case 13:
                                         BranchModel.IdDistrict = _branchMigrateDao.GetDistrictByName(GetCellValue(doc, cell), BranchModel.IdProvice);
-                                        Isval(BranchModel.IdProvice.ToString(), 5, j);
+                                        Isval(BranchModel.IdDistrict.ToString(), 5, j);
                                         break;
                                     case 14:
                                         BranchModel.IdParish = _branchMigrateDao.GetParishByName(GetCellValue(doc, cell), BranchModel.IdDistrict);
-                                        Isval(BranchModel.IdProvice.ToString(), 6, j);
+                                        Isval(BranchModel.IdParish.ToString(), 6, j);
                                         break;
                                     case 15:
                                         BranchModel.IdSector = _branchMigrateDao.GetSectorByName(GetCellValue(doc, cell), BranchModel.IdDistrict);
-                                        Isval(BranchModel.IdProvice.ToString(), 7, j);
+                                        Isval(BranchModel.IdSector.ToString(), 7, j);
                                         break;
                                     case 16:
                                         BranchModel.Rute = GetCellValue(doc, cell);

@@ -12,6 +12,7 @@ using Mardis.Engine.Web.ViewModel;
 using Mardis.Engine.Web.ViewModel.Filter;
 using Mardis.Engine.Web.ViewModel.BranchViewModels;
 using Microsoft.EntityFrameworkCore;
+using Mardis.Engine.DataObject.MardisSecurity;
 
 namespace Mardis.Engine.DataObject.MardisCore
 {
@@ -19,11 +20,12 @@ namespace Mardis.Engine.DataObject.MardisCore
     {
         private readonly PersonDao _personDao;
         private readonly BranchDao _brachDao;
-
+        private readonly UserDao _userDao;
         public BranchMigrateDao(MardisContext mardisContext) :
             base(mardisContext)
         {
             _personDao = new PersonDao(mardisContext);
+            _userDao = new UserDao(mardisContext);
             _brachDao = new BranchDao(mardisContext);
             CoreFilterDao = new CoreFilterDao(mardisContext);
             CoreFilterDetailDao = new CoreFilterDetailDao(mardisContext);
@@ -176,7 +178,7 @@ namespace Mardis.Engine.DataObject.MardisCore
                             //task.IdAccount = idAccount;
                             //task.IdCampaign = idcampaing;
                             //task.IdBranch = branch.Id;
-                            //task.IdMerchant = Guid.Parse("494EDD03-B3FC-4B37-97A7-52A8D8EBE2F5");
+                            //task.IdMerchant = _userDao.GetMerchants(idAccount).First().Id;
                             //task.IdStatusTask = Guid.Parse("7B0D0269-1AEF-4B73-9089-20E53698FF75");
                             //task.StatusRegister = "A";
                             //task.Route = item.Rute;
@@ -205,6 +207,25 @@ namespace Mardis.Engine.DataObject.MardisCore
                             Context.Branches.Add(Getbrach);
                             Context.Entry(Getbrach).State = stateRegister;
                             Context.SaveChanges();
+
+                            //task = new TaskCampaign();
+                            //task.Code = item.Code;
+                            //task.Description = "Agregada Para Gestión de Rutas";
+                            //task.ExternalCode = item.Code;
+                            //task.IdAccount = idAccount;
+                            //task.IdCampaign = idcampaing;
+                            //task.IdBranch = Getbrach.Id;
+                            //task.IdMerchant = _userDao.GetMerchants(idAccount).First().Id;
+                            //task.IdStatusTask = Guid.Parse("7B0D0269-1AEF-4B73-9089-20E53698FF75");
+                            //task.StatusRegister = "A";
+                            //task.Route = item.Rute;
+
+                            //Context.TaskCampaigns.Add(task);
+                            //Context.Entry(task).State = EntityState.Added;
+                            //Context.SaveChanges();
+                            
+
+
                             transaction.Commit();
                         }
 
