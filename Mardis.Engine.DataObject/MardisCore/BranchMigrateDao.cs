@@ -98,8 +98,9 @@ namespace Mardis.Engine.DataObject.MardisCore
         /// </summary>
         /// <param name="branchPerson"> El parametero tiene informacion de persona y local</param>
         /// <returns></returns>
-        public Branch SaveBranchMigrate(IList<BranchMigrate> branchPerson, Guid idAccount, Guid idcampaing)
+        public bool SaveBranchMigrate(IList<BranchMigrate> branchPerson, Guid idAccount, Guid idcampaing)
         {
+            bool status = false;
             Branch branch = null;
             Person person = null;
 #pragma warning disable CS0219 // La variable 'task' está asignada pero su valor nunca se usa
@@ -171,21 +172,21 @@ namespace Mardis.Engine.DataObject.MardisCore
                             Context.Entry(branch).State = stateRegister;
                             Context.SaveChanges();
 
-                            //task = new TaskCampaign();
-                            //task.Code = item.Code;
-                            //task.Description = "Agregada Para Gestión de Rutas";
-                            //task.ExternalCode = item.Code;
-                            //task.IdAccount = idAccount;
-                            //task.IdCampaign = idcampaing;
-                            //task.IdBranch = branch.Id;
-                            //task.IdMerchant = _userDao.GetMerchants(idAccount).First().Id;
-                            //task.IdStatusTask = Guid.Parse("7B0D0269-1AEF-4B73-9089-20E53698FF75");
-                            //task.StatusRegister = "A";
-                            //task.Route = item.Rute;
+                            task = new TaskCampaign();
+                            task.Code = item.Code;
+                            task.Description = "Agregada Para Gestión de Rutas";
+                            task.ExternalCode = item.Code;
+                            task.IdAccount = idAccount;
+                            task.IdCampaign = idcampaing;
+                            task.IdBranch = branch.Id;
+                            task.IdMerchant = _userDao.GetMerchants(idAccount).First().Id;
+                            task.IdStatusTask = Guid.Parse("7B0D0269-1AEF-4B73-9089-20E53698FF75");
+                            task.StatusRegister = "A";
+                            task.Route = item.Rute;
 
-                            //Context.TaskCampaigns.Add(task);
-                            //Context.Entry(task).State = stateRegister;
-                            //Context.SaveChanges();
+                            Context.TaskCampaigns.Add(task);
+                            Context.Entry(task).State = stateRegister;
+                            Context.SaveChanges();
 
 
                             transaction.Commit();
@@ -208,40 +209,45 @@ namespace Mardis.Engine.DataObject.MardisCore
                             Context.Entry(Getbrach).State = stateRegister;
                             Context.SaveChanges();
 
-                            //task = new TaskCampaign();
-                            //task.Code = item.Code;
-                            //task.Description = "Agregada Para Gestión de Rutas";
-                            //task.ExternalCode = item.Code;
-                            //task.IdAccount = idAccount;
-                            //task.IdCampaign = idcampaing;
-                            //task.IdBranch = Getbrach.Id;
-                            //task.IdMerchant = _userDao.GetMerchants(idAccount).First().Id;
-                            //task.IdStatusTask = Guid.Parse("7B0D0269-1AEF-4B73-9089-20E53698FF75");
-                            //task.StatusRegister = "A";
-                            //task.Route = item.Rute;
+                            task = new TaskCampaign();
+                            task.Code = item.Code;
+                            task.Description = "Agregada Para Gestión de Rutas";
+                            task.ExternalCode = item.Code;
+                            task.IdAccount = idAccount;
+                            task.IdCampaign = idcampaing;
+                            task.IdBranch = Getbrach.Id;
+                            task.IdMerchant = _userDao.GetMerchants(idAccount).First().Id;
+                            task.IdStatusTask = Guid.Parse("7B0D0269-1AEF-4B73-9089-20E53698FF75");
+                            task.StatusRegister = "A";
+                            task.Route = item.Rute;
 
-                            //Context.TaskCampaigns.Add(task);
-                            //Context.Entry(task).State = EntityState.Added;
-                            //Context.SaveChanges();
-                            
+                            Context.TaskCampaigns.Add(task);
+                            Context.Entry(task).State = EntityState.Modified;
+                            Context.SaveChanges();
+
 
 
                             transaction.Commit();
                         }
-
+                      
                     }
-#pragma warning disable CS0168 // La variable 'ex' se ha declarado pero nunca se usa
+                
                     catch (Exception ex)
-#pragma warning restore CS0168 // La variable 'ex' se ha declarado pero nunca se usa
+
                     {
                         transaction.Rollback();
-                        branch = null;
+                        return false;
+                    }
+                    finally{
+                        status = true;
+
+
                     }
                 }
             }
+     
+            return status;
 
-
-            return null;
         }
     }
 }

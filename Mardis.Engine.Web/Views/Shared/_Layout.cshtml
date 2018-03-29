@@ -34,7 +34,7 @@
         <link href="~/css/AdminLTE/dashboard/dist/css/AdminLTE.css" rel="stylesheet" />
         <link href="~/css/AdminLTE/_all-skins.css" rel="stylesheet" />
         @*<link href="~/css/AdminLTE/dashboard/dist/css/AdminLTE.css" rel="stylesheet" />*@
-    
+
         <link href="~/lib/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
         <link href="~/lib/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
     </environment>
@@ -165,10 +165,10 @@
                     <div class="col-sm-8">
                         @if (!string.IsNullOrEmpty((string)ViewData["Title"]) && !string.IsNullOrEmpty((string)ViewData["Description"]))
                         {
-                            <h2>
-                                @ViewData["Title"]
-                                <small>@ViewData["Description"]</small>
-                            </h2>
+                        <h2>
+                            @ViewData["Title"]
+                            <small>@ViewData["Description"]</small>
+                        </h2>
                         }
                     </div>
                     <div class="col-sm-4">
@@ -200,8 +200,11 @@
 
     <environment names="Development">
 
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
         <script type="text/javascript" src="~/lib/knockout/dist/knockout.js"></script>
         <script type="text/javascript" src="~/lib/knockout/dist/knockout.debug.js"></script>
@@ -233,7 +236,8 @@
         <script src="~/lib/jquery-sticky/jquery.sticky.js"></script>
         <script src="~/lib/bootstrap-select/dist/js/bootstrap-select.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
-        @*<script src="~/js/AdminLTE/fastclick/fastclick.js"></script>*@
+        @*
+        <script src="~/js/AdminLTE/fastclick/fastclick.js"></script>*@
         <script src="~/js/AdminLTE/app.js"></script>
         <script src="~/js/AdminLTE/slimScroll/jquery.slimscroll.min.js"></script>
         <script src="~/lib/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
@@ -313,5 +317,6 @@
     </script>
 
 </body>
-@*<div class="se-pre-con"></div>*@
+@*
+<div class="se-pre-con"></div>*@
 </html>

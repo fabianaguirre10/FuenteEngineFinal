@@ -1341,9 +1341,16 @@ namespace Mardis.Engine.Business.MardisCore
             {
                 if (status.Equals("2"))
                 {
-                    _branchMigrateDao.SaveBranchMigrate(lsBranch, idAccount, idcampaing);
-                    result.Add(new TaskMigrateResultViewModel { description = "Locales Cargados", Element = (j - 1).ToString() });
-                    result.Add(new TaskMigrateResultViewModel { description = "Errores", Element ="0" });
+                    if (_branchMigrateDao.SaveBranchMigrate(lsBranch, idAccount, idcampaing))
+                    {
+                        result.Add(new TaskMigrateResultViewModel { description = "Locales Cargados", Element = (j - 1).ToString() });
+                        result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = "0" });
+                    }
+                    else {
+                        result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = "NA" });
+                        result.Add(new TaskMigrateResultViewModel { description = "No se actualizo la información volver", Element = (j - 1).ToString() });
+                       
+                    }
                     if (File.Exists(fileBrachMassive))
                     {
                         File.Delete(fileBrachMassive);
