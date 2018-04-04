@@ -161,7 +161,7 @@ namespace Mardis.Engine.Web.Controllers
         }
 
         [Authorize]
-        public IActionResult Index(string filterValues, bool deleteFilter, int pageSize = 15, int pageIndex = 1)
+        public IActionResult Index(string filterValues, bool deleteFilter, int pageSize = 20, int pageIndex = 1)
         {
             try
             {

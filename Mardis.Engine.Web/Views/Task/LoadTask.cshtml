@@ -83,8 +83,10 @@
                     <hr style="border-color: transparent; margin-top: 7px; margin-right: 20px ; margin-left: 20px ;padding-top  :90px" />
                     <div class="form-group">
                         <div class="col-md-offset-4 ">
-                            <button class="btn btn-default" onclick="history.back();" id="btnGuardars" type="submit">Cancelar</button>
+                            <a href="@Url.Action("Massive", "Task", new { idCampaign = @ViewBag.idcampingn })" class="btn btn-default">Cancelar</a>
+                            @*<button class="btn btn-default" onclick="history.back();" id="btnGuardars" type="submit">Cancelar</button>*@
                             <a href="@Url.Action("Index","Campaign")" class="btn btn-primary">Salir y Continuar</a>
+                            <a href="@Url.Action("Index", "Branch")" class="btn btn-default">Locales</a>
                             <a href="" id="errorbtn" class="btn btn-info" hidden>Archivo Errores</a>
                         </div>
 

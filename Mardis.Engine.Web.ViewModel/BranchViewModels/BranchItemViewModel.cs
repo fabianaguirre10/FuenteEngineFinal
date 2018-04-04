@@ -17,7 +17,11 @@ namespace Mardis.Engine.Web.ViewModel.BranchViewModels
         public string Neighborhood { get; set; }
 
         public string Reference { get; set; }
-      
 
+        public string RUTAAGGREGATE { get; set; }
+
+        public string IMEI_ID { get; set; }
+
+        public string TypeBusiness { get; set; }
     }
 }
