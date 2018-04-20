@@ -167,7 +167,7 @@ namespace Mardis.Engine.DataObject.MardisCore
                             branch.IMEI_ID = item.IMEI;
                             branch.RUTAAGGREGATE = item.Rute;
                             branch.ESTADOAGGREGATE = "S";
-
+                            branch.routeDate = DateTime.Now;
                             Context.Branches.Add(branch);
                             Context.Entry(branch).State = stateRegister;
                             Context.SaveChanges();
@@ -205,6 +205,7 @@ namespace Mardis.Engine.DataObject.MardisCore
                             Getbrach.LenghtBranch = item.LenghtBranch;
                             Getbrach.LatitudeBranch = item.LatitudeBranch;
                             Getbrach.ESTADOAGGREGATE = "S";
+                            branch.routeDate = DateTime.Now;
                             Context.Branches.Add(Getbrach);
                             Context.Entry(Getbrach).State = stateRegister;
                             Context.SaveChanges();
@@ -222,7 +223,11 @@ namespace Mardis.Engine.DataObject.MardisCore
                             //task.Route = item.Rute;
 
                             //Context.TaskCampaigns.Add(task);
+<<<<<<< HEAD
                             //Context.Entry(task).State = EntityState.Modified;
+=======
+                            //Context.Entry(task).State = EntityState.Added;
+>>>>>>> 7eff6df586b469665be488a0ba16ade6cbc20be3
                             //Context.SaveChanges();
 
 
