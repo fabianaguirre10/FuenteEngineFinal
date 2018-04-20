@@ -65,7 +65,7 @@ namespace Mardis.Engine.Web.Controllers
         }
         
         [HttpGet]
-        public IActionResult DashBoard(DashBoardViewModel model, string filterValues, bool deleteFilter, int pageIndex = 1, int pageSize = 10)
+        public IActionResult DashBoard(DashBoardViewModel model, string filterValues, bool deleteFilter, int pageIndex = 1, int pageSize = 50)
         {
 
             if (!string.IsNullOrEmpty(model.IdCampaign))

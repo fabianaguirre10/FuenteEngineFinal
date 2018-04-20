@@ -263,7 +263,7 @@ namespace Mardis.Engine.Web.Controllers
                 {
                    // _SaveImagesAsync(IdEq);
                 }
-                return Json(model);
+                return Json(model);  
             }
             catch (Exception e)
             {
