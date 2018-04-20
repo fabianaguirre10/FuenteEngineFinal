@@ -535,8 +535,8 @@ namespace Mardis.Engine.Web.Controllers
             if (fileBranch == null)
             {
 
-                ViewBag.error = "Verfique si el archivo fue cargado";
-                return Json("-1");
+                TempData["ErrorCarga"] = "Verfique si el archivo fue cargado";
+                return RedirectToAction("Massive");
             }
             Guid idcampaing = JsonConvert.DeserializeObject<Guid>(TempData["Idcampaing"].ToString());
             string LogFile = localDate.ToString("yyyyMMddHHmmss");

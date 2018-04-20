@@ -64,6 +64,7 @@
             <div style="margin-top: 14px;"></div>
 
             <div style="text-align: center">
+                <label class="label-danger ">@ViewBag.error</label>
                 <button class="btn btn-primary" id="btnGuardar" type="submit">Subir</button>
                 <button onclick="history.back();" class="btn btn-default btn-sm" id="btnCancelar">Salir</button>
             </div>
@@ -145,8 +146,10 @@
             });
         };
         window.addEventListener("submit", function (e) {
+     
             if ($('#formBacklink').valid()) {
                 var form = e.target;
+          
                 if (form.getAttribute("enctype") === "multipart/form-data") {
                     if (form.dataset.ajax) {
                         e.preventDefault();
@@ -155,12 +158,13 @@
                         var dataString;
                         event.preventDefault();
                         var action = $("#formBacklink").attr("action");
+                     
                         if ($("#formBacklink").attr("enctype") == "multipart/form-data") {
-
+                            alert($("#formBacklink").attr("enctype"));
                             dataString = new FormData($("#formBacklink").get(0));
                             contentType = false;
                             processData = false;
-
+                           
                             OnSuccess(action, dataString)
                         } else {
                             alert("Ingrese el archivo  que desea validar")

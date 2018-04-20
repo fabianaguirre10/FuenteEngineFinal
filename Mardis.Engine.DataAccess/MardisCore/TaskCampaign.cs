@@ -13,7 +13,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
 
         public TaskCampaign()
         {
-            Campaign = new Campaign();
+            
             Answers = new HashSet<Answer>();
         }
 
