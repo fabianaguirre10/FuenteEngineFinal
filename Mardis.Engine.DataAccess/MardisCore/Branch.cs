@@ -67,7 +67,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public string ESTADOAGGREGATE { get; set; }
         public string RUTAAGGREGATE { get; set; }
         public string IMEI_ID { get; set; }
-
+        public DateTime routeDate { get; set; } = DateTime.Now;
         [ForeignKey("IdCountry")]
         public Country Country { get; set; }
 
