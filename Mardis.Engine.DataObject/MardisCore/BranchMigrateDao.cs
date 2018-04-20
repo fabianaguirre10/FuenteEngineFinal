@@ -172,21 +172,21 @@ namespace Mardis.Engine.DataObject.MardisCore
                             Context.Entry(branch).State = stateRegister;
                             Context.SaveChanges();
 
-                            task = new TaskCampaign();
-                            task.Code = item.Code;
-                            task.Description = "Agregada Para Gestión de Rutas";
-                            task.ExternalCode = item.Code;
-                            task.IdAccount = idAccount;
-                            task.IdCampaign = idcampaing;
-                            task.IdBranch = branch.Id;
-                            task.IdMerchant = _userDao.GetMerchants(idAccount).First().Id;
-                            task.IdStatusTask = Guid.Parse("7B0D0269-1AEF-4B73-9089-20E53698FF75");
-                            task.StatusRegister = "A";
-                            task.Route = item.Rute;
+                            //task = new TaskCampaign();
+                            //task.Code = item.Code;
+                            //task.Description = "Agregada Para Gestión de Rutas";
+                            //task.ExternalCode = item.Code;
+                            //task.IdAccount = idAccount;
+                            //task.IdCampaign = idcampaing;
+                            //task.IdBranch = branch.Id;
+                            //task.IdMerchant = _userDao.GetMerchants(idAccount).First().Id;
+                            //task.IdStatusTask = Guid.Parse("7B0D0269-1AEF-4B73-9089-20E53698FF75");
+                            //task.StatusRegister = "A";
+                            //task.Route = item.Rute;
 
-                            Context.TaskCampaigns.Add(task);
-                            Context.Entry(task).State = stateRegister;
-                            Context.SaveChanges();
+                            //Context.TaskCampaigns.Add(task);
+                            //Context.Entry(task).State = stateRegister;
+                            //Context.SaveChanges();
 
 
                             transaction.Commit();
@@ -209,21 +209,21 @@ namespace Mardis.Engine.DataObject.MardisCore
                             Context.Entry(Getbrach).State = stateRegister;
                             Context.SaveChanges();
 
-                            task = new TaskCampaign();
-                            task.Code = item.Code;
-                            task.Description = "Agregada Para Gestión de Rutas";
-                            task.ExternalCode = item.Code;
-                            task.IdAccount = idAccount;
-                            task.IdCampaign = idcampaing;
-                            task.IdBranch = Getbrach.Id;
-                            task.IdMerchant = _userDao.GetMerchants(idAccount).First().Id;
-                            task.IdStatusTask = Guid.Parse("7B0D0269-1AEF-4B73-9089-20E53698FF75");
-                            task.StatusRegister = "A";
-                            task.Route = item.Rute;
+                            //task = new TaskCampaign();
+                            //task.Code = item.Code;
+                            //task.Description = "Agregada Para Gestión de Rutas";
+                            //task.ExternalCode = item.Code;
+                            //task.IdAccount = idAccount;
+                            //task.IdCampaign = idcampaing;
+                            //task.IdBranch = Getbrach.Id;
+                            //task.IdMerchant = _userDao.GetMerchants(idAccount).First().Id;
+                            //task.IdStatusTask = Guid.Parse("7B0D0269-1AEF-4B73-9089-20E53698FF75");
+                            //task.StatusRegister = "A";
+                            //task.Route = item.Rute;
 
-                            Context.TaskCampaigns.Add(task);
-                            Context.Entry(task).State = EntityState.Modified;
-                            Context.SaveChanges();
+                            //Context.TaskCampaigns.Add(task);
+                            //Context.Entry(task).State = EntityState.Modified;
+                            //Context.SaveChanges();
 
 
 
