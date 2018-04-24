@@ -106,153 +106,165 @@ namespace Mardis.Engine.DataObject.MardisCore
 #pragma warning disable CS0219 // La variable 'task' está asignada pero su valor nunca se usa
             TaskCampaign task = null;
 #pragma warning restore CS0219 // La variable 'task' está asignada pero su valor nunca se usa
-            foreach (var item in branchPerson.Where(x => x.Code != "NA"))
+            try
             {
-
-                using (var transaction = Context.Database.BeginTransaction())
+                foreach (var item in branchPerson.Where(x => x.Code != "NA"))
                 {
 
-                    try
+                    using (var transaction = Context.Database.BeginTransaction())
                     {
-                        var Getbrach = _brachDao.GetBranchByExternalCode(item.Code, idAccount);
 
-
-                        if (Getbrach == null)
+                        try
                         {
-                            var stateRegister = EntityState.Added;
+                            var Getbrach = _brachDao.GetBranchByExternalCode(item.Code, idAccount);
 
 
-                            person = new Person();
-                            var ci = item.Document == null ? item.Code : item.Document;
-                            person.Code = item.Code;
-                            person.Name = item.PersonName;
-                            person.Phone = item.phone;
-                            person.Mobile = item.Mobil;
-                            person.Document = ci;
-                            person.SurName = "";
-                            person.TypeDocument = "CI";
-                            person.StatusRegister = "A";
-                            person.IdAccount = idAccount;
-                            Context.Persons.Add(person);
+                            if (Getbrach == null)
+                            {
+                                var stateRegister = EntityState.Added;
+
+
+                                person = new Person();
+                                var ci = item.Document == null ? item.Code : item.Document;
+                                person.Code = item.Code;
+                                person.Name = item.PersonName;
+                                person.Phone = item.phone;
+                                person.Mobile = item.Mobil;
+                                person.Document = ci;
+                                person.SurName = "";
+                                person.TypeDocument = "CI";
+                                person.StatusRegister = "A";
+                                person.IdAccount = idAccount;
+                                Context.Persons.Add(person);
 
 
 
-                            Context.Entry(person).State = stateRegister;
+                                Context.Entry(person).State = stateRegister;
 
-                            Context.SaveChanges();
-                            Guid idperson = person.Id;
-                            branch = new Branch();
-                            branch.Code = item.Code;
-                            branch.ExternalCode = item.Code;
-                            branch.IdCountry = Guid.Parse("BE7CF5FF-296B-464D-82FA-EF0B4F48721B");// Pais ecuador
-                            branch.IdProvince = item.IdProvice;
-                            branch.IdDistrict = item.IdDistrict;
-                            branch.IdParish = item.IdParish;
-                            branch.IdSector = item.IdSector;
-                            branch.Name = item.BranchName;
-                            branch.Label = item.BranchName;
-                            branch.LatitudeBranch = item.LatitudeBranch;
-                            branch.LenghtBranch = item.LenghtBranch;
-                            branch.MainStreet = item.BranchStreet;
-                            branch.Reference = item.BranchReference;
-                            branch.Zone = "";
-                            branch.TypeBusiness = item.BranchType;
-                            branch.Neighborhood = "-";
-                            branch.SecundaryStreet = "-";
-                            branch.NumberBranch = "-";
-                            branch.IdPersonAdministrator = idperson;
-                            branch.IdPersonOwner = idperson;
-                            branch.IsAdministratorOwner = "SI";
-                            branch.IdAccount = idAccount;
-                            branch.IMEI_ID = item.IMEI;
-                            branch.RUTAAGGREGATE = item.Rute;
-                            branch.ESTADOAGGREGATE = "S";
-                            branch.routeDate = DateTime.Now;
-                            Context.Branches.Add(branch);
-                            Context.Entry(branch).State = stateRegister;
-                            Context.SaveChanges();
+                                Context.SaveChanges();
+                                Guid idperson = person.Id;
+                                branch = new Branch();
+                                branch.Code = item.Code;
+                                branch.ExternalCode = item.Code;
+                                branch.IdCountry = Guid.Parse("BE7CF5FF-296B-464D-82FA-EF0B4F48721B");// Pais ecuador
+                                branch.IdProvince = item.IdProvice;
+                                branch.IdDistrict = item.IdDistrict;
+                                branch.IdParish = item.IdParish;
+                                branch.IdSector = item.IdSector;
+                                branch.Name = item.BranchName;
+                                branch.Label = item.BranchName;
+                                branch.LatitudeBranch = item.LatitudeBranch;
+                                branch.LenghtBranch = item.LenghtBranch;
+                                branch.MainStreet = item.BranchStreet;
+                                branch.Reference = item.BranchReference;
+                                branch.Zone = "";
+                                branch.TypeBusiness = item.BranchType;
+                                branch.Neighborhood = "-";
+                                branch.SecundaryStreet = "-";
+                                branch.NumberBranch = "-";
+                                branch.IdPersonAdministrator = idperson;
+                                branch.IdPersonOwner = idperson;
+                                branch.IsAdministratorOwner = "SI";
+                                branch.IdAccount = idAccount;
+                                branch.IMEI_ID = item.IMEI;
+                                branch.RUTAAGGREGATE = item.Rute;
+                                branch.ESTADOAGGREGATE = "S";
+                                branch.routeDate = DateTime.Now;
+                                Context.Branches.Add(branch);
+                                Context.Entry(branch).State = stateRegister;
+                                Context.SaveChanges();
 
-                            //task = new TaskCampaign();
-                            //task.Code = item.Code;
-                            //task.Description = "Agregada Para Gestión de Rutas";
-                            //task.ExternalCode = item.Code;
-                            //task.IdAccount = idAccount;
-                            //task.IdCampaign = idcampaing;
-                            //task.IdBranch = branch.Id;
-                            //task.IdMerchant = _userDao.GetMerchants(idAccount).First().Id;
-                            //task.IdStatusTask = Guid.Parse("7B0D0269-1AEF-4B73-9089-20E53698FF75");
-                            //task.StatusRegister = "A";
-                            //task.Route = item.Rute;
+                                //task = new TaskCampaign();
+                                //task.Code = item.Code;
+                                //task.Description = "Agregada Para Gestión de Rutas";
+                                //task.ExternalCode = item.Code;
+                                //task.IdAccount = idAccount;
+                                //task.IdCampaign = idcampaing;
+                                //task.IdBranch = branch.Id;
+                                //task.IdMerchant = _userDao.GetMerchants(idAccount).First().Id;
+                                //task.IdStatusTask = Guid.Parse("7B0D0269-1AEF-4B73-9089-20E53698FF75");
+                                //task.StatusRegister = "A";
+                                //task.Route = item.Rute;
 
-                            //Context.TaskCampaigns.Add(task);
-                            //Context.Entry(task).State = stateRegister;
-                            //Context.SaveChanges();
+                                //Context.TaskCampaigns.Add(task);
+                                //Context.Entry(task).State = stateRegister;
+                                //Context.SaveChanges();
 
 
-                            transaction.Commit();
+                                transaction.Commit();
+                            }
+                            else
+                            {
+                                var stateRegister = Guid.Empty == Getbrach.Id ? EntityState.Added : EntityState.Modified;
+
+
+                                Getbrach.IMEI_ID = item.IMEI;
+                                Getbrach.RUTAAGGREGATE = item.Rute;
+                                Getbrach.MainStreet = item.BranchStreet;
+                                Getbrach.Name = item.BranchName;
+                                Getbrach.Label = item.BranchName;
+                                Getbrach.Reference = item.BranchReference;
+                                Getbrach.LenghtBranch = item.LenghtBranch;
+                                Getbrach.LatitudeBranch = item.LatitudeBranch;
+                                Getbrach.ESTADOAGGREGATE = "S";
+                                Getbrach.routeDate = DateTime.Now;
+                                Context.Branches.Add(Getbrach);
+                                Context.Entry(Getbrach).State = stateRegister;
+                                Context.SaveChanges();
+
+                                //task = new TaskCampaign();
+                                //task.Code = item.Code;
+                                //task.Description = "Agregada Para Gestión de Rutas";
+                                //task.ExternalCode = item.Code;
+                                //task.IdAccount = idAccount;
+                                //task.IdCampaign = idcampaing;
+                                //task.IdBranch = Getbrach.Id;
+                                //task.IdMerchant = _userDao.GetMerchants(idAccount).First().Id;
+                                //task.IdStatusTask = Guid.Parse("7B0D0269-1AEF-4B73-9089-20E53698FF75");
+                                //task.StatusRegister = "A";
+                                //task.Route = item.Rute;
+
+                                //Context.TaskCampaigns.Add(task);
+
+                                //Context.Entry(task).State = EntityState.Modified;
+
+                                //Context.Entry(task).State = EntityState.Added;
+
+                                //Context.SaveChanges();
+
+
+
+                                transaction.Commit();
+                            }
+
                         }
-                        else
+
+                        catch (Exception ex)
+
                         {
-                            var stateRegister = Guid.Empty == Getbrach.Id ? EntityState.Added : EntityState.Modified;
-
-
-                            Getbrach.IMEI_ID = item.IMEI;
-                            Getbrach.RUTAAGGREGATE = item.Rute;
-                            Getbrach.MainStreet = item.BranchStreet;
-                            Getbrach.Name = item.BranchName;
-                            Getbrach.Label = item.BranchName;
-                            Getbrach.Reference = item.BranchReference;
-                            Getbrach.LenghtBranch = item.LenghtBranch;
-                            Getbrach.LatitudeBranch = item.LatitudeBranch;
-                            Getbrach.ESTADOAGGREGATE = "S";
-                            branch.routeDate = DateTime.Now;
-                            Context.Branches.Add(Getbrach);
-                            Context.Entry(Getbrach).State = stateRegister;
-                            Context.SaveChanges();
-
-                            //task = new TaskCampaign();
-                            //task.Code = item.Code;
-                            //task.Description = "Agregada Para Gestión de Rutas";
-                            //task.ExternalCode = item.Code;
-                            //task.IdAccount = idAccount;
-                            //task.IdCampaign = idcampaing;
-                            //task.IdBranch = Getbrach.Id;
-                            //task.IdMerchant = _userDao.GetMerchants(idAccount).First().Id;
-                            //task.IdStatusTask = Guid.Parse("7B0D0269-1AEF-4B73-9089-20E53698FF75");
-                            //task.StatusRegister = "A";
-                            //task.Route = item.Rute;
-
-                            //Context.TaskCampaigns.Add(task);
-
-                            //Context.Entry(task).State = EntityState.Modified;
-
-                            //Context.Entry(task).State = EntityState.Added;
-
-                            //Context.SaveChanges();
-
-
-
-                            transaction.Commit();
+                            transaction.Rollback();
+                            return false;
                         }
-                      
-                    }
-                
-                    catch (Exception ex)
-
-                    {
-                        transaction.Rollback();
-                        return false;
-                    }
-                    finally{
-                        status = true;
+                        finally
+                        {
+                            status = true;
 
 
+                        }
                     }
                 }
             }
-     
-            return status;
+            catch (Exception exc)
+            {
 
+                status =false;
+
+            }
+            finally {
+                status =true;
+            }
+
+            return status;
         }
     }
 }
