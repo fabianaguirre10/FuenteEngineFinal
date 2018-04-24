@@ -85,9 +85,9 @@ namespace Mardis.Engine.DataObject.MardisCore
                 var idSectors = itemReturn.Count() > 0 ? itemReturn.First().Id : Guid.Parse("00000000-0000-0000-0000-000000000000");
                 return idSectors;
             }
-#pragma warning disable CS0168 // La variable 'e' se ha declarado pero nunca se usa
+
             catch (Exception e)
-#pragma warning restore CS0168 // La variable 'e' se ha declarado pero nunca se usa
+
             {
                 throw new Exception("Error al consultar Sectores");
             }

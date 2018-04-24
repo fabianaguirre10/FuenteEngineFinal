@@ -1228,105 +1228,112 @@ namespace Mardis.Engine.Business.MardisCore
 
                         BranchMigrate BranchModel = new BranchMigrate();
                         int i = 0;
-                        foreach (Cell cell in row.Descendants<Cell>())
+                        if (row.Descendants<Cell>().Count() >= 17)
                         {
-
-                            try
-                            {
-                                i++;
-                                switch (i)
-                                {
-                                    case 1:
-                                        BranchModel.Code = GetCellValue(doc, cell);
-                                        Isval(BranchModel.Code,1,j);
-                                        break;
-                                    case 2:
-                                        BranchModel.BranchType = GetCellValue(doc, cell);
-                                        break;
-                                    case 3:
-                                        BranchModel.BranchName = GetCellValue(doc, cell);
-                                        break;
-                                    case 4:
-                                        BranchModel.BranchStreet = GetCellValue(doc, cell);
-                                        break;
-                                    case 5:
-                                        BranchModel.BranchReference = GetCellValue(doc, cell);
-                                        break;
-                                    case 6:
-                                        BranchModel.PersonName = GetCellValue(doc, cell);
-                                        break;
-                                    case 7:
-                                        BranchModel.Document = GetCellValue(doc, cell);
-                                        break;
-                                    case 8:
-                                        BranchModel.phone = GetCellValue(doc, cell);
-                                        break;
-                                    case 9:
-                                        BranchModel.Mobil = GetCellValue(doc, cell);
-                                        break;
-                                    case 10:
-                                        string lat = GetCellValue(doc, cell);
-                                        BranchModel.LatitudeBranch = lat.Length <= 10 ? lat : lat.Substring(0, 11);
-
-                                        break;
-                                    case 11:
-                                        string len = GetCellValue(doc, cell);
-                                        BranchModel.LenghtBranch = len.Length <= 10 ? len : len.Substring(0, 11);
-
-                                        break;
-                                    case 12:
-                                        BranchModel.IdProvice = _branchMigrateDao.GetProviceByName(GetCellValue(doc, cell));
-                                        Isval(BranchModel.IdProvice.ToString(), 4, j);
-                                        break;
-                                    case 13:
-                                        BranchModel.IdDistrict = _branchMigrateDao.GetDistrictByName(GetCellValue(doc, cell), BranchModel.IdProvice);
-                                        Isval(BranchModel.IdDistrict.ToString(), 5, j);
-                                        break;
-                                    case 14:
-                                        BranchModel.IdParish = _branchMigrateDao.GetParishByName(GetCellValue(doc, cell), BranchModel.IdDistrict);
-                                        Isval(BranchModel.IdParish.ToString(), 6, j);
-                                        break;
-                                    case 15:
-                                        BranchModel.IdSector = _branchMigrateDao.GetSectorByName(GetCellValue(doc, cell), BranchModel.IdDistrict);
-                                        Isval(BranchModel.IdSector.ToString(), 7, j);
-                                        break;
-                                    case 16:
-                                        BranchModel.Rute = GetCellValue(doc, cell);
-                                        break;
-                                    case 17:
-                                        BranchModel.IMEI = GetCellValue(doc, cell);
-                                  
-                                        break;
-
-                                }
-                            }
-                            catch (Exception e)
+                            foreach (Cell cell in row.Descendants<Cell>())
                             {
 
-                                var ex = e.Message.ToString();
-
-                                int ne = -1;
-
-                                switch (ex)
+                                try
                                 {
-                                    case "Error al consultar Cuidad":
-                                        ne = 2;
-                                        break;
-                                    case "Error al consultar Parroquias":
-                                        ne = 3;
-                                        break;
-                                    case "Error al consultar Sectores":
-                                        ne = 4;
-                                        break;
+                                    i++;
+                                    switch (i)
+                                    {
+                                        case 1:
+                                            BranchModel.Code = GetCellValue(doc, cell);
+                                            Isval(BranchModel.Code, 1, j);
+                                            break;
+                                        case 2:
+                                            BranchModel.BranchType = GetCellValue(doc, cell);
+                                            break;
+                                        case 3:
+                                            BranchModel.BranchName = GetCellValue(doc, cell);
+                                            break;
+                                        case 4:
+                                            BranchModel.BranchStreet = GetCellValue(doc, cell);
+                                            break;
+                                        case 5:
+                                            BranchModel.BranchReference = GetCellValue(doc, cell);
+                                            break;
+                                        case 6:
+                                            BranchModel.PersonName = GetCellValue(doc, cell);
+                                            break;
+                                        case 7:
+                                            BranchModel.Document = GetCellValue(doc, cell);
+                                            break;
+                                        case 8:
+                                            BranchModel.phone = GetCellValue(doc, cell);
+                                            break;
+                                        case 9:
+                                            BranchModel.Mobil = GetCellValue(doc, cell);
+                                            break;
+                                        case 10:
+                                            string lat = GetCellValue(doc, cell);
+                                            BranchModel.LatitudeBranch = lat.Length <= 10 ? lat : lat.Substring(0, 11);
+
+                                            break;
+                                        case 11:
+                                            string len = GetCellValue(doc, cell);
+                                            BranchModel.LenghtBranch = len.Length <= 10 ? len : len.Substring(0, 11);
+
+                                            break;
+                                        case 12:
+                                            BranchModel.IdProvice = _branchMigrateDao.GetProviceByName(GetCellValue(doc, cell));
+                                            Isval(BranchModel.IdProvice.ToString(), 4, j);
+                                            break;
+                                        case 13:
+                                            BranchModel.IdDistrict = _branchMigrateDao.GetDistrictByName(GetCellValue(doc, cell), BranchModel.IdProvice);
+                                            Isval(BranchModel.IdDistrict.ToString(), 5, j);
+                                            break;
+                                        case 14:
+                                            BranchModel.IdParish = _branchMigrateDao.GetParishByName(GetCellValue(doc, cell), BranchModel.IdDistrict);
+                                            Isval(BranchModel.IdParish.ToString(), 6, j);
+                                            break;
+                                        case 15:
+                                            BranchModel.IdSector = _branchMigrateDao.GetSectorByName(GetCellValue(doc, cell), BranchModel.IdDistrict);
+                                            Isval(BranchModel.IdSector.ToString(), 7, j);
+                                            break;
+                                        case 16:
+                                            BranchModel.Rute = GetCellValue(doc, cell);
+                                            break;
+                                        case 17:
+                                            BranchModel.IMEI = GetCellValue(doc, cell);
+
+                                            break;
+
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+
+                                    var ex = e.Message.ToString();
+
+                                    int ne = -1;
+
+                                    switch (ex)
+                                    {
+                                        case "Error al consultar Cuidad":
+                                            ne = 2;
+                                            break;
+                                        case "Error al consultar Parroquias":
+                                            ne = 3;
+                                            break;
+                                        case "Error al consultar Sectores":
+                                            ne = 4;
+                                            break;
+
+                                    }
 
                                 }
 
                             }
-
+                            if (row.RowIndex.Value != 1)
+                            {
+                                lsBranch.Add(BranchModel);
+                            }
                         }
-                        if (row.RowIndex.Value != 1)
-                        {
-                            lsBranch.Add(BranchModel);
+                        else {
+
+                            lstTaskResult.Add(new TaskMigrateResultViewModel { description = "Existen Columnas vacias(Todas las columnas debe tener INFORMACION )", line = j, type = "E" });
                         }
                     }
 
