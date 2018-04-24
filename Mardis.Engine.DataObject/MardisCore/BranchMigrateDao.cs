@@ -106,6 +106,10 @@ namespace Mardis.Engine.DataObject.MardisCore
 #pragma warning disable CS0219 // La variable 'task' está asignada pero su valor nunca se usa
             TaskCampaign task = null;
 #pragma warning restore CS0219 // La variable 'task' está asignada pero su valor nunca se usa
+            try
+            {
+
+            
             foreach (var item in branchPerson.Where(x => x.Code != "NA"))
             {
 
@@ -250,7 +254,16 @@ namespace Mardis.Engine.DataObject.MardisCore
                     }
                 }
             }
-     
+            }
+            catch (Exception)
+            {
+                return false;
+                throw;
+            }
+            finally
+            {
+                status=true;
+            }
             return status;
 
         }
