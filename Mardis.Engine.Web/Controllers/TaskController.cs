@@ -26,6 +26,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Mardis.Engine.Web.App_code;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
+using System.Timers;
 
 namespace Mardis.Engine.Web.Controllers
 {
@@ -576,9 +577,11 @@ namespace Mardis.Engine.Web.Controllers
 
             try
             {
+                Timer timer = new Timer(10000);
                 Guid idCampaignGuid = Guid.Parse(idcampaign);
                 Guid idAccount = ApplicationUserCurrent.AccountId;
                 var data = _taskCampaignBusiness.taskMigrate(idpath, idAccount, idCampaignGuid, idstatus);
+                timer.Start();
                 var rows = from x in data
                            select new
                            {

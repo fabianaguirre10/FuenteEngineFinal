@@ -98,7 +98,7 @@ namespace Mardis.Engine.DataObject.MardisCore
         /// </summary>
         /// <param name="branchPerson"> El parametero tiene informacion de persona y local</param>
         /// <returns></returns>
-        public bool SaveBranchMigrate(IList<BranchMigrate> branchPerson, Guid idAccount, Guid idcampaing)
+        public  bool SaveBranchMigrate(IList<BranchMigrate> branchPerson, Guid idAccount, Guid idcampaing)
         {
             bool status = false;
             Branch branch = null;
