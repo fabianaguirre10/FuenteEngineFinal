@@ -229,7 +229,7 @@ namespace Mardis.Engine.Business.MardisCore
         {
             return _campaignDao.GetActiveCampaignsList(idAccount);
         }
-        public List<Campaign> GetActiveCampaignsListDasboard(Guid idAccount, Guid idUser)
+        public List<Dashboard> GetActiveCampaignsListDasboard(Guid idAccount, Guid idUser)
         {
             return _campaignDao.GetActiveCampaignsListDasboard(idAccount, idUser);
         }

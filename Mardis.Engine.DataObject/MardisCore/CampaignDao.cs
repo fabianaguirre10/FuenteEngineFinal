@@ -79,14 +79,15 @@ namespace Mardis.Engine.DataObject.MardisCore
 
 
         }
-        public List<Campaign> GetActiveCampaignsListDasboard(Guid idAccount, Guid idusr)
+        public List<Dashboard> GetActiveCampaignsListDasboard(Guid idAccount, Guid idusr)
         {
             var innerJoinQuery =
-             from c in Context.Campaigns
-             join u in Context.UserCanpaign on c.Id equals u.idCanpaign
-             where u.idUser == idusr && c.IdAccount == idAccount
+             from c in Context.Dashboards
+             join u in Context.UserCanpaign on c.idcampaign equals u.idCanpaign
+             join d in Context.Campaigns on u.idCanpaign equals  d.Id
+             where u.idUser == idusr && d.IdAccount == idAccount
              select c; //produces flat sequence
-            List<Campaign> result = innerJoinQuery.ToList<Campaign>();
+            List<Dashboard> result = innerJoinQuery.ToList<Dashboard>();
 
             return result;
 
