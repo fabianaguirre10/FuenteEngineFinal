@@ -314,7 +314,7 @@
                                                         @*Seleccion multiple con preguntas*@
                                                         <div class="col-sm-8 row">
                                                             <div v-for="(questionS, jf) in section.QuestionCollection">
-                                                                <div v-if="questionS.CodeTypePoll=='MANY'">
+                                                                <div v-if="questionS.CodeTypePoll=='MANY' && questionS.Weight!='0'">
 
 
 
