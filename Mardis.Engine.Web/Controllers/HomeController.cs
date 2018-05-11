@@ -78,7 +78,7 @@ namespace Mardis.Engine.Web.Controllers
             }
 
             ViewBag.CampaignList =
-                _campaignBusiness.GetActiveCampaignsListDasboard(ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId))
+                _campaignBusiness.GetActiveCampaignsListDasboard(ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId)).OrderBy(x => x.Name)
                     .Select(c => new SelectListItem() { Value = _protectorCampaign.Protect(c.idcampaign.ToString()), Text = c.Name });
                   
             var filters = GetFilters(filterValues, deleteFilter);
