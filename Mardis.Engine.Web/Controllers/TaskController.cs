@@ -577,7 +577,7 @@ namespace Mardis.Engine.Web.Controllers
 
             try
             {
-                Timer timer = new Timer(10000);
+                Timer timer = new Timer(3000);
                 Guid idCampaignGuid = Guid.Parse(idcampaign);
                 Guid idAccount = ApplicationUserCurrent.AccountId;
                 var data = _taskCampaignBusiness.taskMigrate(idpath, idAccount, idCampaignGuid, idstatus);

@@ -314,7 +314,7 @@
                                                         @*Seleccion multiple con preguntas*@
                                                         <div class="col-sm-8 row">
                                                             <div v-for="(questionS, jf) in section.QuestionCollection">
-                                                                <div v-if="questionS.CodeTypePoll=='MANY'">
+                                                                <div v-if="questionS.CodeTypePoll=='MANY' && questionS.Weight!='0'">
 
 
 
@@ -350,7 +350,7 @@
 
                                                                                         <div class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
 
-                                                                                            <input v-info-sender v-if="questionM.CodeTypePoll=='OPEN'" v-model="questionM.Answer" class="form-control inputmardis subsec" v-bind:id="questionM.Id" v-bind:name="questionM.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" onchange="valorseleccion(this)" />
+                                                                                            <input v-info-sender v-if="questionM.CodeTypePoll=='OPEN'" v-model="questionM.Answer" class="form-control inputmardis subsec" v-bind:id="questionM.Id" v-bind:name="questionM.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;"      />
 
                                                                                             <select v-info-sender v-if="questionM.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="questionM.IdQuestionDetail" v-bind:id="questionM.Id" v-bind:name="questionM.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)">
                                                                                                 <option v-for="answer in questionM.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
