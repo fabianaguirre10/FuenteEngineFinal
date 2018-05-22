@@ -51,6 +51,11 @@
         border: none;
         border-bottom: 1px solid #000000;
     }
+
+    #divImages .panel-body {
+        height: auto !important;
+        overflow-y: hidden !important;
+    }
 </style>
 
 <div id="divPoll">
@@ -230,15 +235,13 @@
     </div>
 
     <div id="divPollServices">
-        <div class="row">
+       
 
+        <div class="col-sm-6 "> @Html.Partial("_taskPhoto")</div>
 
-            <div class="col-sm-12 ">@Html.Partial("PollImageViewerPartial")</div>
-
-        </div>
-        <div class="row" style="height: 350px; overflow-y: scroll">
+     
            
-            <div class="col-sm-12">
+            <div class="col-sm-6">
 
                 <div class="panel-group" v-for="(service, index) in poll.ServiceCollection">
                     <div class="panel panel-default">
@@ -495,14 +498,13 @@
                     </div>
                 </div>
 
-            </div> @*Fin visor de encuestas*@
         </div> @*Fin Sección de Encuestas*@
     </div>
 
 </div>
 
 @section scripts{
-    <script src="~/js/mardis-images.js"></script>
+    <script src="~/js/dgIMG.js"></script>
     <script src="~/js/viewModel/TaskViewModel.js"></script>
     <script src="~/js/tools/classie.js"></script>
     <script>
@@ -510,7 +512,7 @@
         var IdTask = '@Html.Raw(IdRegister)';
 
         LoadTaskById(IdTask);
-
+      
         $(document).ready(function () {
             $('.inputeditable').editable({
                 success: function (response, newValue) {
@@ -588,5 +590,6 @@
 
         //    $("#panelD_" + text.id).html(div);
         //}
+   
     </script>
 }
