@@ -260,6 +260,7 @@
     <Compile Include="BranchViewModels\BranchRegisterViewModel.cs" />
     <Compile Include="BranchViewModels\BranchTaskCampaignsProfileViewModel.cs" />
     <Compile Include="BranchViewModels\BranchViewModel.cs" />
+    <Compile Include="BranchViewModels\RouteBranchViewModel.cs" />
     <Compile Include="CampaignViewModels\CampaignBranchesImportedViewModel.cs" />
     <Compile Include="CampaignViewModels\CampaignBranchesViewModel.cs" />
     <Compile Include="CampaignViewModels\CampaignGeopositionViewModel.cs" />

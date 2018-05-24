@@ -27,6 +27,7 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics;
 using Microsoft.Extensions.Caching.Distributed;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -462,6 +463,25 @@ namespace Mardis.Engine.Web.Controllers
                 return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
             }
         }
+        #region Administracion de Rutas
+        public IActionResult AdminRoute() {
+
+            return View();
+        }
+
+        public JsonResult ActiveRoute()
+        {
+          var model=  _campaignBusiness.GetActiveRoute(ApplicationUserCurrent.AccountId);
+            return Json(model);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ChangeStatus(string id)
+        {
+            int model = await _campaignBusiness.ChangeStatusRoute(ApplicationUserCurrent.AccountId,id);
+            return Json(model);
+        }
+        #endregion
     }
 }
 

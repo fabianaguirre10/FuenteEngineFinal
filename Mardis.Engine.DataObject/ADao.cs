@@ -19,6 +19,7 @@ namespace Mardis.Engine.DataObject
         {
             Context = mardisContext;
         }
+    
 
         public MardisContext Context { get; }
 

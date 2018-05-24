@@ -15,6 +15,8 @@ using Mardis.Engine.Web.ViewModel.TaskViewModels;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Mardis.Engine.Web.ViewModel.BranchViewModels;
+using System.Threading.Tasks;
 
 namespace Mardis.Engine.Business.MardisCore
 {
@@ -479,6 +481,24 @@ namespace Mardis.Engine.Business.MardisCore
 
             return model;
         }
+
+        #region administracion Rutas
+        public IList<RouteBranchViewModel> GetActiveRoute( Guid idAccount)
+        {
+            IList<RouteBranchViewModel> model = new List <RouteBranchViewModel>();
+                     model= _campaignServicesDao.GetActRoute(idAccount);
+
+            return model;
+        }
+
+        public async Task<int> ChangeStatusRoute(Guid idAccount, string route)
+        {
+
+          int  model = await _campaignServicesDao.UpdateStatusRoute(idAccount, route);
+
+            return model;
+        }
+        #endregion
 
     }
 }
