@@ -34,9 +34,10 @@
         <link href="~/css/AdminLTE/dashboard/dist/css/AdminLTE.css" rel="stylesheet" />
         <link href="~/css/AdminLTE/_all-skins.css" rel="stylesheet" />
         @*<link href="~/css/AdminLTE/dashboard/dist/css/AdminLTE.css" rel="stylesheet" />*@
-
+        <link href="~/bower_components/plugin/iCheck/flat/blue.css" rel="stylesheet" />
         <link href="~/lib/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
         <link href="~/lib/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+        <link href="~/bower_components/datatables.net-bs/css/dataTables.bootstrap.css" rel="stylesheet" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -64,6 +65,9 @@
         <link href="~/css/AdminLTE/_all-skins.css" rel="stylesheet" />
         <link href="~/lib/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
         <link href="~/lib/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
+        @*<link href="~/bower_components/plugin/data-table/datatables.css" rel="stylesheet" />*@
+        <link href="~/bower_components/plugin/iCheck/flat/blue.css" rel="stylesheet" />
+        <link href="~/bower_components/datatables.net-bs/css/dataTables.bootstrap.css" rel="stylesheet" />
     </environment>
 </head>
 <body class="hold-transition skin-mardis sidebar-collapse sidebar-mini">
@@ -204,7 +208,7 @@
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery">
         </script>
-            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
         <script type="text/javascript" src="~/lib/knockout/dist/knockout.js"></script>
         <script type="text/javascript" src="~/lib/knockout/dist/knockout.debug.js"></script>
@@ -248,6 +252,8 @@
         <script src="~/lib/store2/dist/store2.js"></script>
         <script src="~/css/AdminLTE/dashboard/bower_components/fastclick/lib/fastclick.js"></script>
         <script src="~/css/AdminLTE/dashboard/dist/js/demo.js"></script>
+        <script src="~/bower_components/plugin/data-table/js/jquery.dataTables.min.js"></script>
+        <script src="~/bower_components/plugin/data-table/js/jquery-table.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script type="text/javascript" src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
@@ -301,6 +307,9 @@
         <script src="~/lib/knockout.mapping-master/build/output/knockout.mapping-latest.js"></script>
         <script src="~/lib/vue/dist/vue.min.js"></script>
         <script src="~/lib/store2/dist/store2.min.js"></script>
+        <script src="~/bower_components/plugin/data-table/js/jquery.dataTables.min.js"></script>
+        <script src="~/bower_components/plugin/data-table/js/jquery-table.js"></script>
+      
     </environment>
 
     @RenderSection("scripts", required: false)

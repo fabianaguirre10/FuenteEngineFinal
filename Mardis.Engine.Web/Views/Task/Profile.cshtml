@@ -500,7 +500,9 @@
 
         </div> @*Fin Sección de Encuestas*@
     </div>
-
+@*<div id="Container">
+    <img alt="Click to zoom" src="https://magictoolbox.sirv.com/images/magiczoomplus/jeans-1-z.jpg?scale.height=400" class="zoom" />
+</div>*@
 </div>
 
 @section scripts{
@@ -590,6 +592,10 @@
 
         //    $("#panelD_" + text.id).html(div);
         //}
-   
+        $('.zoom').hover(function () {
+            $(this).addClass('transition');
+        }, function () {
+            $(this).removeClass('transition');
+        });
     </script>
 }
