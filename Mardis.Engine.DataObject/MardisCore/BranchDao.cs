@@ -9,6 +9,7 @@ using Mardis.Engine.Framework.Resources;
 using Mardis.Engine.Web.ViewModel.Filter;
 using Microsoft.EntityFrameworkCore;
 using Mardis.Engine.Web.ViewModel.BranchViewModels;
+using Mardis.Engine.DataAccess.MardisCommon;
 
 namespace Mardis.Engine.DataObject.MardisCore
 {
@@ -39,6 +40,11 @@ namespace Mardis.Engine.DataObject.MardisCore
                 .FirstOrDefault(tb => tb.Id == id &&
                                       tb.StatusRegister == CStatusRegister.Active &&
                                       tb.IdAccount == idAccount);
+        }
+
+        public Person GetOnePerson(Guid? id)
+        {
+            return Context.Persons.Where(x => x.Id==id).First();
         }
         public object GetBranchList(Guid idAccount,String Imeid)
         {
