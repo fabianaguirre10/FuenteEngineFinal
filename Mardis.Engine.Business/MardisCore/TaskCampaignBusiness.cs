@@ -1026,7 +1026,7 @@ namespace Mardis.Engine.Business.MardisCore
                 var task = _taskCampaignDao.Get(idtask, idaccount);
                 var branchImge = _branchImageBusiness.GetBranchesImagesList(task.IdBranch, idaccount,task.IdCampaign);
                 var branch = _branchDao.GetOne(task.IdBranch, idaccount);
-                
+                var person = _branchDao.GetOnePerson(Guid.Parse(branch.IdPersonAdministrator.ToString()));
                 #region variable de estilo
 
                 var normalFont = FontFactory.GetFont(FontFactory.HELVETICA, 12);
@@ -1066,7 +1066,7 @@ namespace Mardis.Engine.Business.MardisCore
                 //leave a gap before and after the table
                 table.SpacingBefore = 20f;
                 table.SpacingAfter = 30f;
-                PdfPCell cell = new PdfPCell(new Phrase("Mardis Research", boldFont));
+                PdfPCell cell = new PdfPCell(new Phrase("Mardis Research", FontFactory.GetFont("Arial", 10, 1)));
                 PdfPCell cell1 = new PdfPCell(new Phrase("Documentación Engine"));
                 cell.Colspan = 2;
                 cell.Border = 0;
@@ -1078,18 +1078,88 @@ namespace Mardis.Engine.Business.MardisCore
                 table.AddCell(cell1);
                 table.HorizontalAlignment = 1;
                 document.Add(table);
-                PdfPTable tbDatos = new PdfPTable(1);
-                tbDatos.AddCell(new PdfPCell(new Phrase("Codigo :" + branch.ExternalCode, boldFont))
+                float[] columnWidths = { 3, 5 , 3, 5 , 3, 5 };
+                PdfPTable tbDatos = new PdfPTable(columnWidths);
+                tbDatos.AddCell(new PdfPCell(new Phrase("Codigo :", FontFactory.GetFont("Arial", 10, 1)))
                 {
                     Border = 0,
                     HorizontalAlignment = Element.ALIGN_LEFT,
-                    PaddingBottom = 40f
+                    PaddingBottom = 10f
+                });
+                tbDatos.AddCell(new PdfPCell(new Phrase( branch.ExternalCode, FontFactory.GetFont("Arial", 10, 0)))
+                {
+                    Border = 0,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    PaddingBottom = 10f
+                });
+                //   tbDatos.AddCell(new PdfPCell(new Phrase()) { Border = 0, HorizontalAlignment = Element.ALIGN_LEFT, PaddingBottom = 40f });
+                tbDatos.AddCell(new PdfPCell(new Phrase("Local :", FontFactory.GetFont("Arial", 10, 1)))
+                {
+                    Border = 0,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    PaddingBottom = 10f
+                });
+                tbDatos.AddCell(new PdfPCell(new Phrase( branch.Name, FontFactory.GetFont("Arial", 10, 0)))
+                {
+                    Border = 0,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    PaddingBottom = 10f
+                });
+                tbDatos.AddCell(new PdfPCell(new Phrase("Dirección :", FontFactory.GetFont("Arial", 10, 1)))
+                {
+                    Border = 0,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    PaddingBottom = 10f
+                });
+                tbDatos.AddCell(new PdfPCell(new Phrase(branch.MainStreet, FontFactory.GetFont("Arial", 10, 0)))
+                {
+                    Border = 0,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    PaddingBottom = 10f
+                });
+                tbDatos.AddCell(new PdfPCell(new Phrase("Cliente :", FontFactory.GetFont("Arial", 10, 1)))
+                {
+                    Border = 0,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    PaddingBottom = 10f
+                });
+                tbDatos.AddCell(new PdfPCell(new Phrase(person.Name+" "+ person.SurName, FontFactory.GetFont("Arial", 10, 0)))
+                {
+                    Border = 0,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    PaddingBottom = 20f
+                });
+                tbDatos.AddCell(new PdfPCell(new Phrase("Ruc :", FontFactory.GetFont("Arial", 10, 1)))
+                {
+                    Border = 0,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    PaddingBottom = 10f
+                });
+                tbDatos.AddCell(new PdfPCell(new Phrase(person.Document, FontFactory.GetFont("Arial", 10, 0)))
+                {
+                    Border = 0,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    PaddingBottom = 20f
+                });
+                tbDatos.AddCell(new PdfPCell(new Phrase("", FontFactory.GetFont("Arial", 10, 0)))
+                {
+                    Border = 0,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    PaddingBottom = 10f
+                });
+                tbDatos.AddCell(new PdfPCell(new Phrase("" , FontFactory.GetFont("Arial", 10, 0)))
+                {
+                    Border = 0,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    PaddingBottom = 20f
                 });
                 //   tbDatos.AddCell(new PdfPCell(new Phrase()) { Border = 0, HorizontalAlignment = Element.ALIGN_LEFT, PaddingBottom = 40f });
 
                 document.Add(tbDatos);
+
+
                 PdfPTable tbImge = new PdfPTable(2);
-                foreach (var item in branchImge)
+                foreach (var item in branchImge.ToList().OrderBy(x =>x.Order))
                 {
                     var img = iTextSharp.text.Image.GetInstance((item.UrlImage));
                     img.Alignment = 1;
@@ -1166,8 +1236,8 @@ namespace Mardis.Engine.Business.MardisCore
                 File.WriteAllBytes("myfile.pdf", by2tes);
 
                 MemoryStream stream = new MemoryStream(by2tes);
-                AzureStorageUtil.UploadFromStream(stream, "evidencias", idtask + ".pdf").Wait();
-                var uri = AzureStorageUtil.GetUriFromBlob("evidencias", idtask + ".pdf");
+                AzureStorageUtil.UploadFromStream(stream, "evidencias", branch.Code+"_"+branch.Name + ".pdf").Wait();
+                var uri = AzureStorageUtil.GetUriFromBlob("evidencias", branch.Code +"_"+ branch.Name+".pdf");
                 // loading bytes from a file is very easy in C#. The built in System.IO.File.ReadAll* methods take care of making sure every byte is read properly.
                 if (File.Exists(pathFull))
                 {
