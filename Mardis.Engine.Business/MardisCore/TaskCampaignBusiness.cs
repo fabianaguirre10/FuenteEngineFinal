@@ -1086,7 +1086,7 @@ namespace Mardis.Engine.Business.MardisCore
                     HorizontalAlignment = Element.ALIGN_LEFT,
                     PaddingBottom = 10f
                 });
-                tbDatos.AddCell(new PdfPCell(new Phrase( branch.ExternalCode, FontFactory.GetFont("Arial", 10, 0)))
+                tbDatos.AddCell(new PdfPCell(new Phrase( branch.ExternalCode, FontFactory.GetFont("Arial", 9, 0)))
                 {
                     Border = 0,
                     HorizontalAlignment = Element.ALIGN_LEFT,
@@ -1099,7 +1099,7 @@ namespace Mardis.Engine.Business.MardisCore
                     HorizontalAlignment = Element.ALIGN_LEFT,
                     PaddingBottom = 10f
                 });
-                tbDatos.AddCell(new PdfPCell(new Phrase( branch.Name, FontFactory.GetFont("Arial", 10, 0)))
+                tbDatos.AddCell(new PdfPCell(new Phrase( branch.Name, FontFactory.GetFont("Arial", 9, 0)))
                 {
                     Border = 0,
                     HorizontalAlignment = Element.ALIGN_LEFT,
@@ -1111,7 +1111,7 @@ namespace Mardis.Engine.Business.MardisCore
                     HorizontalAlignment = Element.ALIGN_LEFT,
                     PaddingBottom = 10f
                 });
-                tbDatos.AddCell(new PdfPCell(new Phrase(branch.MainStreet, FontFactory.GetFont("Arial", 10, 0)))
+                tbDatos.AddCell(new PdfPCell(new Phrase(branch.MainStreet, FontFactory.GetFont("Arial", 9, 0)))
                 {
                     Border = 0,
                     HorizontalAlignment = Element.ALIGN_LEFT,
@@ -1121,50 +1121,57 @@ namespace Mardis.Engine.Business.MardisCore
                 {
                     Border = 0,
                     HorizontalAlignment = Element.ALIGN_LEFT,
-                    PaddingBottom = 10f
+                    PaddingBottom = 30f
                 });
-                tbDatos.AddCell(new PdfPCell(new Phrase(person.Name+" "+ person.SurName, FontFactory.GetFont("Arial", 10, 0)))
+                tbDatos.AddCell(new PdfPCell(new Phrase(person.Name+" "+ person.SurName, FontFactory.GetFont("Arial", 9, 0)))
                 {
                     Border = 0,
                     HorizontalAlignment = Element.ALIGN_LEFT,
-                    PaddingBottom = 20f
+                    PaddingBottom = 30f
                 });
                 tbDatos.AddCell(new PdfPCell(new Phrase("Ruc :", FontFactory.GetFont("Arial", 10, 1)))
                 {
                     Border = 0,
                     HorizontalAlignment = Element.ALIGN_LEFT,
-                    PaddingBottom = 10f
+                    PaddingBottom = 30f
                 });
-                tbDatos.AddCell(new PdfPCell(new Phrase(person.Document, FontFactory.GetFont("Arial", 10, 0)))
+                tbDatos.AddCell(new PdfPCell(new Phrase(person.Document, FontFactory.GetFont("Arial", 9, 0)))
                 {
                     Border = 0,
                     HorizontalAlignment = Element.ALIGN_LEFT,
-                    PaddingBottom = 20f
+                    PaddingBottom = 30f
                 });
                 tbDatos.AddCell(new PdfPCell(new Phrase("", FontFactory.GetFont("Arial", 10, 0)))
                 {
                     Border = 0,
                     HorizontalAlignment = Element.ALIGN_LEFT,
-                    PaddingBottom = 10f
+                    PaddingBottom = 30f
                 });
                 tbDatos.AddCell(new PdfPCell(new Phrase("" , FontFactory.GetFont("Arial", 10, 0)))
                 {
                     Border = 0,
                     HorizontalAlignment = Element.ALIGN_LEFT,
-                    PaddingBottom = 20f
+                    PaddingBottom = 30f
                 });
                 //   tbDatos.AddCell(new PdfPCell(new Phrase()) { Border = 0, HorizontalAlignment = Element.ALIGN_LEFT, PaddingBottom = 40f });
 
                 document.Add(tbDatos);
 
-
-                PdfPTable tbImge = new PdfPTable(2);
+                PdfPTable tbUB2 = new PdfPTable(1);
+                PdfPCell cell22 = new PdfPCell(new Phrase("DOCUMENTOS", boldFont));
+                cell22.Colspan = 2;
+                cell22.Border = 0;
+                cell22.PaddingBottom = 15f;
+                cell22.HorizontalAlignment = Element.ALIGN_LEFT;
+                tbUB2.AddCell(cell22);
+                document.Add(tbUB2);
+                PdfPTable tbImge = new PdfPTable(1);
                 foreach (var item in branchImge.ToList().OrderBy(x =>x.Order))
                 {
                     var img = iTextSharp.text.Image.GetInstance((item.UrlImage));
                     img.Alignment = 1;
-                    img.ScaleAbsoluteHeight(230);
-                    img.ScaleAbsoluteWidth(216);
+                    img.ScaleAbsoluteHeight(360);
+                    img.ScaleAbsoluteWidth(480);
 
                     PdfPCell imageCell = new PdfPCell(img);
                     imageCell.HorizontalAlignment = 1;
@@ -1174,15 +1181,15 @@ namespace Mardis.Engine.Business.MardisCore
                     tbImge.AddCell(imageCell);
 
                 }
-                if (branchImge.Count() % 2 != 0)
-                {
-                    PdfPCell imageCell = new PdfPCell();
-                    imageCell.HorizontalAlignment = 1;
-                    imageCell.VerticalAlignment = 1;
-                    imageCell.PaddingBottom = 10f;
-                    imageCell.Border = 0;
-                    tbImge.AddCell(imageCell);
-                }
+                //if (branchImge.Count() % 2 != 0)
+                //{
+                //    PdfPCell imageCell = new PdfPCell();
+                //    imageCell.HorizontalAlignment = 1;
+                //    imageCell.VerticalAlignment = 1;
+                //    imageCell.PaddingBottom = 10f;
+                //    imageCell.Border = 0;
+                //    tbImge.AddCell(imageCell);
+                //}
                 tbImge.PaddingTop = 10f;
                 document.Add(tbImge);
                 PdfPTable tbUB = new PdfPTable(1);
