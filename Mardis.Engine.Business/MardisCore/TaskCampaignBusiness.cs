@@ -1225,7 +1225,8 @@ namespace Mardis.Engine.Business.MardisCore
                             tbImge.AddCell(imageCell);
                             tbImge.PaddingTop = 10f;
                             document.Add(tbImge);
-                         break;
+                            tbImge = new PdfPTable(1);
+                            break;
 
                         case 5:
                             img.Alignment = 1;
@@ -1238,7 +1239,8 @@ namespace Mardis.Engine.Business.MardisCore
                             tbImge.AddCell(imageCell);
                             tbImge.PaddingTop = 10f;
                             document.Add(tbImge);
-                        break;
+                            tbImge = new PdfPTable(1);
+                            break;
 
 
                     }
