@@ -96,7 +96,11 @@
                         </div>
                         <div class="col-sm-8">
                             <select id="selStatusTask" v-model="poll.IdStatusTask" class="form-control input-sm"
-                                    asp-items="ViewBag.StatusList"></select>
+                                    asp-items="ViewBag.StatusList">
+
+                            </select>
+                           
+
                         </div>
                     </div>
                     <div class="col-sm-3">
@@ -259,7 +263,7 @@
 
                                         <div style="margin-top: 7px;"></div>
 
-                                        <div class="panel panel-warning" v-for="(section, i) in service.ServiceDetailCollection" >
+                                        <div class="panel panel-warning" v-for="(section, i) in service.ServiceDetailCollection">
                                             <div class="panel-heading center" v-bind:href="'#panel_'+section.Id" data-toggle="">
                                                 {{section.SectionTitle}}
                                                 <div v-if="section.IsDynamic==true">
@@ -268,10 +272,10 @@
                                                     </button>
 
                                                 </div>
-                                                
+
                                             </div>
 
-                                            <div v-bind:id="'panel_'+section.Id" class="panel panel-default collapse in" >
+                                            <div v-bind:id="'panel_'+section.Id" class="panel panel-default collapse in">
 
                                                 <div class="panel-body" style="padding: 5px;">
 
@@ -353,7 +357,7 @@
 
                                                                                         <div class="panel-body" style="padding-bottom: 5px; padding-top: 5px;">
 
-                                                                                            <input v-info-sender v-if="questionM.CodeTypePoll=='OPEN'" v-model="questionM.Answer" class="form-control inputmardis subsec" v-bind:id="questionM.Id" v-bind:name="questionM.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;"      />
+                                                                                            <input v-info-sender v-if="questionM.CodeTypePoll=='OPEN'" v-model="questionM.Answer" class="form-control inputmardis subsec" v-bind:id="questionM.Id" v-bind:name="questionM.IdAnswer" style="margin: 0 auto; float: none; background-color: #cccccc;" />
 
                                                                                             <select v-info-sender v-if="questionM.CodeTypePoll=='ONE'" class="inputmardis subsec" v-model="questionM.IdQuestionDetail" v-bind:id="questionM.Id" v-bind:name="questionM.IdAnswer" style="margin: 0 auto; float: none;" onchange="valorseleccion(this)">
                                                                                                 <option v-for="answer in questionM.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
@@ -465,31 +469,46 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                </div>
-                                           
                                             </div>
-                                           
-                                           
-                                         
+
                                         </div>
-                                       
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading center" data-toggle="collapse">
+                                                Estado de Validación
+                                            </div>
+                                            <div class="panel-body center" style="padding: 5px;">
+                                                <select id="selStatusTask" v-model="poll.IdStatusTask" class="form-control input-sm center"
+                                                        asp-items="ViewBag.StatusList"></select>
 
-                                        <div style="margin-top: 7px;"></div>
+                                            </div>
+                                        </div>
 
-                                        <div class="row">
-                                            <div class="col-sm-12" style="text-align: center">
-                                                @*<button class="btn btn-primary" id="btnGuardar" onclick="Save();">Guardar</button>*@
-                                                @*<a class="btn btn-default btn-sm" id="btnCancelar" href="@Url.Action("MyTasks", "Task")">Salir</a>*@
+
+                                    </div>
+
+
+                                   
+
+
+                                    <div class="row">
+                                        <div class="col-sm-12" style="text-align: center; padding-top: 10px;">
+                                            @*<button class="btn btn-primary" id="btnGuardar" onclick="Save();">Guardar</button>*@
+                                            @*<a class="btn btn-default btn-sm" id="btnCancelar" href="@Url.Action("MyTasks", "Task")">Salir</a>*@
+
+                                            
+                                                <a href="@Url.Action("MyTasks", "Task")" class="btn btn-default" id="btnCancelar" style="min-width: 100px;">
+                                                    <i class="clip-exit"></i> Salir
+                                                </a>
+                                   
                                                 <a href="#" class="btn btn-primary" id="btnGuardar" onclick="Save();">
                                                     <i class="fa fa-save"></i> Guardar
                                                 </a>
-                                                <a href="@Url.Action("MyTasks", "Task")" class="btn btn-default" id="btnCancelar" style="min-width: 100px;">
-                                                    <i class="clip-exit"></i> Salir  
-                                                </a>
-                                            </div>
-                                        </div>
+                             
 
+                                        </div>
                                     </div>
+
+                                </div>
 
                                 </div>
                             </div>
@@ -523,11 +542,21 @@
                     $(elm).val(newValue);
                 }
             });
+            $("#ddlStatusTask").change(function () {
+                alert("Handler for .change() called.");
+
+            });
+            $(".target").change(function () {
+                alert("Handler for .change() called.");
+            });
+
         });
+
 
         $.fn.editable.defaults.mode = 'inline';
 
         $("#divImages").sticky({ topSpacing: 50 });
+ 
 
         function ChangeStatusManual() {
             var selectedStatus = $("#ddlStatusTask>option:selected").html();

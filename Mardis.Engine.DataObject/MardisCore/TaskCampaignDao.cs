@@ -339,11 +339,11 @@ namespace Mardis.Engine.DataObject.MardisCore
             //    .ToDictionary(t => t.StatusName, t => t.Count);
         }
 
-        public void ImplementTask(Guid idTask, Guid idStatus, Guid idAccount)
+        public void ImplementTask(Guid idTask, Guid idStatus, Guid idAccount , Guid status)
         {
             var task = Get(idTask, idAccount);
             task.DateModification = DateTime.Now;
-            task.IdStatusTask = idStatus;
+            task.IdStatusTask = status;
             InsertOrUpdate(task);
         }
 

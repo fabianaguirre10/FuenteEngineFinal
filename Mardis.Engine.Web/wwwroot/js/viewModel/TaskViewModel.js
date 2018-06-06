@@ -113,6 +113,7 @@ Vue.directive('for-events', {
                     value: el.value,
                     idanswer: el.name
                     , Idtask: getParameterByName('idTask')
+                    , idstatus: vueVM.$data.poll.IdStatusTask
                 },
                 success: function (data) {
 
@@ -335,6 +336,7 @@ function ValidarPreguntas() {
 function Save() {
     var imgsrc = 'http://www.google.es/intl/en_com/images/logo_plain.png';
     var img = new Image();
+    console.log()
     img.onerror = function () {
         alert("No hay conexion a internet.");
     }
@@ -370,6 +372,7 @@ function Save() {
                     AnswerQuestion: ko.toJSON(infoList),
                     fintransaccion: "ok",
                     Idtask: getParameterByName('idTask')
+                    , idstatus:vueVM.$data.poll.IdStatusTask
                 },
                 success: function (data) {
                     if (data) {

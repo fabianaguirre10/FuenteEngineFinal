@@ -270,7 +270,7 @@ namespace Mardis.Engine.Web.Controllers
                     ApplicationUserCurrent.ProfileId = Global.ProfileId;
                     ApplicationUserCurrent.PersonId = Global.PersonId;
                 }
-                _taskCampaignBusiness.SaveAnsweredPoll(model, ApplicationUserCurrent.AccountId, ApplicationUserCurrent.ProfileId, Guid.Parse(ApplicationUserCurrent.UserId));
+                _taskCampaignBusiness.SaveAnsweredPoll(model, ApplicationUserCurrent.AccountId, ApplicationUserCurrent.ProfileId, Guid.Parse(ApplicationUserCurrent.UserId), model.IdStatusTask);
 
                 return Json("OK");
             }
@@ -281,13 +281,13 @@ namespace Mardis.Engine.Web.Controllers
             }
         }
         [HttpPost]
-        public JsonResult SaveAnswerQuestion(String AnswerQuestion, String fintransaccion, String Idtask)
+        public JsonResult SaveAnswerQuestion(String AnswerQuestion, String fintransaccion, String Idtask, String idstatus)
         {
             try
             {
                 var model = JSonConvertUtil.Deserialize<List<MyTaskViewAnswer>>(AnswerQuestion);
                 if (model == null) return null;
-                _taskCampaignBusiness.CrearAnswerQuestion(model, ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId), ApplicationUserCurrent.ProfileId, fintransaccion, Idtask);
+                _taskCampaignBusiness.CrearAnswerQuestion(model, ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId), ApplicationUserCurrent.ProfileId, fintransaccion, Idtask , Guid.Parse(idstatus));
                 return Json(model);
             }
             catch (Exception ex)
@@ -296,7 +296,7 @@ namespace Mardis.Engine.Web.Controllers
                 return null;
             }
         }
-        public JsonResult SaveAnswerQuestionMultiple( String id, String value , String idanswer, String Idtask)
+        public JsonResult SaveAnswerQuestionMultiple( String id, String value , String idanswer, String Idtask, String idstatus)
         {
             try
             {
@@ -309,7 +309,7 @@ namespace Mardis.Engine.Web.Controllers
                 });
                 //JSonConvertUtil.Deserialize<List<MyTaskViewAnswer>>(AnswerQuestion);
                 if (model == null) return null;
-                _taskCampaignBusiness.CrearAnswerQuestion(model, ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId), ApplicationUserCurrent.ProfileId, "ok", Idtask);
+                _taskCampaignBusiness.CrearAnswerQuestion(model, ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId), ApplicationUserCurrent.ProfileId, "ok", Idtask , Guid.Parse(idstatus));
                 return Json(model);
             }
             catch (Exception ex)

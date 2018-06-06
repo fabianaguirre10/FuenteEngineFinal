@@ -513,7 +513,7 @@ namespace Mardis.Engine.Business.MardisCore
             return true;
         }
 
-        public void SaveAnsweredPoll(MyTaskViewModel model, Guid idAccount, Guid idProfile, Guid idUser)
+        public void SaveAnsweredPoll(MyTaskViewModel model, Guid idAccount, Guid idProfile, Guid idUser, Guid status)
         {
             try
             {
@@ -537,7 +537,7 @@ namespace Mardis.Engine.Business.MardisCore
                     }
                 }
 
-                FinalizeTask(model, idAccount, idProfile, idUser);
+                FinalizeTask(model, idAccount, idProfile, idUser,status);
             }
             catch (Exception ex)
             {
@@ -547,7 +547,7 @@ namespace Mardis.Engine.Business.MardisCore
 
         }
 
-        private void FinalizeTask(MyTaskViewModel model, Guid idAccount, Guid idProfile, Guid idUser)
+        private void FinalizeTask(MyTaskViewModel model, Guid idAccount, Guid idProfile, Guid idUser, Guid status)
         {
             var profile = _profileDao.GetById(idProfile);
 
@@ -557,7 +557,7 @@ namespace Mardis.Engine.Business.MardisCore
                 case CTypePerson.PersonSupervisor:
                 case CTypePerson.PersonSystem:
                     _taskCampaignDao.ImplementTask(model.IdTask, _statusTaskBusiness.GeStatusTaskByName(CTask.StatusImplemented).Id,
-                        idAccount);
+                        idAccount,status);
                     break;
                 case CTypePerson.PersonValidator:
                     _taskCampaignDao.ValidateTask(model.IdTask, _statusTaskBusiness.GeStatusTaskByName(CTask.StatusImplemented).Id,
@@ -566,7 +566,7 @@ namespace Mardis.Engine.Business.MardisCore
             }
         }
 
-        private void FinalizeTaskAnswerQuestion(Guid idtask, Guid idAccount, Guid idProfile, Guid idUser)
+        private void FinalizeTaskAnswerQuestion(Guid idtask, Guid idAccount, Guid idProfile, Guid idUser ,Guid status)
         {
             var profile = _profileDao.GetById(idProfile);
 
@@ -576,7 +576,7 @@ namespace Mardis.Engine.Business.MardisCore
                 case CTypePerson.PersonSupervisor:
                 case CTypePerson.PersonSystem:
                     _taskCampaignDao.ImplementTask(idtask, _statusTaskBusiness.GeStatusTaskByName(CTask.StatusImplemented).Id,
-                        idAccount);
+                        idAccount,status);
                     break;
                 case CTypePerson.PersonValidator:
                     _taskCampaignDao.ValidateTask(idtask, _statusTaskBusiness.GeStatusTaskByName(CTask.StatusImplemented).Id,
@@ -607,7 +607,7 @@ namespace Mardis.Engine.Business.MardisCore
 
         /*Crear Respuestas para gurdar informacion por seccion*/
         #region AnswerQuestion
-        public void CrearAnswerQuestion(List<MyTaskViewAnswer> model, Guid idAccount, Guid IdMerchant, Guid idProfile, String fintransaccion, String Idtask)
+        public void CrearAnswerQuestion(List<MyTaskViewAnswer> model, Guid idAccount, Guid IdMerchant, Guid idProfile, String fintransaccion, String Idtask, Guid status  )
         {
             Guid idtask = new Guid();
             foreach (var answerquestion in model)
@@ -677,7 +677,7 @@ namespace Mardis.Engine.Business.MardisCore
             }
             if (fintransaccion == "ok")
             {
-                FinalizeTaskAnswerQuestion(Guid.Parse(Idtask), idAccount, idProfile, IdMerchant);
+                FinalizeTaskAnswerQuestion(Guid.Parse(Idtask), idAccount, idProfile, IdMerchant, status);
             }
 
         }
@@ -798,10 +798,10 @@ namespace Mardis.Engine.Business.MardisCore
             _personDao.InsertOrUpdate(person);
         }
 
-        public bool AddSection(MyTaskViewModel model, Guid idAccount, Guid idProfile, Guid idUser, Guid idseccion)
+        public bool AddSection(MyTaskViewModel model, Guid idAccount, Guid idProfile, Guid idUser, Guid idseccion,Guid status)
         {
 
-            SaveAnsweredPoll(model, idAccount, idProfile, idUser);
+            SaveAnsweredPoll(model, idAccount, idProfile, idUser,status);
 
             var sections = _serviceDetailTaskBusiness.GetSections(model.IdTask, idseccion, idAccount);
 
@@ -1166,19 +1166,82 @@ namespace Mardis.Engine.Business.MardisCore
                 tbUB2.AddCell(cell22);
                 document.Add(tbUB2);
                 PdfPTable tbImge = new PdfPTable(1);
-                foreach (var item in branchImge.ToList().OrderBy(x =>x.Order))
+                PdfPTable tbImge1 = new PdfPTable(2);
+                foreach (var item in branchImge.ToList().OrderBy(x => x.Order))
                 {
-                    var img = iTextSharp.text.Image.GetInstance((item.UrlImage));
-                    img.Alignment = 1;
-                    img.ScaleAbsoluteHeight(360);
-                    img.ScaleAbsoluteWidth(480);
-
+                var    img = iTextSharp.text.Image.GetInstance((item.UrlImage));
                     PdfPCell imageCell = new PdfPCell(img);
-                    imageCell.HorizontalAlignment = 1;
-                    imageCell.VerticalAlignment = 1;
-                    imageCell.PaddingBottom = 10f;
-                    imageCell.Border = 0;
-                    tbImge.AddCell(imageCell);
+                    switch (item.Order)
+                    {
+                        case 1:
+                           
+                            img.Alignment = 1;
+                            img.ScaleAbsoluteHeight(480);
+                            img.ScaleAbsoluteWidth(480);
+                            imageCell.HorizontalAlignment = 1;
+                            imageCell.VerticalAlignment = 1;
+                            imageCell.PaddingBottom = 10f;
+                            imageCell.Border = 0;
+                            tbImge.AddCell(imageCell);
+                            tbImge.PaddingTop = 10f;
+                            document.Add(tbImge);
+                            tbImge =new PdfPTable(1);
+                            break;
+                        case 2:
+             
+                            img.Alignment = 1;
+                            img.ScaleAbsoluteHeight(180);
+                            img.ScaleAbsoluteWidth(220);
+                            imageCell.HorizontalAlignment = 1;
+                            imageCell.VerticalAlignment = 1;
+                            imageCell.PaddingBottom = 10f;
+                            imageCell.Border = 0;
+                            tbImge1.AddCell(imageCell);
+                         
+                         break;
+
+                        case 3:
+
+                            img.Alignment = 1;
+                            img.ScaleAbsoluteHeight(180);
+                            img.ScaleAbsoluteWidth(220);
+                            imageCell.HorizontalAlignment = 1;
+                            imageCell.VerticalAlignment = 1;
+                            imageCell.PaddingBottom = 10f;
+                            imageCell.Border = 0;
+                            tbImge1.AddCell(imageCell);
+                            tbImge1.PaddingTop = 10f;
+                            document.Add(tbImge1);
+                         break;
+                        case 4:
+
+                            img.Alignment = 1;
+                            img.ScaleAbsoluteHeight(490);
+                            img.ScaleAbsoluteWidth(480);
+                            imageCell.HorizontalAlignment = 1;
+                            imageCell.VerticalAlignment = 1;
+                            imageCell.PaddingBottom = 10f;
+                            imageCell.Border = 0;
+                            tbImge.AddCell(imageCell);
+                            tbImge.PaddingTop = 10f;
+                            document.Add(tbImge);
+                         break;
+
+                        case 5:
+                            img.Alignment = 1;
+                            img.ScaleAbsoluteHeight(250);
+                            img.ScaleAbsoluteWidth(480);
+                            imageCell.HorizontalAlignment = 1;
+                            imageCell.VerticalAlignment = 1;
+                            imageCell.PaddingBottom = 10f;
+                            imageCell.Border = 0;
+                            tbImge.AddCell(imageCell);
+                            tbImge.PaddingTop = 10f;
+                            document.Add(tbImge);
+                        break;
+
+
+                    }
 
                 }
                 //if (branchImge.Count() % 2 != 0)
@@ -1190,8 +1253,7 @@ namespace Mardis.Engine.Business.MardisCore
                 //    imageCell.Border = 0;
                 //    tbImge.AddCell(imageCell);
                 //}
-                tbImge.PaddingTop = 10f;
-                document.Add(tbImge);
+                
                 PdfPTable tbUB = new PdfPTable(1);
                 PdfPCell cell2 = new PdfPCell(new Phrase("UBICACIÓN", boldFont));
                 cell2.Colspan = 2;
