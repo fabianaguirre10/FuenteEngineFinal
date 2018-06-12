@@ -616,5 +616,29 @@ namespace Mardis.Engine.Web.Controllers
             }
         }
         #endregion
+
+        #region Update BranchImage
+
+        [HttpPost]
+        public JsonResult ChangeImage(string idIdimg, string imgdata)
+        {
+
+            try
+            {
+
+      
+
+                return Json(_taskCampaignBusiness.UpdateBranch(idIdimg, imgdata).ToString());
+
+            }
+            catch (Exception e)
+            {
+
+              
+                return Json("0");
+
+            }
+        }
+        #endregion
     }
 }

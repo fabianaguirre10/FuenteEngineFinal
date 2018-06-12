@@ -1704,5 +1704,28 @@ namespace Mardis.Engine.Business.MardisCore
 
         }
         #endregion
+
+        #region ActualizarBranchImage
+        public int UpdateBranch(string id, string imagen)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+            string[] separadas;
+            var _modelImage=    _branchDao.GetDataImage(Guid.Parse(id));
+
+
+            separadas = imagen.Split(',');
+            byte[] bytes = Convert.FromBase64String(separadas[1]);
+            MemoryStream imageStream = new MemoryStream(bytes);
+            AzureStorageUtil.UploadFromStream(imageStream, _modelImage.NameContainer, _modelImage.Id.ToString() + ".jpg").Wait();
+          
+            var uri = AzureStorageUtil.GetUriFromBlob(_modelImage.NameContainer, _modelImage.Id.ToString() + ".jpg");
+
+
+            return _branchDao.UpdateDataImage(Guid.Parse(id),uri);
+            
+
+        }
+        #endregion
     }
 }

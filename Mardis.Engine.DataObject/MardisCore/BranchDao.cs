@@ -260,5 +260,36 @@ namespace Mardis.Engine.DataObject.MardisCore
 
 
         }
+
+        public BranchImages GetDataImage(Guid id)
+        {
+             
+            return Context.BranchImageses.Where (x=>x.Id.Equals(id)).First();
+        }
+
+
+        public int UpdateDataImage(Guid id,string url)
+        {
+            try
+            {
+                var stateRegister = EntityState.Modified;
+
+                var _model = Context.BranchImageses.Where(x => x.Id.Equals(id)).First();
+                _model.UrlImage = url;
+               Context.BranchImageses.Add(_model);
+                Context.Entry(_model).State = stateRegister;
+                Context.SaveChanges();
+                return 1;
+
+            }
+            catch (Exception)
+            {
+
+                return 0;
+            }
+         
+   
+        }
+
     }
 }
