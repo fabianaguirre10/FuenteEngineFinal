@@ -51,8 +51,10 @@ namespace Mardis.Engine.DataAccess.MardisCore
         [ForeignKey("IdType")]
         public virtual Equipament_type Equipament_types { get; set; }
         public ICollection<EquipamentImages> EquipamentImg { get; set; } = new HashSet<EquipamentImages>();
+        public ICollection<Activity> Activities { get; set; } = new HashSet<Activity>();
 
     }
+
 
     public interface IEntityId
     {

@@ -765,3 +765,33 @@ function updateBranchImg(id, img) {
         }
     });
 }
+
+
+function deleteBranchImg(id) {
+    $.blockUI({ message: "Actualizando Imagen.." });
+
+    $.ajax({
+        url: "/Task/DeleteImage",
+        type: "POST",
+        data: {
+            idIdimg: id
+        },
+        success: function (data) {
+
+            if (data == "1") {
+                bootbox.alert("Foto ha sido eliminada");
+
+            } else {
+                bootbox.alert("Existío un error, Vuelva a intentarlo");
+            }
+
+        },
+        complete: function (data) {
+            $.unblockUI();
+        },
+        error: function (error) {
+            console.log(error);
+            $.unblockUI();
+        }
+    });
+}

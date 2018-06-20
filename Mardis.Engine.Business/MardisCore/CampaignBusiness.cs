@@ -17,6 +17,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using Mardis.Engine.Web.ViewModel.BranchViewModels;
 using System.Threading.Tasks;
+using AutoMapper;
+using Mardis.Engine.DataAccess.MardisCommon;
+using Mardis.Engine.DataObject.MardisCommon;
 
 namespace Mardis.Engine.Business.MardisCore
 {
@@ -32,6 +35,7 @@ namespace Mardis.Engine.Business.MardisCore
         private readonly BranchDao _branchDao;
         private readonly UserCanpaignDao _userCanpaignDao;
         private readonly DashboardDao _dashboardDao;
+        private readonly PersonDao _personDao;
         public CampaignBusiness(MardisContext mardisContext) : base(mardisContext)
         {
             _campaignDao = new CampaignDao(mardisContext);
@@ -44,6 +48,7 @@ namespace Mardis.Engine.Business.MardisCore
             _branchDao = new BranchDao(mardisContext);
             _userCanpaignDao = new UserCanpaignDao(mardisContext);
             _dashboardDao = new DashboardDao(mardisContext);
+            _personDao = new PersonDao(mardisContext);
         }
 
         public Campaign GetCampaignById(Guid idCampaign, Guid idAccount)
@@ -497,6 +502,64 @@ namespace Mardis.Engine.Business.MardisCore
           int  model = await _campaignServicesDao.UpdateStatusRoute(idAccount, route);
 
             return model;
+        }
+
+
+        public IList<EncuestadorViewModel> GetRoute(Guid idaccount, string route)
+        {
+
+            var imei = _campaignServicesDao.GetIMEIRoute(route, idaccount);
+            IList<string> encuestadores = new List<string>();
+            string[] separadas;
+
+            foreach (var person in imei) {
+                string UniqueImei = person;
+                separadas = UniqueImei.Split('-');
+                for (int xi = 0; xi < separadas.Length; xi++)
+                {
+
+                    encuestadores.Add(separadas[xi]);
+                }
+            }
+            var data = _campaignServicesDao.GetIdPersonByDocumentAndTypeDocumentAndAccount(encuestadores, "IMEI", idaccount);
+
+            IList<EncuestadorViewModel> _model = new List<EncuestadorViewModel>();
+
+            foreach (var item in data) {
+                _model.Add(new EncuestadorViewModel { Code = item.Code, Name = item.Name, Phone = item.Phone });
+            }
+            return _model;
+        }
+        public int deleteRoute(Guid idaccount, string route,string imei)
+        {
+
+            return _campaignServicesDao.UpdateRouteImei(imei, route, idaccount);
+
+
+    
+        }
+
+        public IList<Person> GetActiveEncuestadores(Guid idAccount)
+        {
+            IList<Person> model = new List<Person>();
+            model = _personDao.GetActiveIMEI(idAccount);
+
+            return model;
+        }
+        public IList<Person> GetEncuestadoresbyIMEI(Guid idAccount)
+        {
+            IList<Person> model = new List<Person>();
+            model = _personDao.GetActiveIMEI(idAccount);
+
+            return model;
+        }
+        public int SaveImei(Guid idaccount, string id, string route)
+        {
+
+            return _campaignServicesDao.AddRouteImei(id, route, idaccount);
+
+
+
         }
         #endregion
 

@@ -348,6 +348,12 @@ namespace Mardis.Engine.DataAccess
         /// Tabla de Equipament_type
         /// </summary>
         public DbSet<Dashboard> Dashboards { get; set; }
+
+
+        /// <summary>
+        /// Tabla de Equipament_status
+        /// </summary>
+        public DbSet<Activity> Activities { get; set; }
         public IEnumerable<T> Query<T>(string query) where T : class
         {
             return connection.Query<T>(query);

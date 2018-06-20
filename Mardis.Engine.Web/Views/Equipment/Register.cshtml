@@ -85,18 +85,10 @@
                         <input asp-for="description" class="form-control" placeholder="Ingrese las descripciones encontradas" />
                         <span asp-validation-for="description" class="text-danger"></span>
                     </div>
-
-                    <label class="col-md-2 control-label text-title">Local</label>
-                    <input asp-for="Idbranch" id="txtBranch" class="hidden" />
-                    <div class="col-sm-3">
-                        <div class="input-group">
-                            <label type="text" id="lblNameBranch" class="form-control input-sm">@Model.BranchName</label>
-                            <span class="input-group-btn">
-                                <div onclick="ShowModal();" class="btn btn-info form-control input-sm">
-                                    <span class="glyphicon glyphicon-search"></span>
-                                </div>
-                            </span>
-                        </div>
+                    <label asp-for="guide" class="col-md-2 control-label text-title"></label>
+                    <div class="col-md-3">
+                        <input asp-for="guide" class="form-control" placeholder="Ingrese la guida del camión" />
+                        <span asp-validation-for="guide" class="text-danger"></span>
                     </div>
 
                 </div>
@@ -111,7 +103,18 @@
                         <span asp-validation-for="maker" class="text-danger"></span>
                     </div>
 
-              
+                    <label class="col-md-2 control-label text-title">Local</label>
+                    <input asp-for="Idbranch" id="txtBranch" class="hidden" />
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <label type="text" id="lblNameBranch" class="form-control input-sm">@Model.BranchName</label>
+                            <span class="input-group-btn">
+                                <div onclick="ShowModal();" class="btn btn-info form-control input-sm">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
 
                 </div>
             </div>

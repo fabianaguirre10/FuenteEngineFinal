@@ -283,6 +283,7 @@
 @section scripts{
     <script src="~/js/viewModel/MapHelper.js"></script>
     <script>
+        alert("@Model.Latitude")
         var marcador = [{ LatitudeBranch: "@Model.Latitude", LenghtBranch: "@Model.Longitude", Name: "@Model.Name" }];
         LoadMarkers(marcador);
     </script>

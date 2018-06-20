@@ -68,7 +68,7 @@ namespace Mardis.Engine.Web.Controllers
             _campaignBusiness = new CampaignBusiness(mardisContext);
             TableName = CCampaign.TableName;
             ControllerName = CCampaign.Controller;
-            _taskCampaignBusiness = new TaskCampaignBusiness(mardisContext,distributedCache);
+            _taskCampaignBusiness = new TaskCampaignBusiness(mardisContext, distributedCache);
             _commonBusiness = new CommonBusiness(mardisContext);
             _customerBusiness = new CustomerBusiness(mardisContext);
             _statusCampaignBusiness = new StatusCampaignBusiness(mardisContext, memoryCache);
@@ -468,19 +468,63 @@ namespace Mardis.Engine.Web.Controllers
 
             return View();
         }
+        public IActionResult Route()
+        {
 
+            return View();
+        }
         public JsonResult ActiveRoute()
         {
-          var model=  _campaignBusiness.GetActiveRoute(ApplicationUserCurrent.AccountId);
+            var model = _campaignBusiness.GetActiveRoute(ApplicationUserCurrent.AccountId);
             return Json(model);
         }
 
         [HttpPost]
         public async Task<JsonResult> ChangeStatus(string id)
         {
-            int model = await _campaignBusiness.ChangeStatusRoute(ApplicationUserCurrent.AccountId,id);
+            int model = await _campaignBusiness.ChangeStatusRoute(ApplicationUserCurrent.AccountId, id);
             return Json(model);
         }
+
+
+        public JsonResult GetEncuestador(string route)
+        {
+
+
+            var model = _campaignBusiness.GetRoute(ApplicationUserCurrent.AccountId, route);
+
+            return Json(model);
+        }
+
+
+        public JsonResult deleteEcuestador(string route, string imeid)
+        {
+
+
+            var model = _campaignBusiness.deleteRoute(ApplicationUserCurrent.AccountId, route, imeid);
+
+            return Json(model);
+        }
+
+        public JsonResult GetActiveEncuestador(string id)
+        {
+
+
+            var model = _campaignBusiness.GetEncuestadoresbyIMEI(ApplicationUserCurrent.AccountId);
+            var _autocompleteModel = from x in model
+                                     select new { name=x.Name+"("+x.Code+")" , abbr=x.Name, id=x.Code , phone=x.Phone };           
+            return Json(_autocompleteModel);
+        }
+        public JsonResult SaveEncuestador(string route, string id)
+        {
+
+
+            var model = _campaignBusiness.SaveImei(ApplicationUserCurrent.AccountId,id,route);
+
+            return Json(model);
+        }
+
+        
         #endregion
     }
 }

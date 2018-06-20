@@ -52,11 +52,14 @@ namespace Mardis.Engine.Web.ViewModel.EquipmentViewModels
         public string usr_web { get; set; }
         public string aggregateuri { get; set; }
 
+        [Display(Name = "Guia")]
+        public string guide { get; set; }
         public virtual Equipament_status Equipament_statuss { get; set; }
 
         public virtual Branch Branches { get; set; }
         public List<EquipamentImages> EquipamentImg { get; set; }
 
+        public List<Activity> Activities { get; set; }
 
     }
 }

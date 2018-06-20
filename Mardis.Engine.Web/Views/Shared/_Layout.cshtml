@@ -206,15 +206,14 @@
 
     <environment names="Development">
 
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery">
-        </script>
+
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
         <script type="text/javascript" src="~/lib/knockout/dist/knockout.js"></script>
         <script type="text/javascript" src="~/lib/knockout/dist/knockout.debug.js"></script>
-        <script type="text/javascript" src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+
         <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="~/lib/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
         <script type="text/javascript" src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
@@ -261,11 +260,10 @@
     </environment>
     <environment names="Staging,Production">
         <script type="text/javascript" src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery">
 
-        </script>
+
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
@@ -274,7 +272,7 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
         <script type="text/javascript" src="~/lib/knockout/dist/knockout.js"></script>
         <script type="text/javascript" src="~/lib/knockout/dist/knockout.debug.js"></script>
-        <script type="text/javascript" src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+        @*<script type="text/javascript" src="~/lib/jquery-ui/jquery-ui.min.js"></script>*@
         <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="~/lib/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
         <script type="text/javascript" src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
