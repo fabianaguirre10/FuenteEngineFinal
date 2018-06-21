@@ -260,6 +260,7 @@
     <Compile Include="BranchViewModels\BranchRegisterViewModel.cs" />
     <Compile Include="BranchViewModels\BranchTaskCampaignsProfileViewModel.cs" />
     <Compile Include="BranchViewModels\BranchViewModel.cs" />
+    <Compile Include="BranchViewModels\EncuestadorViewModel.cs" />
     <Compile Include="BranchViewModels\RouteBranchViewModel.cs" />
     <Compile Include="CampaignViewModels\CampaignBranchesImportedViewModel.cs" />
     <Compile Include="CampaignViewModels\CampaignBranchesViewModel.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="CampaignViewModels\CampaignRegisterViewModel.cs" />
     <Compile Include="CampaignViewModels\CampaignSelectViewModel.cs" />
     <Compile Include="CampaignViewModels\CampaignTaskDetailViewModel.cs" />
+    <Compile Include="CampaignViewModels\SectionCampaignDinamicViewModels.cs" />
     <Compile Include="Common\SelectItemViewModel.cs" />
     <Compile Include="Common\StatusRegisterSelectViewModel.cs" />
     <Compile Include="CustomerViewModels\CustomerItemViewModel.cs" />
@@ -306,6 +308,7 @@
     <Compile Include="ServiceViewModels\ServiceItemViewModel.cs" />
     <Compile Include="ServiceViewModels\ServiceRegisterViewModel.cs" />
     <Compile Include="ServiceViewModels\TypeServiceListViewModel.cs" />
+    <Compile Include="TaskViewModels\MyStatusTaskViewModel.cs" />
     <Compile Include="TaskViewModels\MyTaskItemViewModel.cs" />
     <Compile Include="TaskViewModels\MyTaskQuestionDetailsViewModel.cs" />
     <Compile Include="TaskViewModels\MyTaskQuestionsViewModel.cs" />

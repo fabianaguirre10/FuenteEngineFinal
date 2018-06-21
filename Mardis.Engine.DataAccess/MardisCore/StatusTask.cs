@@ -10,6 +10,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public StatusTask()
         {
             Tasks = new HashSet<TaskCampaign>();
+            EstadoTarea = new HashSet<StatusTaskAccount>();
         }
 
         [Key]
@@ -17,7 +18,8 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public string Code { get; set; }
         public string Name { get; set; }
         public string StatusRegister { get; set; }
-
+        public string color { get; set; }
         public ICollection<TaskCampaign> Tasks { get; set; }
+        public ICollection<StatusTaskAccount> EstadoTarea { get; set; }
     }
 }

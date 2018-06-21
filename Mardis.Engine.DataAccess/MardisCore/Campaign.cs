@@ -18,6 +18,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
         {
             CampaignServices = new List<CampaignServices>();
             Tasks = new HashSet<TaskCampaign>();
+            Activities = new HashSet<Activity>();
         }
 
         [Key]
@@ -67,6 +68,9 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public User Supervisor { get; set; }
 
         public ICollection<TaskCampaign> Tasks { get; set; }
+        public ICollection<Activity> Activities { get; set; }
+
+
     }
 }
 

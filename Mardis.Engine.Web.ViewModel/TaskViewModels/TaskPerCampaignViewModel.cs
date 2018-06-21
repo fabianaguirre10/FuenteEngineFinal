@@ -32,5 +32,8 @@ namespace Mardis.Engine.Web.ViewModel.TaskViewModels
 
         public int CountPendingTasks { get; set; }
 
+        public List<MyStatusTaskViewModel> tasks { get; set; }
+
+
     }
 }

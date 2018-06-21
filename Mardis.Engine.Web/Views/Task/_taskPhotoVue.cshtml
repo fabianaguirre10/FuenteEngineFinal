@@ -11,10 +11,9 @@
         </label>
     </div>
 
-    @*<button type="button" class="btn btn-red btn-xs pull-left" v-on:click="addRemoveIndex(poll.carouselIndex)"><i class="fa fa-trash-o"></i></button>*@
+   <button type="button" class="btn btn-red btn-xs pull-left" v-on:click="addRemoveIndex(poll.carouselIndex)"><i class="fa fa-trash-o"></i></button>
     <v-carousel :cycle="false" v-model="poll.carouselIndex">
         <v-carousel-item v-for="(image, index) in poll.BranchImages" :src="image.UrlImage" :key="index"></v-carousel-item>
-
     </v-carousel>
 
 </div>
@@ -24,5 +23,7 @@
         <img id="myimage" src='https://vuetifyjs.com/static/doc-images/carousel/squirrel.jpg' width="300" height="200">
         <div id="myresult" class="img-zoom-result"></div>
     </div>*@
+
+
 
 

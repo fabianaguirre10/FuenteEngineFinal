@@ -90,5 +90,19 @@ namespace Mardis.Engine.DataObject.MardisCommon
                           .FirstOrDefault(tb => tb.Code == code &&
                                  tb.StatusRegister == CStatusRegister.Active);
         }
+
+
+        /// <summary>
+        /// Obtener las personas con status activo
+        /// </summary>
+        /// <returns></returns>
+        public List<Person> GetActiveIMEI(Guid idaccount)
+        {
+            return Context.Persons
+                .Where(p => p.StatusRegister == CStatusRegister.Active && p.IdAccount.Equals(idaccount)&& p.TypeDocument=="IMEI")
+                .ToList();
+
+        }
+
     }
 }

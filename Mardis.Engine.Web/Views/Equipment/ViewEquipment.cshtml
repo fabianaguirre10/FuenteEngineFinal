@@ -1,4 +1,4 @@
-@{
+﻿@{
     var Ideu = (string)ViewData[CTask.IdEquipment];
 }
 
@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-md-3">
                 <!-- Profile Image -->
-                <div class="box box-info">
+                <div class="box box-danger">
                     <div class="box-body box-profile">
 
                         <div  v-if="poll.Branches" >
@@ -59,7 +59,7 @@
                     <!-- /.box-body -->
                 </div>
                 <!-- /.box -->
-                <div class="box box-success">
+                <div class="box box-default">
                     <div class="box-header with-border">
                         <h3 class="box-title">Album </h3>
                     </div>
@@ -69,7 +69,7 @@
                         <br />
                         <img alt="..." v-for="(fotos, i) in poll.EquipamentImg" v-bind:src="fotos.UrlImage" v-if="fotos.ContentType =='3'" class="margin " style="width:130px; height:100px;">
                         <hr>
-                        <strong><i class="fa fa-tasks margin-r-5"></i> Implementacion</strong>
+                        <strong><i class="fa fa-tasks margin-r-5"></i> Implementación</strong>
                         <br />
                        
                             <img alt="..." v-for="(fotos, i) in poll.EquipamentImg" v-bind:src="fotos.UrlImage" v-if="fotos.ContentType =='1'" class="margin " style="width:130px; height:100px;">
@@ -87,7 +87,7 @@
             <div class="col-md-9">
                 <div class="nav-tabs-custom">
 
-                    <div class="tab-content box box-primary ">
+                    <div class="tab-content box box-mardis ">
 
                         <!-- /.tab-pane -->
                         <div v-if="poll.Idbranch != '00000000-0000-0000-0000-000000000000'">
@@ -98,7 +98,7 @@
                                     <!-- timeline time label -->
                                     <li class="box-header  time-label">
 
-                                        <button type="button" class="btn btn-box-tool btn bg-olive btn-flat" data-widget="collapse">
+                                        <button type="button" class="btn btn-box btn bg-timeline btn-flat" data-widget="collapse">
                                             {{moment(task.DateCreation).format('ll')}}
                                         </button>
                                     </li>
@@ -107,11 +107,11 @@
 
                                     <li class="box-body">
 
-                                        <i class="fa fa-tasks bg-blue"></i>
+                                        <i class="fa fa-tasks bg-red-active"></i>
                                         <div class="timeline-item" style="border-radius:0px !important">
 
                                             <span class="time"><i class="fa fa-clock-o"></i>   {{moment(task.DateModification).format('LT')}}</span>
-                                            <h3 class="timeline-header"><a href="#">Tarea :</a>  {{task.Code}}</h3>
+                                            <h3 class="timeline-header"><a href="#">Encuesta :</a>  {{task.Code}}</h3>
                                             <div class="timeline-body">
                                                 <div class=" invoice-col">
 
@@ -133,30 +133,138 @@
                                                 </a>
 
                                                 @*<a v-bind:href="'../Campaign/TaskPoll?idTask='+ task.Id" class="btn btn-google btn-flat btn-xs">Ver Tarea</a>
-                    <a v-bind:href="'../Branch/Profile?idBranch='+ task.IdBranch" class="btn btn-linkedin btn-flat btn-xs">Ir a local</a>*@
+                        <a v-bind:href="'../Branch/Profile?idBranch='+ task.IdBranch" class="btn btn-linkedin btn-flat btn-xs">Ir a local</a>*@
 
                                             </div>
                                         </div>
                                     </li>
-                                   
-                                    <li class="box-body" v-if="poll.Branches.BranchImages!='0'" >
-                                       
-                                            <i class="fa fa-camera bg-purple"></i>
-
-                                            <div class="timeline-item" style="border-radius:0px !important">
-
-                                                <h3 class="timeline-header"><a href="#">Fotos</a>  </h3>
-                                                <div class="timeline-body" style="display: -webkit-inline-box;">
-
-                                                    <img alt="..." v-for="(fotos, imgs) in poll.Branches.BranchImages" v-bind:src="fotos.UrlImage" v-on:click="[openModal(), currentSlide(imgs + 1)]" v-if="fotos.IdCampaign==task.IdCampaign" class="margin " style="width:150px; height:100px;">
 
 
-                                                </div>
+                                    <li class="box-body" v-if="poll.Branches.BranchImages!=''">
+
+                                        <i class="fa fa-camera bg-purple"></i>
+
+                                        <div class="timeline-item" style="border-radius:0px !important">
+
+                                            <h3 class="timeline-header"><a href="#">Multimedia</a>  </h3>
+                                            <div class="timeline-body" style="display: -webkit-inline-box;">
+
+                                                <img alt="..." v-for="(fotos, imgs) in poll.Branches.BranchImages" v-bind:src="fotos.UrlImage" v-on:click="[openModal(), currentSlide(imgs + 1)]" v-if="fotos.IdCampaign==task.IdCampaign" class="margin " style="width:150px; height:100px;">
+
+
                                             </div>
-                                      
+                                        </div>
+
                                     </li>
-                                       
+
                                 </ul>
+
+                                <ul v-for="(task, x) in poll.Activities" class="timeline timeline-inverse box">
+                                    <!-- timeline time label -->
+                                    <li class="box-header  time-label" v-if="task.typeActivity == 'C'">
+
+                                        <button type="button" class="btn btn-box btn bg-timeline btn-flat" data-widget="collapse">
+                                            {{moment(task.DateCreation).format('ll')}}
+                                        </button>
+                                    </li>
+                                    <!-- /.timeline-label -->
+                                    <!-- timeline item -->
+
+                                    <li class="box-body" v-if="task.typeActivity == 'C' ">
+
+                                        <i class="fa fa-bus bg-green"></i>
+                                        <div class="timeline-item" style="border-radius:0px !important">
+
+                                            <span class="time"><i class="fa fa-clock-o"></i>   {{moment(task.DateModification).format('LT')}}</span>
+                                            <h3 class="timeline-header"><a href="#">Actividad :</a>  {{task.Code}}</h3>
+                                            <div class="timeline-body">
+                                                <div class=" invoice-col">
+
+                                                    <br>
+                                                    <b>Guía:</b> {{task.guide}}<br>
+                                                    <b>Placa:</b> {{task.car_license}}<br>
+                                                    <b>Descripción:</b> {{task.Description}}
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </li>
+
+                                    <li class="box-body" v-if="ExistsImg(3) && task.typeActivity == 'C'">
+
+                                        <i class="fa fa-camera bg-purple"></i>
+
+                                        <div class="timeline-item" style="border-radius:0px !important">
+
+                                            <h3 class="timeline-header"><a href="#">Multimedia</a>  </h3>
+                                            <div class="timeline-body" style="display: -webkit-inline-box;">
+
+                                                <img alt="..." v-for="(fotos, i) in poll.EquipamentImg" v-bind:src="fotos.UrlImage" v-if="fotos.ContentType =='3'" class="margin " style="width:150px; height:100px;" v-on:click="[openModal(), currentSlide(imgs + 1)]">
+
+
+                                            </div>
+                                        </div>
+
+                                    </li>
+
+
+
+
+
+                                </ul>
+                                <ul v-for="(task, x) in poll.Activities" class="timeline timeline-inverse box">
+                                    <!-- timeline time label -->
+                                    <li class="box-header  time-label" v-if="task.typeActivity == 'B' ">
+
+                                        <button type="button" class="btn btn-box btn bg-timeline btn-flat" data-widget="collapse">
+                                            {{moment(task.DateCreation).format('ll')}}
+                                        </button>
+                                    </li>
+                                    <!-- /.timeline-label -->
+                                    <!-- timeline item -->
+
+                                    <li class="box-body" v-if="task.typeActivity == 'B' ">
+
+                                        <i class="fa fa-home bg-blue"></i>
+                                        <div class="timeline-item" style="border-radius:0px !important">
+
+                                            <span class="time"><i class="fa fa-clock-o"></i>   {{moment(task.DateModification).format('LT')}}</span>
+                                            <h3 class="timeline-header"><a href="#">Actividad :</a>  {{task.Code}}</h3>
+                                            <div class="timeline-body">
+                                                <div class=" invoice-col">
+
+                                                    <br>
+                                                    <b>Guía:</b> {{task.guide}}<br>
+                                                    <b>Observación:</b> {{task.car_license}}<br>
+
+                                                    <b>Descripción:</b> {{task.Description}}
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </li>
+
+                                    <li class="box-body" v-if="ExistsImg(4) && task.typeActivity == 'B' ">
+
+                                        <i class="fa fa-camera bg-purple"></i>
+
+                                        <div class="timeline-item" style="border-radius:0px !important">
+
+                                            <h3 class="timeline-header"><a href="#">Multimedia</a>  </h3>
+                                            <div class="timeline-body" style="display: -webkit-inline-box;">
+                                                <img alt="..." v-for="(fotos, i) in poll.EquipamentImg" v-bind:src="fotos.UrlImage" v-if="fotos.ContentType =='4' || fotos.ContentType =='5'" class="margin " style="width:150px; height:100px;" v-on:click="[openModal(), currentSlide(imgs + 1)]">
+
+
+
+                                            </div>
+                                        </div>
+
+                                    </li>
+                                </ul>
+
+
 
                             </div>
                         </div>
@@ -166,6 +274,7 @@
                 <!-- /.nav-tabs-custom -->
             </div>
             <!-- /.col -->
+            @*<pre>{{poll.Branches.BranchImages||json}}</pre>*@
         </div>
         <!-- /.row -->
     </section>
@@ -238,6 +347,7 @@
 
         </section>
     </div>
+    @*<pre>{{poll||json}}</pre>*@   
     </div>
     @section scripts{
         <script src="~/js/viewModel/MapHelper.js"></script>
@@ -251,6 +361,6 @@
 
         LoadEquipment(idDeu);
 
-        console.log(vueVM)
+
         </script>
     }

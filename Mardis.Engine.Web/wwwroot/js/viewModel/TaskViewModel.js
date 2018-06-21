@@ -402,6 +402,7 @@ function Save() {
                     if (data) {
                         store.clearAll();
                         bootbox.alert("Registros Actualizados Satisfactoriamente");
+
                         window.location.href = "/Task/MyTasks";
                     }
                 },
@@ -751,6 +752,36 @@ function updateBranchImg(id, img) {
             if (data=="1") {
                 bootbox.alert("Registro Actualizado Satisfactoriamente");
           
+            } else {
+                bootbox.alert("Existío un error, Vuelva a intentarlo");
+            }
+
+        },
+        complete: function (data) {
+            $.unblockUI();
+        },
+        error: function (error) {
+            console.log(error);
+            $.unblockUI();
+        }
+    });
+}
+
+
+function deleteBranchImg(id) {
+    $.blockUI({ message: "Actualizando Imagen.." });
+
+    $.ajax({
+        url: "/Task/DeleteImage",
+        type: "POST",
+        data: {
+            idIdimg: id
+        },
+        success: function (data) {
+
+            if (data == "1") {
+                bootbox.alert("Foto ha sido eliminada");
+
             } else {
                 bootbox.alert("Existío un error, Vuelva a intentarlo");
             }

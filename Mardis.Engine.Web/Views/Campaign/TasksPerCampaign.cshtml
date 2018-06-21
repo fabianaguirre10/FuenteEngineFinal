@@ -1,10 +1,10 @@
 ﻿@model Mardis.Engine.Web.ViewModel.TaskViewModels.TaskPerCampaignViewModel
-
 @{
     ViewData["Menu"] = "Tareas";
     ViewData["Title"] = "Tareas";
-    ViewData["Description"] = "Listado de Tareas";
+    ViewData["Description"] = "Mis Tareas";
     Layout = "_Layout";
+
 }
 
 @section buttons{
@@ -17,311 +17,94 @@
         </a>
     </div>
 }
+
 @section filters{
     @Html.Partial("_CoreFilterPartial", Model.Properties)
 }
 
-<div id="divTasksPerCampaign">
-    <div class="row">
-        <div class="col-sm-3" id="divPendingTasks">
-            <div class="row">
-                <div class="col-sm-12" style="text-align: center; border: thick solid white; background-color: #C40000;">
-                    <h5 class="control-label" style="color: white;">PENDIENTE @(Model.PendingTasksList.Count + " / " + Model.CountPendingTasks)</h5>
-                </div>
-            </div>
-            @foreach (var task in Model.PendingTasksList)
-            {
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-9">
-                                <strong>
-                                    TAREA: <a title="Tarea" href="@Url.Action("TaskPoll", "Campaign", new {idTask = @task.Id})" id="@task.Id" class="btn btn-link">@task.Code</a>
-                                </strong>
-                            </div>
-                            <div class="col-sm-3">
-                                <label style="font-size-adjust: 0.4;">@task.Route</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    Código Mardis:
-                                    @(" " + @task.BranchMardisCode )
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    Código Cliente:
-                                    @(" " + @task.BranchExternalCode)
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    Nombre de Local:
-                                    <a href="@Url.Action("Profile", "Branch", new {idBranch = @task.BranchId})">@task.BranchName</a>
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    CAMPAÑA: @task.CampaignName
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-8">
-                                @task.StartDate
-                            </div>
-                            <div class="col-sm-4" style="color: #DD4B39">
-                                &#x2500;&#x25CF;&#x2500;
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-        <div class="col-sm-3" id="divStartedTasks">
-            <div class="row">
-                <div class="col-sm-12" style="text-align: center; border: thick solid white; background-color: #E26B00;">
-                    <h5 class="control-label" style="color: white;">INICIADO @(Model.StartedTasksList.Count + " / " + Model.CountStartedTasks)</h5>
-                </div>
-            </div>
+<link rel="stylesheet" href="~/lib/Slidebars/dist/slidebars.css">
+<link rel="stylesheet" href="~/css/theme/StyleFilter.css">
 
-            @foreach (var task in Model.StartedTasksList)
-            {
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-9">
-                                <strong>
-                                    TAREA: <a title="Tarea" href="@Url.Action("TaskPoll", "Campaign", new {idTask = @task.Id})" id="@task.Id" class="btn btn-link">@task.Code</a>
-                                </strong>
+
+<div id="divMyTask">
+    <div class="row">
+        <div class="row-fluid">
+
+            @foreach (var task in Model.tasks)
+    {
+  
+                            <div class="col-sm-2" style="text-align: center; border: thick solid white; background-color: @task.color;">
+                                <h5 class="control-label" style="color: white;">@task.type @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + " - " + (Model.PageIndex * Model.PageSize) + " / " + task.CountTasks)</h5>
                             </div>
-                            <div class="col-sm-3">
-                                <label style="font-size-adjust: 0.4;">@task.Route</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    Código Mardis:
-                                    @(" " + @task.BranchMardisCode )
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    Código Cliente:
-                                    @(" " + @task.BranchExternalCode)
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    Nombre de Local:
-                                    <a href="@Url.Action("Profile", "Branch", new {idBranch = @task.BranchId})">@task.BranchName</a>
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    CAMPAÑA: @task.CampaignName
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-8">
-                                @task.StartDate
-                            </div>
-                            <div class="col-sm-4" style="color: #F39C12">
-                                &#x2500;&#x25CF;&#x2500;
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
+        
+}
         </div>
-        <div class="col-sm-3" id="divImplementedTasks">
-            <div class="row">
-                <div class="col-sm-12" style="text-align: center; border: thick solid white; background-color: #2C9B36;">
-                    <h5 class="control-label" style="color: white;">IMPLEMENTADO @(Model.ImplementedTasksList.Count + " / " + Model.CountImplementedTasks)</h5>
-                </div>
-            </div>
-            @foreach (var task in Model.ImplementedTasksList)
+    </div>
+
+    <div class="row">
+        <div class="row-fluid">
+            @foreach (var listtask in Model.tasks)
             {
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-9">
-                                <strong>
-                                    TAREA: <a title="Tarea" href="@Url.Action("TaskPoll", "Campaign", new {idTask = @task.Id})" id="@task.Id" class="btn btn-link">@task.Code</a>
-                                </strong>
-                            </div>
-                            <div class="col-sm-3">
-                                <label style="font-size-adjust: 0.4;">@task.Route</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    Código Mardis:
-                                    @(" " + @task.BranchMardisCode )
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    Código Cliente:
-                                    @(" " + @task.BranchExternalCode)
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    Nombre de Local:
-                                    <a href="@Url.Action("Profile", "Branch", new {idBranch = @task.BranchId})">@task.BranchName</a>
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    CAMPAÑA: @task.CampaignName
-                                </strong>
+                <div class="col-sm-2" style="border: thick solid #CCCCCC;">
+
+                    @foreach (var task in listtask.TasksList)
+                    {
+                        <div class="panel panel-default" id="@("row" +task.Id )">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <strong>CAMPAÑA:</strong>
+                                        <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id , idcampaing=Model.IdCampaign})">@task.CampaignName</a>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label style="font-size-adjust: 0.4;">@task.Route</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label style="font-size-adjust: 0.4;">@task.BranchName</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label style="font-size-adjust: 0.4;">Código Mardis: </label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-9">
+                                        <label style="font-size-adjust: 0.4;">@task.StartDate.ToString("dd/MM/yyyy")</label>
+                                    </div>
+                                    <div class="col-sm-2" style="color: @listtask.color">
+                                        &#x2500;&#x25CF;&#x2500;
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-8">
-                                @task.StartDate
-                            </div>
-                            <div class="col-sm-4" style="color: #26A65A">
-                                &#x2500;&#x25CF;&#x2500;
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-        <div class="col-sm-3" id="divNotImplementedTasks">
-            <div class="row">
-                <div class="col-sm-12" style="text-align: center; border: thick solid white; background-color: #1091BF;">
-                    <h5 class="control-label" style="color: white;">NO IMPLEMENTADO @(Model.NotImplementedTasksList.Count + " / " + Model.CountNotImplementedTasks)</h5>
-                </div>
-            </div>
-            @foreach (var task in Model.NotImplementedTasksList)
-            {
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-9">
-                                <strong>
-                                    TAREA: <a title="Tarea" href="@Url.Action("TaskPoll", "Campaign", new {idTask = @task.Id})" id="@task.Id" class="btn btn-link">@task.Code</a>
-                                </strong>
-                            </div>
-                            <div class="col-sm-3">
-                                <label style="font-size-adjust: 0.4;">@task.Route</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    Código Mardis:
-                                    @(" " + @task.BranchMardisCode )
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    Código Cliente:
-                                    @(" " + @task.BranchExternalCode)
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    Nombre de Local:
-                                    <a href="@Url.Action("Profile", "Branch", new {idBranch = @task.BranchId})">@task.BranchName</a>
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>
-                                    CAMPAÑA: @task.CampaignName
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-8">
-                                @task.StartDate
-                            </div>
-                            <div class="col-sm-4" style="color: #1091BF;">
-                                &#x2500;&#x25CF;&#x2500;
-                            </div>
-                        </div>
-                    </div>
+
+                    }
                 </div>
             }
         </div>
     </div>
-
 </div>
+
 <div id="divFooter">
     @Html.Partial("_PagingPartial", Model)
 </div>
 
 @section scripts{
-    <script src="~/js/viewModel/TaskCommon.js"></script>
-    <script src="~/js/viewModel/CommonScript.js"></script>
     <script src="~/js/viewModel/FilterHelper.js"></script>
     <script>
-
         controllerName = "@Model.Properties.ControllerName";
         actionName = "@Model.Properties.ActionName";
-
-        var pageIndex = parseInt("@Model.PageIndex");
-        var pageSize = 10;
-
-
-        function OpenProfileTaskClick(element) {
-            $.blockUI({ message: '' });
-            var idTask = element.id;
-            $.ajax({
-                url: "/Campaign/TaskPoll",
-                type: "get",
-                async: false,
-                data: {
-                    idTask: idTask
-                },
-                success: function (viewHtml) {
-                    $("#divMain").html(viewHtml);
-                    $.unblockUI();
-                },
-                error: function (error) {
-                    console.log(error);
-                    $.unblockUI();
-                }
-            });
-        }
 
         @foreach (var filter in Model.Properties.FilterValues)
         {
             @:var point = { 'IdFilter': "@filter.IdFilter", 'NameFilter': "@filter.NameFilter", 'Criteria': "@filter.Criteria", 'Value': "@filter.Value", 'Visible':'@filter.Visible' };
             @:filters.push(point);
         }
-
     </script>
 }

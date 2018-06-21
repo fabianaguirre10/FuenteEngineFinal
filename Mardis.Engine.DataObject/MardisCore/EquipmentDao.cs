@@ -99,6 +99,7 @@ namespace Mardis.Engine.DataObject.MardisCore
                .Include(u => u.Equipament_statuss)
                .Include(u => u.Branches.BranchImages)
                .Include(u=>u.EquipamentImg)
+               .Include(u=>u.Activities)
                
                 .Where(x => x.Id.Equals(Id)).First();
             //.Where(usr => usr.Equipaments. == typeUser &&
@@ -112,10 +113,13 @@ namespace Mardis.Engine.DataObject.MardisCore
         {
 
             if (entity.Idbranch == Guid.Parse("00000000-0000-0000-0000-000000000000")) entity.Idbranch = null;
-            entity.CreationDate = DateTime.Now;
+         ///  
             Context.Equipaments.Add(entity);
 
-            if (entity.Id < 1) Context.Entry(entity).State = EntityState.Added;
+            if (entity.Id < 1) {
+                entity.CreationDate = DateTime.Now;
+                Context.Entry(entity).State = EntityState.Added; 
+            } 
             else Context.Entry(entity).State = EntityState.Modified;
 
 

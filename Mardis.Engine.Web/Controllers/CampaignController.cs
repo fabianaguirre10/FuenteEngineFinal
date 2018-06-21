@@ -68,7 +68,7 @@ namespace Mardis.Engine.Web.Controllers
             _campaignBusiness = new CampaignBusiness(mardisContext);
             TableName = CCampaign.TableName;
             ControllerName = CCampaign.Controller;
-            _taskCampaignBusiness = new TaskCampaignBusiness(mardisContext,distributedCache);
+            _taskCampaignBusiness = new TaskCampaignBusiness(mardisContext, distributedCache);
             _commonBusiness = new CommonBusiness(mardisContext);
             _customerBusiness = new CustomerBusiness(mardisContext);
             _statusCampaignBusiness = new StatusCampaignBusiness(mardisContext, memoryCache);
@@ -335,7 +335,7 @@ namespace Mardis.Engine.Web.Controllers
                     id = Guid.Parse(Protector.Unprotect(idCampaign));
                 }
                 var filters = GetFilters(filterValues, deleteFilter);
-                var tasks = _campaignBusiness.GetPaginatedTaskPerCampaignViewModel(id, pageIndex, pageSize, filters, ApplicationUserCurrent.AccountId);
+                var tasks = _campaignBusiness.GetPaginatedTaskPerCampaignViewModelDinamic(id, pageIndex, pageSize, filters, ApplicationUserCurrent.AccountId);
 
                 if (view == "list")
                 {
@@ -392,7 +392,7 @@ namespace Mardis.Engine.Web.Controllers
             {
                 ViewData[CTask.IdRegister] = idTask.ToString();
 
-                ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks()
+                ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId)
                     .Select(s => new SelectListItem() { Text = s.Name, Value = s.Id.ToString() })
                     .ToList();
 
@@ -415,7 +415,7 @@ namespace Mardis.Engine.Web.Controllers
             try
             {
                 var filters = GetFilters(filterValues, deleteFilter);
-                var campaigns = _campaignBusiness.GetPaginatedCampaigns(filters, pageSize, pageIndex, ApplicationUserCurrent.AccountId, Protector, _userId, _typeuser);
+                var campaigns = _campaignBusiness.GetPaginatedCampaignsDinamic(filters, pageSize, pageIndex, ApplicationUserCurrent.AccountId, Protector, _userId, _typeuser);
                 return View(campaigns);
             }
             catch (Exception e)
@@ -468,19 +468,96 @@ namespace Mardis.Engine.Web.Controllers
 
             return View();
         }
+        public IActionResult Route()
+        {
 
+            return View();
+        }
         public JsonResult ActiveRoute()
         {
-          var model=  _campaignBusiness.GetActiveRoute(ApplicationUserCurrent.AccountId);
+            var model = _campaignBusiness.GetActiveRoute(ApplicationUserCurrent.AccountId);
             return Json(model);
         }
 
         [HttpPost]
         public async Task<JsonResult> ChangeStatus(string id)
         {
-            int model = await _campaignBusiness.ChangeStatusRoute(ApplicationUserCurrent.AccountId,id);
+            int model = await _campaignBusiness.ChangeStatusRoute(ApplicationUserCurrent.AccountId, id);
             return Json(model);
         }
+
+
+        public JsonResult GetEncuestador(string route)
+        {
+
+
+            var model = _campaignBusiness.GetRoute(ApplicationUserCurrent.AccountId, route);
+
+            return Json(model);
+        }
+
+
+        public JsonResult deleteEcuestador(string route, string imeid)
+        {
+
+
+            var model = _campaignBusiness.deleteRoute(ApplicationUserCurrent.AccountId, route, imeid);
+
+            return Json(model);
+        }
+
+        public JsonResult GetActiveEncuestador(string id)
+        {
+
+
+            var model = _campaignBusiness.GetEncuestadoresbyIMEI(ApplicationUserCurrent.AccountId);
+            var _autocompleteModel = from x in model
+                                     select new { name=x.Name+"("+x.Code+")" , abbr=x.Name, id=x.Code , phone=x.Phone };           
+            return Json(_autocompleteModel);
+        }
+        public JsonResult SaveEncuestador(string route, string id)
+        {
+
+
+            var model = _campaignBusiness.SaveImei(ApplicationUserCurrent.AccountId,id,route);
+
+            return Json(model);
+        }
+
+
+        #endregion
+        #region modoSupervisor
+        [HttpGet]
+        public IActionResult ProfileCampaign(Guid idTask , String idcampaing)
+        {
+            try
+            {
+                ViewData[CTask.IdRegister] = idTask.ToString();
+     
+                ViewData[CTask.IdCampaing] = Protector.Protect(idcampaing);
+                LoadSelectItems();
+
+                return View();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), e.Message);
+                return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
+            }
+
+        }
+        public void LoadSelectItems()
+        {
+            ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId)
+                .Select(s => new SelectListItem() { Text = s.Name, Value = s.Id.ToString() })
+                    .ToList();
+
+            ViewBag.ReasonsList =
+                _taskNotImplementedReasonBusiness.GetAllTaskNotImplementedReason()
+                    .Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Name })
+                    .ToList();
+        }
+
         #endregion
     }
 }

@@ -17,6 +17,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using Mardis.Engine.Web.ViewModel.BranchViewModels;
 using System.Threading.Tasks;
+using AutoMapper;
+using Mardis.Engine.DataAccess.MardisCommon;
+using Mardis.Engine.DataObject.MardisCommon;
 
 namespace Mardis.Engine.Business.MardisCore
 {
@@ -32,6 +35,7 @@ namespace Mardis.Engine.Business.MardisCore
         private readonly BranchDao _branchDao;
         private readonly UserCanpaignDao _userCanpaignDao;
         private readonly DashboardDao _dashboardDao;
+        private readonly PersonDao _personDao;
         public CampaignBusiness(MardisContext mardisContext) : base(mardisContext)
         {
             _campaignDao = new CampaignDao(mardisContext);
@@ -44,6 +48,7 @@ namespace Mardis.Engine.Business.MardisCore
             _branchDao = new BranchDao(mardisContext);
             _userCanpaignDao = new UserCanpaignDao(mardisContext);
             _dashboardDao = new DashboardDao(mardisContext);
+            _personDao = new PersonDao(mardisContext);
         }
 
         public Campaign GetCampaignById(Guid idCampaign, Guid idAccount)
@@ -301,7 +306,31 @@ namespace Mardis.Engine.Business.MardisCore
 
             return ConfigurePagination(model, 1, 10, filters, 1);
         }
+        #region taskDinamic
 
+        public TaskPerCampaignViewModel GetPaginatedTaskPerCampaignViewModelDinamic(Guid idCampaign,  int pageIndex, int pageSize, List<FilterValue> filters, Guid idAccount)
+        {
+            filters = filters ?? new List<FilterValue>();
+
+            var itemResult = new TaskPerCampaignViewModel();
+
+            filters = AddHiddenFilter("IdCampaign", idCampaign.ToString(), filters, itemResult.FilterName);
+            itemResult.tasks = new List<MyStatusTaskViewModel>();
+            var data = _taskCampaignDao.statusAllow(idAccount, pageIndex, pageSize);
+            int aux = 0;
+            int   max = 0;
+
+            foreach (var allow in data)
+            {
+                aux = _taskCampaignDao.GetTaskCountByCampaignAndStatus(allow.Name, filters, idAccount);
+                var taskslist = GetMyTaskViewItemModel(allow.Name,pageIndex, pageSize, filters, idAccount);
+                max = (aux > max) ? aux : max;
+                itemResult.tasks.Add(new MyStatusTaskViewModel { TasksList = taskslist, CountTasks = aux, type = allow.Name, color = allow.color });
+            }
+            itemResult.IdCampaign = idCampaign;
+            return ConfigurePagination(itemResult, pageIndex, pageSize, filters, max);
+        }
+        #endregion
         public TaskPerCampaignViewModel GetPaginatedTaskPerCampaignViewModel(Guid idCampaign, int pageIndex, int pageSize, List<FilterValue> filters, Guid idAccount)
         {
             filters = filters ?? new List<FilterValue>();
@@ -364,6 +393,117 @@ namespace Mardis.Engine.Business.MardisCore
             return ConfigurePagination(resultItem, int.MaxValue, int.MaxValue, filterValues, int.MaxValue);
         }
 
+
+        #region CampaingDinamic
+
+        public CampaignListViewModel GetPaginatedCampaignsDinamic(List<FilterValue> filterValues, int pageSize, int pageNumber, Guid idAccount, IDataProtector protector, Guid userid, Guid _typeuser)
+        {
+#if DEBUG
+            var myWatch = new Stopwatch();
+            myWatch.Start();
+#endif
+
+            var itemResult = new CampaignListViewModel();
+            var campaigns = _campaignDao.GetPaginatedCampaignList(filterValues, pageSize, pageNumber, idAccount);
+            var countCampaigns = _campaignDao.GetPaginatedCampaignCount(filterValues, pageSize, pageNumber, idAccount, _typeuser, userid);
+            var _data = _taskCampaignDao.statusAllow(idAccount, pageNumber, pageSize);
+            foreach (var campaign in campaigns)
+            {
+                var ts = campaign.EndDate - DateTime.Now;
+
+                int numberNotImplementedTasks;
+                int numberStartedTasks;
+                int numberPendingTasks;
+                int numberImplementedTasks;
+                //var totalTasks = GetCampaignStatistics(idAccount, campaign, out numberNotImplementedTasks, out numberStartedTasks, out numberPendingTasks, out numberImplementedTasks);
+                var totalTasks = _campaignDao.NumbertaskbyCampaign(campaign.Id);
+                var usercampaign = _userCanpaignDao.GetCampaignById(campaign.Id, userid);
+                if (_typeuser.Equals(new Guid("30DB815C-8B82-47EE-9279-B28922BEB616")))
+                {
+                    if (usercampaign.Count > 0)
+                    {
+                        var cvm = new CampaignItemViewModel
+                        {
+                            EndDate = campaign.EndDate,
+                            Id = protector.Protect(campaign.Id.ToString()),
+                            Name = campaign.Name,
+                            StartDate = campaign.StartDate,
+                            RemainingDays = ts.Days,
+
+                            //ImplementedTaskPercent = (totalTasks > 0) ? ((numberImplementedTasks * 100) / totalTasks) + "%" : "0%",
+                            //NotImplementedTaskPercent = (totalTasks > 0) ? ((numberNotImplementedTasks * 100) / totalTasks) + "%" : "0%",
+                            //StartedTaskPercent = (totalTasks > 0) ? ((numberStartedTasks * 100) / totalTasks) + "%" : "0%",
+                            //PendingTaskPercent = (totalTasks > 0) ? ((numberPendingTasks * 100) / totalTasks) + "%" : "0%",
+                            //CountImplementedTasks = numberImplementedTasks,
+                            //CountNotImplementedTasks = numberNotImplementedTasks,
+                            //CountPendingTasks = numberPendingTasks,
+                            //CountStartedTasks = numberStartedTasks,
+                            TotalTasks = totalTasks
+                        };
+                        int aux = 0;
+                        int max = 0;
+             
+                        foreach (var allow in _data)
+                        {
+                            aux = _taskCampaignDao.GetTaskCountByCampaignAndStatusStadi(allow.Name, campaign.Id, idAccount);
+                            max = (aux > max) ? aux : max;
+                            cvm.sectionCampaign.Add(new SectionCampaignDinamicViewModels  { name=allow.Name,total=aux,percent= (totalTasks > 0) ? ((aux * 100) / totalTasks) + "%" : "0%",color=allow
+                            .color});
+                        }
+                        itemResult.CampaignList.Add(cvm);
+                    }
+                }
+                else
+                {
+                    var cvm = new CampaignItemViewModel
+                    {
+                        EndDate = campaign.EndDate,
+                        Id = protector.Protect(campaign.Id.ToString()),
+                        Name = campaign.Name,
+                        StartDate = campaign.StartDate,
+                        RemainingDays = ts.Days,
+
+                        //ImplementedTaskPercent = (totalTasks > 0) ? ((numberImplementedTasks * 100) / totalTasks) + "%" : "0%",
+                        //NotImplementedTaskPercent = (totalTasks > 0) ? ((numberNotImplementedTasks * 100) / totalTasks) + "%" : "0%",
+                        //StartedTaskPercent = (totalTasks > 0) ? ((numberStartedTasks * 100) / totalTasks) + "%" : "0%",
+                        //PendingTaskPercent = (totalTasks > 0) ? ((numberPendingTasks * 100) / totalTasks) + "%" : "0%",
+                        //CountImplementedTasks = numberImplementedTasks,
+                        //CountNotImplementedTasks = numberNotImplementedTasks,
+                        //CountPendingTasks = numberPendingTasks,
+                        //CountStartedTasks = numberStartedTasks,
+
+                        TotalTasks = totalTasks
+                    };
+                    int aux = 0;
+                    int max = 0;
+
+                    foreach (var allow in _data)
+                    {
+                        aux = _taskCampaignDao.GetTaskCountByCampaignAndStatusStadi(allow.Name, campaign.Id, idAccount);
+                        max = (aux > max) ? aux : max;
+                        cvm.sectionCampaign.Add(new SectionCampaignDinamicViewModels
+                        {
+                            name = allow.Name,
+                            total = aux,
+                            percent = (totalTasks > 0) ? ((aux * 100) / totalTasks) + "%" : "0%",
+                            color = allow
+                        .color
+                        });
+                    }
+
+                    itemResult.CampaignList.Add(cvm);
+                }
+
+            }
+
+#if DEBUG
+            myWatch.Stop();
+            Debugger.Log(0, "Campañas", $"ms: {myWatch.ElapsedMilliseconds}");
+#endif
+
+            return ConfigurePagination(itemResult, pageNumber, pageSize, filterValues, countCampaigns);
+        }
+        #endregion
         public CampaignListViewModel GetPaginatedCampaigns(List<FilterValue> filterValues, int pageSize, int pageNumber, Guid idAccount, IDataProtector protector, Guid userid, Guid _typeuser)
         {
 #if DEBUG
@@ -497,6 +637,64 @@ namespace Mardis.Engine.Business.MardisCore
           int  model = await _campaignServicesDao.UpdateStatusRoute(idAccount, route);
 
             return model;
+        }
+
+
+        public IList<EncuestadorViewModel> GetRoute(Guid idaccount, string route)
+        {
+
+            var imei = _campaignServicesDao.GetIMEIRoute(route, idaccount);
+            IList<string> encuestadores = new List<string>();
+            string[] separadas;
+
+            foreach (var person in imei) {
+                string UniqueImei = person;
+                separadas = UniqueImei.Split('-');
+                for (int xi = 0; xi < separadas.Length; xi++)
+                {
+
+                    encuestadores.Add(separadas[xi]);
+                }
+            }
+            var data = _campaignServicesDao.GetIdPersonByDocumentAndTypeDocumentAndAccount(encuestadores, "IMEI", idaccount);
+
+            IList<EncuestadorViewModel> _model = new List<EncuestadorViewModel>();
+
+            foreach (var item in data) {
+                _model.Add(new EncuestadorViewModel { Code = item.Code, Name = item.Name, Phone = item.Phone });
+            }
+            return _model;
+        }
+        public int deleteRoute(Guid idaccount, string route,string imei)
+        {
+
+            return _campaignServicesDao.UpdateRouteImei(imei, route, idaccount);
+
+
+    
+        }
+
+        public IList<Person> GetActiveEncuestadores(Guid idAccount)
+        {
+            IList<Person> model = new List<Person>();
+            model = _personDao.GetActiveIMEI(idAccount);
+
+            return model;
+        }
+        public IList<Person> GetEncuestadoresbyIMEI(Guid idAccount)
+        {
+            IList<Person> model = new List<Person>();
+            model = _personDao.GetActiveIMEI(idAccount);
+
+            return model;
+        }
+        public int SaveImei(Guid idaccount, string id, string route)
+        {
+
+            return _campaignServicesDao.AddRouteImei(id, route, idaccount);
+
+
+
         }
         #endregion
 

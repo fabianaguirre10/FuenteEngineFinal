@@ -36,6 +36,7 @@ function LoadEquipment(idEq) {
             window.location.href = "/Equipment/Index";
         }
     });
+    
 }
 
 function LoadImages(idEq)
@@ -103,13 +104,22 @@ function ApplyBindingEquipment(data) {
             },
             Save: function () {
                 return Save();
+            },
+            ExistsImg: function (e) {
+                for (i in this.poll.EquipamentImg) {
+                    console.log(this.poll.EquipamentImg[i])
+                    if (this.poll.EquipamentImg[i].ContentType == e.toString()) return true;
+                }
+
+
+             
             }
         }
     
     });
 
     if (vueVM.poll.Idbranch != '00000000-0000-0000-0000-000000000000') {
-    var marcador = [{ LatitudeBranch: vueVM.poll.Branches.LatitudeBranch, LenghtBranch: vueVM.poll.Branches.LatitudeBranch, Name: vueVM.poll.Branches.Name }];
+        var marcador = [{ LatitudeBranch: vueVM.poll.Branches.LatitudeBranch, LenghtBranch: vueVM.poll.Branches.LenghtBranch, Name: vueVM.poll.Branches.Name }];
     LoadMarkers(marcador);
     }
     $.unblockUI();

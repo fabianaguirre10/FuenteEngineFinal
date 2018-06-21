@@ -210,6 +210,7 @@
     <Compile Include="MardisCommon\Region.cs" />
     <Compile Include="MardisCommon\Sector.cs" />
     <Compile Include="MardisContext.cs" />
+    <Compile Include="MardisCore\Activity.cs" />
     <Compile Include="MardisCore\Answer.cs" />
     <Compile Include="MardisCore\AnswerDetail.cs" />
     <Compile Include="MardisCore\Branch.cs" />
@@ -246,6 +247,7 @@
     <Compile Include="MardisCore\StatusCampaign.cs" />
     <Compile Include="MardisCore\StatusCustomer.cs" />
     <Compile Include="MardisCore\StatusTask.cs" />
+    <Compile Include="MardisCore\StatusTaskAccount.cs" />
     <Compile Include="MardisCore\TaskCampaign.cs" />
     <Compile Include="MardisCore\TaskNoImplementedReason.cs" />
     <Compile Include="MardisCore\TypeBusiness.cs" />
