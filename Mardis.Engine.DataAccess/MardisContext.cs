@@ -345,15 +345,21 @@ namespace Mardis.Engine.DataAccess
         public DbSet<Equipament_type> Equipaments_type { get; set; }
 
         /// <summary>
-        /// Tabla de Equipament_type
+        /// Tabla de DASHBOAR
         /// </summary>
         public DbSet<Dashboard> Dashboards { get; set; }
 
 
         /// <summary>
-        /// Tabla de Equipament_status
+        /// Tabla de ACTIVIDADES
         /// </summary>
         public DbSet<Activity> Activities { get; set; }
+
+
+        /// <summary>
+        /// Tabla de ESTADOS DINAMICOS
+        /// </summary>
+        public DbSet<StatusTaskAccount> StatusTaskAccounts { get; set; }
         public IEnumerable<T> Query<T>(string query) where T : class
         {
             return connection.Query<T>(query);

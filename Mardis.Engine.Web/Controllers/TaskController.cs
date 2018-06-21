@@ -322,7 +322,7 @@ namespace Mardis.Engine.Web.Controllers
 
         public void LoadSelectItems()
         {
-            ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks()
+            ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId)
                 .Select(s => new SelectListItem() { Text = s.Name, Value = s.Id.ToString() })
                     .ToList();
 
@@ -350,7 +350,7 @@ namespace Mardis.Engine.Web.Controllers
         [HttpGet]
         public List<StatusTask> GetAllStatusTask()
         {
-            return _statusTaskBusiness.GetAllStatusTasks();
+            return _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId);
         }
 
         [HttpGet]

@@ -270,6 +270,7 @@
     <Compile Include="CampaignViewModels\CampaignRegisterViewModel.cs" />
     <Compile Include="CampaignViewModels\CampaignSelectViewModel.cs" />
     <Compile Include="CampaignViewModels\CampaignTaskDetailViewModel.cs" />
+    <Compile Include="CampaignViewModels\SectionCampaignDinamicViewModels.cs" />
     <Compile Include="Common\SelectItemViewModel.cs" />
     <Compile Include="Common\StatusRegisterSelectViewModel.cs" />
     <Compile Include="CustomerViewModels\CustomerItemViewModel.cs" />
@@ -307,6 +308,7 @@
     <Compile Include="ServiceViewModels\ServiceItemViewModel.cs" />
     <Compile Include="ServiceViewModels\ServiceRegisterViewModel.cs" />
     <Compile Include="ServiceViewModels\TypeServiceListViewModel.cs" />
+    <Compile Include="TaskViewModels\MyStatusTaskViewModel.cs" />
     <Compile Include="TaskViewModels\MyTaskItemViewModel.cs" />
     <Compile Include="TaskViewModels\MyTaskQuestionDetailsViewModel.cs" />
     <Compile Include="TaskViewModels\MyTaskQuestionsViewModel.cs" />

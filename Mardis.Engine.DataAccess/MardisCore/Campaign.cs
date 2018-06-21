@@ -69,6 +69,8 @@ namespace Mardis.Engine.DataAccess.MardisCore
 
         public ICollection<TaskCampaign> Tasks { get; set; }
         public ICollection<Activity> Activities { get; set; }
+
+
     }
 }
 

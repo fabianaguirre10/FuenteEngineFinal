@@ -2210,6 +2210,12 @@
 
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="wwwroot\bower_components\autocomplete\countries.js" />
+    <None Include="wwwroot\bower_components\autocomplete\demo.js" />
+    <None Include="wwwroot\bower_components\autocomplete\jquery-1.8.2.min.js" />
+    <None Include="wwwroot\bower_components\autocomplete\jquery-2.1.1.js" />
+    <None Include="wwwroot\bower_components\autocomplete\jquery.autocomplete.js" />
+    <None Include="wwwroot\bower_components\autocomplete\jquery.mockjax.js" />
     <None Include="wwwroot\bower_components\bootstrap-progressbar\bootstrap-progressbar.js" />
     <None Include="wwwroot\bower_components\bootstrap-progressbar\bootstrap-progressbar.min.js" />
     <None Include="wwwroot\bower_components\bootstrap-progressbar\CHANGELOG.md" />

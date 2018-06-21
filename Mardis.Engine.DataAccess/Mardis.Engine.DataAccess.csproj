@@ -247,6 +247,7 @@
     <Compile Include="MardisCore\StatusCampaign.cs" />
     <Compile Include="MardisCore\StatusCustomer.cs" />
     <Compile Include="MardisCore\StatusTask.cs" />
+    <Compile Include="MardisCore\StatusTaskAccount.cs" />
     <Compile Include="MardisCore\TaskCampaign.cs" />
     <Compile Include="MardisCore\TaskNoImplementedReason.cs" />
     <Compile Include="MardisCore\TypeBusiness.cs" />

@@ -402,6 +402,7 @@ function Save() {
                     if (data) {
                         store.clearAll();
                         bootbox.alert("Registros Actualizados Satisfactoriamente");
+
                         window.location.href = "/Task/MyTasks";
                     }
                 },

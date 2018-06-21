@@ -335,7 +335,7 @@ namespace Mardis.Engine.Web.Controllers
                     id = Guid.Parse(Protector.Unprotect(idCampaign));
                 }
                 var filters = GetFilters(filterValues, deleteFilter);
-                var tasks = _campaignBusiness.GetPaginatedTaskPerCampaignViewModel(id, pageIndex, pageSize, filters, ApplicationUserCurrent.AccountId);
+                var tasks = _campaignBusiness.GetPaginatedTaskPerCampaignViewModelDinamic(id, pageIndex, pageSize, filters, ApplicationUserCurrent.AccountId);
 
                 if (view == "list")
                 {
@@ -392,7 +392,7 @@ namespace Mardis.Engine.Web.Controllers
             {
                 ViewData[CTask.IdRegister] = idTask.ToString();
 
-                ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks()
+                ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId)
                     .Select(s => new SelectListItem() { Text = s.Name, Value = s.Id.ToString() })
                     .ToList();
 
@@ -415,7 +415,7 @@ namespace Mardis.Engine.Web.Controllers
             try
             {
                 var filters = GetFilters(filterValues, deleteFilter);
-                var campaigns = _campaignBusiness.GetPaginatedCampaigns(filters, pageSize, pageIndex, ApplicationUserCurrent.AccountId, Protector, _userId, _typeuser);
+                var campaigns = _campaignBusiness.GetPaginatedCampaignsDinamic(filters, pageSize, pageIndex, ApplicationUserCurrent.AccountId, Protector, _userId, _typeuser);
                 return View(campaigns);
             }
             catch (Exception e)
@@ -524,7 +524,40 @@ namespace Mardis.Engine.Web.Controllers
             return Json(model);
         }
 
-        
+
+        #endregion
+        #region modoSupervisor
+        [HttpGet]
+        public IActionResult ProfileCampaign(Guid idTask , String idcampaing)
+        {
+            try
+            {
+                ViewData[CTask.IdRegister] = idTask.ToString();
+     
+                ViewData[CTask.IdCampaing] = Protector.Protect(idcampaing);
+                LoadSelectItems();
+
+                return View();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), e.Message);
+                return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
+            }
+
+        }
+        public void LoadSelectItems()
+        {
+            ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId)
+                .Select(s => new SelectListItem() { Text = s.Name, Value = s.Id.ToString() })
+                    .ToList();
+
+            ViewBag.ReasonsList =
+                _taskNotImplementedReasonBusiness.GetAllTaskNotImplementedReason()
+                    .Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Name })
+                    .ToList();
+        }
+
         #endregion
     }
 }

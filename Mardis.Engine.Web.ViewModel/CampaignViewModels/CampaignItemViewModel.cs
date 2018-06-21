@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Mardis.Engine.Web.ViewModel.CampaignViewModels
 {
@@ -31,5 +32,7 @@ namespace Mardis.Engine.Web.ViewModel.CampaignViewModels
         public int CountStartedTasks { get; set; }
 
         public int RemainingDays { get; set; }
+
+        public List<SectionCampaignDinamicViewModels> sectionCampaign { get; set; } =  new List<SectionCampaignDinamicViewModels>();
     }
 }

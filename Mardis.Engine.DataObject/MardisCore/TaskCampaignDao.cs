@@ -249,6 +249,18 @@ namespace Mardis.Engine.DataObject.MardisCore
             return Context.TaskCampaigns
                 .Count(strPredicate);
         }
+        public int GetTaskCountByCampaignAndStatusStadi(string nameStatus, Guid idcamp, Guid idAccount)
+        {
+            var strPredicate = $"StatusTask.Name ==  \"{nameStatus}\" " +
+                         $"&& StatusRegister == \"{CStatusRegister.Active}\" " +
+                         $"&& IdAccount == \"{idAccount.ToString()}\" "+
+                         $"&& IdCampaign == \"{idcamp.ToString()}\" ";
+
+      
+
+            return Context.TaskCampaigns
+                .Count(strPredicate);
+        }
 
         public List<TaskCampaign> GetTaskListByBranch(Guid idBranch, Guid idAccount)
         {
@@ -384,6 +396,22 @@ namespace Mardis.Engine.DataObject.MardisCore
             return Context.TaskCampaigns
                 .Where(strPredicate)
                 .Count();
+        }
+        public List<StatusTask> statusAllow(Guid idaccount, int pageIndex, int pageSize) {
+
+            var _status = from st in Context.StatusTasks
+                          join stc in Context.StatusTaskAccounts
+                          on st.Id equals stc.Idstatustask
+                          where stc.Idaccount == idaccount
+                          orderby stc.ORDER
+                          select st;
+
+            return _status.ToList();
+
+
+                
+             
+
         }
     }
 }

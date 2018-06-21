@@ -149,8 +149,7 @@ namespace Mardis.Engine.Business.MardisCore
         public TaskPerCampaignViewModel GetTasksPerCampaign(Guid userId, int pageIndex, int pageSize, List<FilterValue> filters, Guid idAccount)
         {
             filters = filters ?? new List<FilterValue>();
-
-            var itemResult = new TaskPerCampaignViewModel("MyTasks", "Task");
+                      var itemResult = new TaskPerCampaignViewModel("MyTasks", "Task");
             var user = _userDao.GetUserById(userId);
 
             if (user.Profile.TypeUser.Name == CTypePerson.PersonMerchant)
@@ -160,14 +159,33 @@ namespace Mardis.Engine.Business.MardisCore
 
             int max;
 
-            itemResult = GetTasksProperties(pageIndex, pageSize, filters, idAccount, itemResult, out max);
+            itemResult = GetTasksPropertiesDinamic(pageIndex, pageSize, filters, idAccount, itemResult, out max);
 
             return ConfigurePagination(itemResult, pageIndex, pageSize, filters, max);
         }
+        #region taskDinamic
 
+        private TaskPerCampaignViewModel GetTasksPropertiesDinamic(int pageIndex, int pageSize, List<FilterValue> filters, Guid idAccount,
+            TaskPerCampaignViewModel itemResult, out int max)
+        {
+            itemResult.tasks = new List<MyStatusTaskViewModel>();
+            var data = _taskCampaignDao.statusAllow(idAccount, pageIndex, pageSize);
+            int aux=0;
+            max = 0;
+            foreach (var allow in data) {
+                aux = _taskCampaignDao.GetTaskCountByCampaignAndStatus(allow.Name, filters, idAccount);
+                var taskslist= GetTaskList(pageIndex, pageSize, filters, idAccount, allow.Name);
+                max = (aux > max) ? aux: max;
+                itemResult.tasks.Add(new MyStatusTaskViewModel { TasksList = taskslist, CountTasks = aux, type = allow.Name , color =allow.color});
+            }
+
+            return itemResult;
+        }
+        #endregion
         private TaskPerCampaignViewModel GetTasksProperties(int pageIndex, int pageSize, List<FilterValue> filters, Guid idAccount,
               TaskPerCampaignViewModel itemResult, out int max)
         {
+        
             max = _taskCampaignDao.GetTaskCountByCampaignAndStatus(CTask.StatusImplemented, filters, idAccount);
 
             var countImplementedTasks = max;
@@ -196,6 +214,7 @@ namespace Mardis.Engine.Business.MardisCore
             itemResult.StartedTasksList = GetTaskList(pageIndex, pageSize, filters, idAccount,
                 CTask.StatusStarted);
 
+        
             itemResult.CountImplementedTasks = countImplementedTasks;
             itemResult.CountNotImplementedTasks = countNotImplementedTasks;
             itemResult.CountPendingTasks = countPendingTasks;

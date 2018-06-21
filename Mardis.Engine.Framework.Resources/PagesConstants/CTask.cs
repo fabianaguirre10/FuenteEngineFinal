@@ -4,6 +4,7 @@
     {
         public const string Controller = "TaskController";
         public const string IdRegister = "IdTask";
+        public const string IdCampaing = "IdCampaing";
         public const string IdEquipment = "IdEquipos";
         public const string SequenceCode = "SEQ_TSK";
         public const string InDataBase = "BDD";

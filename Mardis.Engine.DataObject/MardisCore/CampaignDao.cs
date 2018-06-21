@@ -183,6 +183,12 @@ namespace Mardis.Engine.DataObject.MardisCore
             }
         }
 
+        public int NumbertaskbyCampaign(Guid idcampaing) {
+
+
+            return Context.TaskCampaigns.Where(x => x.IdCampaign.Equals(idcampaing) && x.StatusRegister == CStatusRegister.Active).Count();
+        }
+
         private string GetIdTask(Guid id)
         {
             return id.ToString();

@@ -29,186 +29,61 @@
 <div id="divMyTask">
     <div class="row">
         <div class="row-fluid">
-            <div class="col-sm-3" style="text-align: center; border: thick solid white; background-color: #C40000;">
-                <h5 class="control-label" style="color: white;">PENDIENTE @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + " - " + (Model.PageIndex * Model.PageSize) + " / " + Model.CountPendingTasks)</h5>
+            @foreach (var task in Model.tasks)
+            {
+            <div class="col-sm-2" style="text-align: center; border: thick solid white; background-color: @task.color;">
+                <h5 class="control-label" style="color: white;">@task.type @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + " - " + (Model.PageIndex * Model.PageSize) + " / " + task.CountTasks)</h5>
             </div>
-            <div class="col-sm-3" style="text-align: center; border: thick solid white; background-color: #E26B00;">
-                <h5 class="control-label" style="color: white;">INICIADO @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + " - " + (Model.PageIndex * Model.PageSize) + " / " + Model.CountStartedTasks)</h5>
-            </div>
-            <div class="col-sm-3" style="text-align: center; border: thick solid white; background-color: #2C9B36;">
-                <h5 class="control-label" style="color: white;">IMPLEMENTADO @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + " - " + (Model.PageIndex * Model.PageSize) + " / " + Model.CountImplementedTasks)</h5>
-            </div>
-            <div class="col-sm-3" style="text-align: center; border: thick solid white; background-color: #1091BF;">
-                <h5 class="control-label" style="color: white;">NO IMPLEMENTADO @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + " - " + (Model.PageIndex * Model.PageSize) + " / " + Model.CountNotImplementedTasks)</h5>
-            </div>
+            }
         </div>
     </div>
 
     <div class="row">
         <div class="row-fluid">
-            <div class="col-sm-3" style="border: thick solid #CCCCCC;">
+            @foreach (var listtask in Model.tasks)
+    {
+            <div class="col-sm-2" style="border: thick solid #CCCCCC;">
 
-                @foreach (var task in Model.PendingTasksList)
+                @foreach (var task in listtask.TasksList)
                 {
-                    <div class="panel panel-default" id="@("row" + task.Id)">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-sm-9">
-                                    <strong>CAMPAÑA:</strong>
-                                    <a href="@Url.Action("Profile", "Task", new {idTask = task.Id})">@task.CampaignName</a>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label style="font-size-adjust: 0.4;">@task.Route</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <label style="font-size-adjust: 0.4;">@task.BranchName</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <label style="font-size-adjust: 0.4;">Código Mardis: </label>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-10">
-                                    <label style="font-size-adjust: 0.4;">@task.StartDate.ToString("dd/MM/yyyy")</label>
-                                </div>
-                                <div class="col-sm-2" style="color: #C40000;">
-                                    &#x2500;&#x25CF;&#x2500;
-                                </div>
-                            </div>
+            <div class="panel panel-default" id="@("row" +task.Id )">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <strong>CAMPAÑA:</strong>
+                            <a href="@Url.Action("Profile", "Task", new { idTask = task.Id })">@task.CampaignName</a>
+                        </div>
+                        <div class="col-sm-3">
+                            <label style="font-size-adjust: 0.4;">@task.Route</label>
                         </div>
                     </div>
-                }
-            </div>
-            <div class="col-sm-3" style="text-align: center; border: thick solid #CCCCCC;">
-
-                @foreach (var task in Model.StartedTasksList)
-                {
-                    <div class="panel panel-default" id="@("row" + task.Id)">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-sm-9">
-                                    <strong>CAMPAÑA:</strong>
-                                    <a href="@Url.Action("Profile", "Task", new {idTask = task.Id})">@task.CampaignName</a>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label style="font-size-adjust: 0.4;">@task.Route</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <label style="font-size-adjust: 0.4;">@task.BranchName</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <label style="font-size-adjust: 0.4;">Código Mardis: </label>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-10">
-                                    <label style="font-size-adjust: 0.4;">@task.StartDate.ToString("dd/MM/yyyy")</label>
-                                </div>
-                                <div class="col-sm-2" style="color: #E26B00;">
-                                    &#x2500;&#x25CF;&#x2500;
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label style="font-size-adjust: 0.4;">@task.BranchName</label>
                         </div>
                     </div>
-                }
-
-            </div>
-            <div class="col-sm-3" style="text-align: center; border: thick solid #CCCCCC;">
-
-                @foreach (var task in Model.ImplementedTasksList)
-                {
-                <div class="panel panel-default" id="@("row" + task.Id)">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-9">
-                                <strong>CAMPAÑA:</strong>
-                                <a href="@Url.Action("Profile", "Task", new {idTask = task.Id})">@task.CampaignName</a>
-                            </div>
-                            <div class="col-sm-3">
-                                <label style="font-size-adjust: 0.4;">@task.Route</label>
-                            </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label style="font-size-adjust: 0.4;">Código Mardis: </label>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <label style="font-size-adjust: 0.4;">@task.BranchName</label>
-                            </div>
+                        <div class="col-sm-6">
+                            <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <label style="font-size-adjust: 0.4;">Código Mardis: </label>
-                            </div>
-                            <div class="col-sm-6">
-                                <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-9">  
+                            <label style="font-size-adjust: 0.4;">@task.StartDate.ToString("dd/MM/yyyy")</label>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-10">
-                                <label style="font-size-adjust: 0.4;">@task.StartDate.ToString("dd/MM/yyyy")</label>
-                            </div>
-                            <div class="col-sm-2" style="color: #2C9B36;">
-                                &#x2500;&#x25CF;&#x2500;
-                            </div>
+                        <div class="col-sm-2" style="color: @listtask.color">
+                            &#x2500;&#x25CF;&#x2500;
                         </div>
                     </div>
                 </div>
-                }
-
             </div>
-            <div class="col-sm-3" style="text-align: center; border: thick solid #CCCCCC;">
 
-                @foreach (var task in Model.NotImplementedTasksList)
-                {
-                <div class="panel panel-default" id="@("row" + task.Id)">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-9">
-                                <strong>CAMPAÑA:</strong>
-                                <a href="@Url.Action("Profile", "Task", new {idTask = task.Id})">@task.CampaignName</a>
-                            </div>
-                            <div class="col-sm-3">
-                                <label style="font-size-adjust: 0.4;">@task.Route</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <label style="font-size-adjust: 0.4;">@task.BranchName</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <label style="font-size-adjust: 0.4;">Código Mardis: </label>
-                            </div>
-                            <div class="col-sm-6">
-                                <label style="font-size-adjust: 0.4;">@task.BranchMardisCode</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-10">
-                                <label style="font-size-adjust: 0.4;">@task.StartDate.ToString("dd/MM/yyyy")</label>
-                            </div>
-                            <div class="col-sm-2" style="color: #1091BF;">
-                                &#x2500;&#x25CF;&#x2500;
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 }
-
             </div>
+}
         </div>
     </div>
 </div>
