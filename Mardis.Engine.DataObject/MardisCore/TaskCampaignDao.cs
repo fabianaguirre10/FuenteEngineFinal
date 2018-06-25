@@ -51,7 +51,7 @@ namespace Mardis.Engine.DataObject.MardisCore
             myWatch.Start();
 #endif
 
-            var task=Context.Query<MyTaskViewModel>($@"select a.*, b.Name as MerchantName, b.Surname as MerchantSurname
+            var task=Context.Query<MyTaskViewModel>($@"select a.*, b.Name as MerchantName, b.Surname as MerchantSurname,a.CodigoGemini as CodeGemini
             from vw_Campaign_Information a
                 inner join mardiscommon.person b on a.idmerchantperson = b.id
             where a.IdTask='{idTask}'").FirstOrDefault();
@@ -358,7 +358,14 @@ namespace Mardis.Engine.DataObject.MardisCore
             task.IdStatusTask = status;
             InsertOrUpdate(task);
         }
-
+        public void ImplementTaskGemini(Guid idTask, Guid idStatus, Guid idAccount, Guid status,string Codigo)
+        {
+            var task = Get(idTask, idAccount);
+            task.DateModification = DateTime.Now;
+            task.IdStatusTask = status;
+            task.CodeGemini = Codigo;
+            InsertOrUpdate(task);
+        }
         public void ValidateTask(Guid idTask, Guid idStatus, Guid idAccount, Guid idUser)
         {
             var task = Get(idTask, idAccount);

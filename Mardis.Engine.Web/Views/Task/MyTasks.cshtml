@@ -29,12 +29,13 @@
 <div id="divMyTask">
     <div class="row">
         <div class="row-fluid">
+            @{ var tam = Model.tasks.Count;}    
             @foreach (var task in Model.tasks)
-            {
-            <div class="col-sm-2" style="text-align: center; border: thick solid white; background-color: @task.color;">
-                <h5 class="control-label" style="color: white;">@task.type @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + " - " + (Model.PageIndex * Model.PageSize) + " / " + task.CountTasks)</h5>
-            </div>
-            }
+    {
+        <div class="col-sm-2-mdr" style="text-align: center; border: thick solid white; background-color: @task.color;">
+            <h5 class="control-label" style="color: white;">@task.type @(((Model.PageIndex * Model.PageSize) - Model.PageSize + 1) + " - " + (Model.PageIndex * Model.PageSize) + " / " + task.CountTasks)</h5>
+        </div>
+}
         </div>
     </div>
 
@@ -42,7 +43,7 @@
         <div class="row-fluid">
             @foreach (var listtask in Model.tasks)
     {
-            <div class="col-sm-2" style="border: thick solid #CCCCCC;">
+            <div class="col-sm-2-mdr" style="border: thick solid #CCCCCC;">
 
                 @foreach (var task in listtask.TasksList)
                 {
@@ -103,5 +104,12 @@
             @:var point = { 'IdFilter': "@filter.IdFilter", 'NameFilter': "@filter.NameFilter", 'Criteria': "@filter.Criteria", 'Value': "@filter.Value", 'Visible':'@filter.Visible' };
             @:filters.push(point);
         }
+                var maxColummn = '@Html.Raw(tam)';
+        var x = document.getElementsByClassName("col-sm-2-mdr");
+        var i;
+        var max= 100 / maxColummn + "%";
+        for (i = 0; i < x.length; i++) {
+                    x[i].style.width = max;
+                }
     </script>
 }

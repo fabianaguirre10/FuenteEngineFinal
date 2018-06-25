@@ -392,7 +392,7 @@ namespace Mardis.Engine.Web.Controllers
             {
                 ViewData[CTask.IdRegister] = idTask.ToString();
 
-                ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId)
+                ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId))
                     .Select(s => new SelectListItem() { Text = s.Name, Value = s.Id.ToString() })
                     .ToList();
 
@@ -548,7 +548,7 @@ namespace Mardis.Engine.Web.Controllers
         }
         public void LoadSelectItems()
         {
-            ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId)
+            ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId))
                 .Select(s => new SelectListItem() { Text = s.Name, Value = s.Id.ToString() })
                     .ToList();
 

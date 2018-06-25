@@ -351,11 +351,14 @@ namespace Mardis.Engine.DataAccess
 
 
         /// <summary>
+        /// Tabla de estados por usuario
+        /// </summary>
+        public DbSet<StatustaskUser> StatustaskUsers { get; set; }
+
+        /// <summary>
         /// Tabla de ACTIVIDADES
         /// </summary>
         public DbSet<Activity> Activities { get; set; }
-
-
         /// <summary>
         /// Tabla de ESTADOS DINAMICOS
         /// </summary>

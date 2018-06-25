@@ -386,3 +386,21 @@ img.zoom {
 .list__tile:hover {
     background-color:white;
 }
+
+.testimonial-group > .row {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+    .testimonial-group > .row > .col-sm-2 {
+        display: inline-block;
+        float: none;
+    }
+.col-sm-2-mdr {
+    /*width: 14.2%;*/
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    float: left;
+}

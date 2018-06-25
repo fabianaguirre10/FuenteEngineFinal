@@ -73,7 +73,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public DateTime DateValidation { get; set; } = DateTime.Now;
 
         public string AggregateUri { get; set; }
-
+        public string CodeGemini { get; set; }
         public ICollection<Answer> Answers { get; set; }
 
     }

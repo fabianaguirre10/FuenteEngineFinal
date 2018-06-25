@@ -37,13 +37,16 @@ namespace Mardis.Engine.Business.MardisCore
         /// Obtiene todos los estados de las Tareas
         /// </summary>
         /// <returns></returns>
-        public List<StatusTask> GetAllStatusTasks(Guid idaccount)
+        public List<StatusTask> GetAllStatusTasks(Guid idaccount, Guid iduser)
         {
 
             var _status = from st in _myCache.Get<List<StatusTask>>(CacheName)
                           join stc in Context.StatusTaskAccounts
                           on st.Id equals stc.Idstatustask
+                          join stu in Context.StatustaskUsers
+                           on   st.Id equals stu.Idstatustask
                           where stc.Idaccount == idaccount
+                          && stu.Iduser== iduser
                           orderby stc.ORDER
                           select st;
             return _status.ToList();

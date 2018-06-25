@@ -604,7 +604,24 @@ namespace Mardis.Engine.Business.MardisCore
             }
         }
 
+        private void FinalizeTaskAnswerQuestionGemini(Guid idtask, Guid idAccount, Guid idProfile, Guid idUser, Guid status,string CodeGemini)
+        {
+            var profile = _profileDao.GetById(idProfile);
 
+            switch (_typeUserBusiness.Get(profile.IdTypeUser).Name)
+            {
+                case CTypePerson.PersonMerchant:
+                case CTypePerson.PersonSupervisor:
+                case CTypePerson.PersonSystem:
+                    _taskCampaignDao.ImplementTaskGemini(idtask, _statusTaskBusiness.GeStatusTaskByName(CTask.StatusImplemented).Id,
+                        idAccount, status,CodeGemini);
+                    break;
+                case CTypePerson.PersonValidator:
+                    _taskCampaignDao.ValidateTask(idtask, _statusTaskBusiness.GeStatusTaskByName(CTask.StatusImplemented).Id,
+                        idAccount, idUser);
+                    break;
+            }
+        }
         private void CreateAnswer(MyTaskViewModel model, Guid idAccount, MyTaskServicesDetailViewModel serviceDetail)
         {
             foreach (var question in serviceDetail.QuestionCollection)
@@ -626,7 +643,7 @@ namespace Mardis.Engine.Business.MardisCore
 
         /*Crear Respuestas para gurdar informacion por seccion*/
         #region AnswerQuestion
-        public void CrearAnswerQuestion(List<MyTaskViewAnswer> model, Guid idAccount, Guid IdMerchant, Guid idProfile, String fintransaccion, String Idtask, Guid status  )
+        public void CrearAnswerQuestion(List<MyTaskViewAnswer> model, Guid idAccount, Guid IdMerchant, Guid idProfile, String fintransaccion, String Idtask, Guid status,string CodigoGemini  )
         {
             Guid idtask = new Guid();
             foreach (var answerquestion in model)
@@ -696,7 +713,16 @@ namespace Mardis.Engine.Business.MardisCore
             }
             if (fintransaccion == "ok")
             {
+                //         
+                if (status == Guid.Parse("c30b7742-9775-4bc1-809b-74509d7dfe8a")) {
+
+                    FinalizeTaskAnswerQuestionGemini(Guid.Parse(Idtask), idAccount, idProfile, IdMerchant, status, CodigoGemini);
+
+                }
+                else { 
                 FinalizeTaskAnswerQuestion(Guid.Parse(Idtask), idAccount, idProfile, IdMerchant, status);
+
+            }
             }
 
         }

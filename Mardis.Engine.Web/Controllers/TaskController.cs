@@ -281,13 +281,13 @@ namespace Mardis.Engine.Web.Controllers
             }
         }
         [HttpPost]
-        public JsonResult SaveAnswerQuestion(String AnswerQuestion, String fintransaccion, String Idtask, String idstatus)
+        public JsonResult SaveAnswerQuestion(String AnswerQuestion, String fintransaccion, String Idtask, String idstatus, String CodigoGemini )
         {
             try
             {
                 var model = JSonConvertUtil.Deserialize<List<MyTaskViewAnswer>>(AnswerQuestion);
                 if (model == null) return null;
-                _taskCampaignBusiness.CrearAnswerQuestion(model, ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId), ApplicationUserCurrent.ProfileId, fintransaccion, Idtask , Guid.Parse(idstatus));
+                _taskCampaignBusiness.CrearAnswerQuestion(model, ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId), ApplicationUserCurrent.ProfileId, fintransaccion, Idtask , Guid.Parse(idstatus), CodigoGemini);
                 return Json(model);
             }
             catch (Exception ex)
@@ -296,7 +296,7 @@ namespace Mardis.Engine.Web.Controllers
                 return null;
             }
         }
-        public JsonResult SaveAnswerQuestionMultiple( String id, String value , String idanswer, String Idtask, String idstatus)
+        public JsonResult SaveAnswerQuestionMultiple( String id, String value , String idanswer, String Idtask, String idstatus, String CodigoGemini)
         {
             try
             {
@@ -309,7 +309,7 @@ namespace Mardis.Engine.Web.Controllers
                 });
                 //JSonConvertUtil.Deserialize<List<MyTaskViewAnswer>>(AnswerQuestion);
                 if (model == null) return null;
-                _taskCampaignBusiness.CrearAnswerQuestion(model, ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId), ApplicationUserCurrent.ProfileId, "ok", Idtask , Guid.Parse(idstatus));
+                _taskCampaignBusiness.CrearAnswerQuestion(model, ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId), ApplicationUserCurrent.ProfileId, "ok", Idtask , Guid.Parse(idstatus), CodigoGemini);
                 return Json(model);
             }
             catch (Exception ex)
@@ -322,7 +322,7 @@ namespace Mardis.Engine.Web.Controllers
 
         public void LoadSelectItems()
         {
-            ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId)
+            ViewBag.StatusList = _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId))
                 .Select(s => new SelectListItem() { Text = s.Name, Value = s.Id.ToString() })
                     .ToList();
 
@@ -350,7 +350,7 @@ namespace Mardis.Engine.Web.Controllers
         [HttpGet]
         public List<StatusTask> GetAllStatusTask()
         {
-            return _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId);
+            return _statusTaskBusiness.GetAllStatusTasks(ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId));
         }
 
         [HttpGet]

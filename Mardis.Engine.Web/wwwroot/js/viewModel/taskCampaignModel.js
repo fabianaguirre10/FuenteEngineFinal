@@ -164,6 +164,7 @@ function ApplyBindingTaskService(data) {
         el: "#divPoll",
         data: {
             poll: data,
+            poll: data,
             carouselIndex: -1
         },
         methods: {
@@ -363,6 +364,10 @@ function Save() {
     var imgsrc = 'http://www.google.es/intl/en_com/images/logo_plain.png';
     var img = new Image();
     console.log()
+    if (resulvalidacionC != "") {
+        resulvalidacion = "Llenar Campos Obligatorios..!!" + "\n" + resulvalidacionC;
+    }
+
     img.onerror = function () {
         alert("No hay conexion a internet.");
     }
@@ -374,10 +379,20 @@ function Save() {
     var resulvalidacionC = "";
     var resulvalidacion = "";
     resulvalidacionC = ValidarPreguntas();
+    if (vueVM.$data.poll.IdStatusTask == 'c30b7742-9775-4bc1-809b-74509d7dfe8a') {
+
+        if (!vueVM.$data.poll.CodeGemini) {
+            resulvalidacion = "Llenar Campos Obligatorios..!!" + "\n" + "Código Gemini";
+
+        }
+
+    }
+    console.log(resulvalidacion)
     if (resulvalidacionC != "") {
         resulvalidacion = "Llenar Campos Obligatorios..!!" + "\n" + resulvalidacionC;
     }
-    if (resulvalidacion == "") {
+    if (resulvalidacion == "")
+    {
         if (navigator.onLine) {
 
             let infoList = [];
@@ -399,6 +414,7 @@ function Save() {
                     fintransaccion: "ok",
                     Idtask: getParameterByName('idTask')
                     , idstatus: vueVM.$data.poll.IdStatusTask
+                    , CodigoGemini: vueVM.$data.poll.CodeGemini
                 },
                 success: function (data) {
                     if (data) {

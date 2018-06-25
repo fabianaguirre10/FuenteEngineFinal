@@ -107,5 +107,7 @@ namespace Mardis.Engine.Web.ViewModel.TaskViewModels
 
         public int CurrentService { get; set; }
 
+
+        public string CodeGemini { get; set; }
     }
 }

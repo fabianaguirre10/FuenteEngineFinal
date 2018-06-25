@@ -431,22 +431,23 @@
                                                                      'col-sm-5' : subSection.QuestionCollection.length == 2,
                                                                      'col-sm-3' : subSection.QuestionCollection.length == 3 || (subSection.QuestionCollection.length == 4 && i < 2 ),
                                                                              'col-sm-2' : subSection.QuestionCollection.length == 5 || (subSection.QuestionCollection.length == 4 && i > 1 ) || (subSection.QuestionCollection.length == 6 && i < 4 ) || (subSection.QuestionCollection.length == 7 && i <3 ),
-                                                                             'col-sm-1' : subSection.QuestionCollection.length >  7 || (subSection.QuestionCollection.length == 6 && i > 3 ) || (subSection.QuestionCollection.length == 7 && i > 2 )
-                                                                             }"
-                                                                 style="padding-left: 5px; padding-right: 0;">
+                                                                       'col-sm-1' : subSection.QuestionCollection.length>
+                                                                        7 || (subSection.QuestionCollection.length == 6 && i > 3 ) || (subSection.QuestionCollection.length == 7 && i > 2 )
+                                                                        }"
+                                                                        style="padding-left: 5px; padding-right: 0;">
 
-                                                                <input v-if="question.CodeTypePoll == 'OPEN'" class="form-control inputmardis" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" disabled="disabled" />
+                                                                        <input v-if="question.CodeTypePoll == 'OPEN'" class="form-control inputmardis" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" disabled="disabled" />
 
-                                                                <select v-if="question.CodeTypePoll == 'ONE'" class="inputmardis" v-model="question.IdQuestionDetail"
-                                                                        style="margin: 0 auto; float: none;" disabled="disabled">
-                                                                    <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
-                                                                </select>
+                                                                        <select v-if="question.CodeTypePoll == 'ONE'" class="inputmardis" v-model="question.IdQuestionDetail"
+                                                                                style="margin: 0 auto; float: none;" disabled="disabled">
+                                                                            <option v-for="answer in question.QuestionDetailCollection" v-bind:value="answer.Id">{{answer.Answer}}</option>
+                                                                        </select>
+                                                                        <input v-if="question.CodeTypePoll=='ONE'" class="form-control inputmardis" style="margin: 0 auto; float: none; background-color: #cccccc;" v-model="question.Answer" disabled="disabled" />
+                                                                    </div>
 
-                                                            </div>
+                                                                            </div>
 
-                                                            </div>
-
-                                                        </div>
+                                                                        </div>
                                                     </div>
 
                                                 </div>
