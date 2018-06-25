@@ -49,7 +49,7 @@ namespace Mardis.Engine.Services.Controllers
                     var resultado = _BranchBusiness.GetCountBranch(idAccounut);
 
 
-                    for (int i = 1; i <= 40; i++)
+                    for (int i = 1; i <= 50; i++)
                     {
                         CodigoReservados nuevo = new CodigoReservados();
                         nuevo.idAccount = idAccounut;
@@ -67,7 +67,7 @@ namespace Mardis.Engine.Services.Controllers
                     int a = _CodigoReservadosBusiness.GetAllcodigo(idAccounut);
 
 
-                    for (int i = 1; i <= 40; i++)
+                    for (int i = 1; i <= 50; i++)
                     {
                         CodigoReservados nuevo = new CodigoReservados();
                         nuevo.idAccount = idAccounut;
