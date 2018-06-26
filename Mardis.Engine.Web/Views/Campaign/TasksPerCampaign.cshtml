@@ -63,7 +63,10 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <label style="font-size-adjust: 0.4;">@task.BranchName</label>
+                                        <strong>
+                                        Local:
+                                            <a href="@Url.Action("Profile", "Branch", new {idBranch = @task.BranchId})">@task.BranchName</a>
+                                        </strong>
                                     </div>
                                 </div>
                                 <div class="row">
