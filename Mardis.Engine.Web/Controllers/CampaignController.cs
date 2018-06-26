@@ -26,9 +26,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics;
-using Microsoft.Extensions.Caching.Distributed;
 using System.Threading.Tasks;
-
+using Syncfusion.XlsIO;
 #endregion
 
 namespace Mardis.Engine.Web.Controllers
@@ -449,7 +448,12 @@ namespace Mardis.Engine.Web.Controllers
             }
         }
 
-        public IActionResult SelectBranches()
+        public ActionResult GenerarExcel()
+        {
+
+        }
+
+            public IActionResult SelectBranches()
         {
             try
             {
