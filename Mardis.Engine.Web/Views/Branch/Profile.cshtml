@@ -203,7 +203,7 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="timeline-body">
-                                        <strong>Tarea: <a href="@Url.Action("TaskPoll", "Campaign", new {idTask = @task.Id})">@task.TaskCode</a></strong>
+                                        <strong>Tarea: <a href="@Url.Action("ProfileCampaign", "Campaign", new { idTask = task.Id , idcampaing=task.Idcampaign})">@task.TaskCode</a></strong>
 
                                     </div>
                                 </div>
@@ -283,7 +283,7 @@
 @section scripts{
     <script src="~/js/viewModel/MapHelper.js"></script>
     <script>
-        alert("@Model.Latitude")
+   
         var marcador = [{ LatitudeBranch: "@Model.Latitude", LenghtBranch: "@Model.Longitude", Name: "@Model.Name" }];
         LoadMarkers(marcador);
     </script>
