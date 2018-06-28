@@ -67,8 +67,7 @@ namespace Mardis.Engine.DataObject.MardisCore
                     x.Name,
                     x.MainStreet,
                     x.Neighborhood,
-                    x.Reference
-                    ,
+                    x.Reference,
                     Propietario = x.PersonAdministration.Name,
                     x.IdProvince,
                     x.IdDistrict,
@@ -76,7 +75,8 @@ namespace Mardis.Engine.DataObject.MardisCore
                     x.RUTAAGGREGATE,
                     x.IMEI_ID,
                     x.LatitudeBranch,
-                    x.LenghtBranch
+                    x.LenghtBranch,
+                    Celular=x.PersonAdministration.Phone
                 });
             
         }

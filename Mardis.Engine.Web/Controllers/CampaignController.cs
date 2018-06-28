@@ -18,7 +18,7 @@ using Mardis.Engine.Web.ViewModel.CampaignViewModels;
 using Mardis.Engine.Web.ViewModel.Filter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,6 +28,9 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Syncfusion.XlsIO;
+using Microsoft.AspNetCore.Http;
+
+
 #endregion
 
 namespace Mardis.Engine.Web.Controllers
@@ -128,7 +131,7 @@ namespace Mardis.Engine.Web.Controllers
                 return null;
             }
         }
-
+       
         [HttpGet]
         public string GetCampaignByName(string nameCampaign)
         {
@@ -148,6 +151,30 @@ namespace Mardis.Engine.Web.Controllers
                 _logger.LogError(new EventId(0, "Error Index"), e.Message);
                 return null;
             }
+        }
+        [HttpGet]
+        public ActionResult GenerateDocument()
+        {
+            //Create an instance of ExcelEngine.
+            using (ExcelEngine excelEngine = new ExcelEngine())
+            {
+                //Set the default application version as Excel 2016.
+                excelEngine.Excel.DefaultVersion = ExcelVersion.Excel2016;
+
+                //Create a workbook with a worksheet.
+                IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+
+                //Access first worksheet from the workbook instance.
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+                //Insert sample text into cell “A1”.
+                worksheet.Range["A1"].Text = "Hello World";
+
+                //Save the workbook to disk in xlsx format.
+                workbook.SaveAs("Sample.xlsx", ExcelSaveType.SaveAsXLS);
+            }
+
+            return View();
         }
 
         [HttpGet]
@@ -375,6 +402,7 @@ namespace Mardis.Engine.Web.Controllers
                 return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
             }
         }
+       
 
         [HttpGet]
         public string GetActiveCampaignsList()
@@ -448,10 +476,7 @@ namespace Mardis.Engine.Web.Controllers
             }
         }
 
-        public ActionResult GenerarExcel()
-        {
-
-        }
+      
 
             public IActionResult SelectBranches()
         {

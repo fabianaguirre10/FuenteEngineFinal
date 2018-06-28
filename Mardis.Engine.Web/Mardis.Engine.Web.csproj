@@ -7142,6 +7142,7 @@
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.Validation" Version="1.0.0" />
     <PackageReference Include="AspNet.Security.OAuth.WeChat" Version="1.0.0" />
+    <PackageReference Include="ClosedXML" Version="0.93.0" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Antiforgery" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.2" />
@@ -7185,8 +7186,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Owin.Security.Providers.GitHub" Version="2.15.1" />
     <PackageReference Include="StackExchange.Redis.StrongName" Version="1.2.6" />
-    <PackageReference Include="Syncfusion.AspNet.Mvc3.FileFormatsHelper" Version="14.1.0.46" />
-    <PackageReference Include="Syncfusion.AspNet.Mvc4.FileFormatsHelper" Version="14.1.0.46" />
     <PackageReference Include="Syncfusion.AspNet.Mvc5.FileFormatsHelper" Version="14.1.0.46" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.1.4" />
   </ItemGroup>
@@ -7222,6 +7221,12 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Form\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Entity.Design" />
   </ItemGroup>
 
 </Project>

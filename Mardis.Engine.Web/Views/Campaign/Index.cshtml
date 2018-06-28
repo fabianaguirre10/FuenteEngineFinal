@@ -42,6 +42,15 @@
 @section filters{
     @Html.Partial("_CoreFilterPartial", Model.Properties)
 }
+@*@{Html.BeginForm("GenerateDocument", "Campaign", FormMethod.Get);
+    {
+        <div>
+            <input type="submit" value="Generate Document" style="width:150px;height:27px" />
+        </div>
+    }
+    Html.EndForm();
+}*@
+
 
 <div id="divMainCampaign">
     @foreach (var campaign in Model.CampaignList)
@@ -75,9 +84,9 @@
                                     <div class="progress">
                                         @foreach (var sectionData in campaign.sectionCampaign)
                                         {
-                                        <div class="progress-bar   " role="progressbar" style="width: @sectionData.percent; background:@sectionData.color;">@sectionData.percent</div>
+                                            <div class="progress-bar   " role="progressbar" style="width: @sectionData.percent; background:@sectionData.color;">@sectionData.percent</div>
                                         }
-                                  
+
                                     </div>
                                 </div>
                             </div>
@@ -89,9 +98,9 @@
                     <div>
                         <div class="row">
                             @foreach (var sectionData in campaign.sectionCampaign)
-                          {
+                            {
                                 <div class="col-sm-6">
-                                    <label><span style="color: @sectionData.color">&#9632;</span>@(" (" + sectionData.total + ")"+ sectionData.name ) </label>
+                                    <label><span style="color: @sectionData.color">&#9632;</span>@(" (" + sectionData.total + ")" + sectionData.name ) </label>
 
                                 </div>
                             }
