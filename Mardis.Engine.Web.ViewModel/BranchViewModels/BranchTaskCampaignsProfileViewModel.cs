@@ -17,6 +17,7 @@ namespace Mardis.Engine.Web.ViewModel.BranchViewModels
         public string StatusName { get; set; }
 
         public DateTime StartDate { get; set; }
+        public Guid Idcampaign { get; set; }
 
         public string Icon { get; set; }
 

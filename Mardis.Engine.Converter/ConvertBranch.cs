@@ -38,6 +38,7 @@ namespace Mardis.Engine.Converter
                 Latitude = branch.LatitudeBranch.Replace(",", "."),
                 Longitude = branch.LenghtBranch.Replace(",", "."),
                 SmsListas = ListaSms
+                
 
             };
         }
@@ -66,6 +67,7 @@ namespace Mardis.Engine.Converter
                     StatusName = t.StatusTask.Name,
                     CampaignServices = GetCampaignServices(t.Campaign.CampaignServices),
                     TaskCode = t.Code
+                    ,Idcampaign=t.IdCampaign
                 })
                 .ToList();
         }
