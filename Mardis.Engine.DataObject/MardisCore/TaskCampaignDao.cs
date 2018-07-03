@@ -156,6 +156,24 @@ namespace Mardis.Engine.DataObject.MardisCore
             return resultList;
         }
 
+        public List<TaskCampaign> GetAlltasksByCampaignNewId(Guid? idCampaign)
+        {
+            var resultList = Context.TaskCampaigns
+                .Include(t => t.Branch)
+                .Include(t => t.Campaign)
+                .Include(t => t.StatusTask)
+                .Include(t => t.Branch.PersonAdministration)
+                .Include(t => t.Branch.Province)
+                .Include(t => t.Branch.District)
+                .Include(t => t.Branch.Sector)
+                .Where(t => t.IdCampaign == idCampaign &&
+                            t.StatusRegister == CStatusRegister.Active)
+                .ToList();
+
+            return resultList;
+        }
+
+
         public List<TaskCampaign> GetAlltasksByCampaignId(Guid idCampaign, Guid idAccount, List<FilterValue> filters)
         {
             var strPredicate = $" StatusRegister == \"{CStatusRegister.Active}\" " +

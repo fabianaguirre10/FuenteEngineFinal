@@ -27,8 +27,11 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Syncfusion.XlsIO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using OfficeOpenXml;
+using System.Net.Http.Headers;
 
 
 #endregion
@@ -54,6 +57,7 @@ namespace Mardis.Engine.Web.Controllers
         public Guid _Profile;
         public Guid _typeuser;
         public readonly ProfileBusiness _profileBusiness;
+        private readonly IHostingEnvironment _hostingEnv;
 
         public CampaignController(
                                     UserManager<ApplicationUser> userManager,
@@ -63,6 +67,7 @@ namespace Mardis.Engine.Web.Controllers
                                     ILogger<ServicesFilterController> loggeFilter,
                                     IDataProtectionProvider protectorProvider,
                                     IMemoryCache memoryCache,
+                                    IHostingEnvironment hostingEnvironment,
                                     RedisCache distributedCache) :
             base(userManager, httpContextAccessor, mardisContext, logger)
         {
@@ -79,6 +84,7 @@ namespace Mardis.Engine.Web.Controllers
             _serviceBusiness = new ServiceBusiness(mardisContext);
             _statusTaskBusiness = new StatusTaskBusiness(mardisContext, distributedCache);
             _taskNotImplementedReasonBusiness = new TaskNotImplementedReasonBusiness(mardisContext);
+            _hostingEnv = hostingEnvironment;
             _profileBusiness = new ProfileBusiness(mardisContext);
             if (ApplicationUserCurrent.UserId != null)
             {
@@ -152,30 +158,110 @@ namespace Mardis.Engine.Web.Controllers
                 return null;
             }
         }
+
+
+
         [HttpGet]
-        public ActionResult GenerateDocument()
+
+        public IActionResult Export(string id)
         {
-            //Create an instance of ExcelEngine.
-            using (ExcelEngine excelEngine = new ExcelEngine())
+            var idCa = Guid.Empty;
+            if (!string.IsNullOrEmpty(id))
             {
-                //Set the default application version as Excel 2016.
-                excelEngine.Excel.DefaultVersion = ExcelVersion.Excel2016;
-
-                //Create a workbook with a worksheet.
-                IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
-
-                //Access first worksheet from the workbook instance.
-                IWorksheet worksheet = workbook.Worksheets[0];
-
-                //Insert sample text into cell “A1”.
-                worksheet.Range["A1"].Text = "Hello World";
-
-                //Save the workbook to disk in xlsx format.
-                workbook.SaveAs("Sample.xlsx", ExcelSaveType.SaveAsXLS);
+                idCa = Guid.Parse(Protector.Unprotect(id));
             }
+            string sWebRootFolder = _hostingEnv.WebRootPath;
 
-            return View();
+            var listado = _taskCampaignBusiness.ListTask(idCa).Select(x => new
+            {
+                x.StartDate,
+                x.Code,
+                x.Branch.TypeBusiness,
+                x.Branch.Name,
+                x.Branch.MainStreet,
+                x.Branch.Reference,
+                Propietario = x.Branch.PersonAdministration.Name,
+                x.Branch.PersonAdministration.Mobile,
+                x.Branch.PersonAdministration.Phone,
+                Provincia = x.Branch.Province.Name,
+                Canton = x.Branch.District.Name,
+                Sector = x.Branch.Sector.Name,
+                Estado_Tarea = x.StatusTask.Name,
+                Cedula = x.Branch.PersonAdministration.Document,
+                DISTRIBUIDOR = x.Campaign.Comment,
+                x.CodeGemini
+            }).ToList();
+
+            string sFileName = @"Listado.xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            if (file.Exists)
+            {
+                file.Delete();
+                file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            }
+            using (ExcelPackage package = new ExcelPackage(file))
+            {
+                // add a new worksheet to the empty workbook
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Datos");
+                //First add the headers
+                worksheet.Cells[1, 1].Value = "Fecha de Captación";
+                worksheet.Cells[1, 2].Value = "Código Titán";
+                worksheet.Cells[1, 3].Value = "Tipo de negocio";
+                worksheet.Cells[1, 4].Value = "Nombre local";
+                worksheet.Cells[1, 5].Value = "Dirección";
+                worksheet.Cells[1, 6].Value = "Referencia";
+                worksheet.Cells[1, 7].Value = "Propietario Administrador";
+                worksheet.Cells[1, 8].Value = "Celular";
+                worksheet.Cells[1, 9].Value = "Telefono";
+                worksheet.Cells[1, 10].Value = "Provincia";
+                worksheet.Cells[1, 11].Value = "Canton";
+                worksheet.Cells[1, 12].Value = "Sector";
+                worksheet.Cells[1, 13].Value = "Captador";
+                worksheet.Cells[1, 14].Value = "gemini";
+                worksheet.Cells[1, 15].Value = "Estado";
+                worksheet.Cells[1, 16].Value = "Cédula o RUC";
+                worksheet.Cells[1, 17].Value = "DISTRIBUIDOR";
+       
+                int rows = 2;
+                foreach (var t in listado)
+                {
+                    worksheet.Cells[rows, 1].Value = t.StartDate;
+                    worksheet.Cells[rows, 1].Style.Numberformat.Format = "yyyy-mm-dd";
+                    worksheet.Cells[rows, 2].Value = t.Code;
+                    worksheet.Cells[rows, 3].Value = t.TypeBusiness;
+                    worksheet.Cells[rows, 4].Value = t.Name;
+                    worksheet.Cells[rows, 5].Value = t.MainStreet;
+                    worksheet.Cells[rows, 6].Value = t.Reference;
+                    worksheet.Cells[rows, 7].Value = t.Propietario;
+                    worksheet.Cells[rows, 8].Value = t.Mobile;
+                    worksheet.Cells[rows, 9].Value = t.Phone;
+                    worksheet.Cells[rows, 10].Value = t.Provincia;
+                    worksheet.Cells[rows, 11].Value = t.Canton;
+                    worksheet.Cells[rows, 12].Value = t.Sector;
+                    worksheet.Cells[rows, 13].Value = "";
+                    worksheet.Cells[rows, 14].Value = t.CodeGemini;
+                    worksheet.Cells[rows, 15].Value = t.Estado_Tarea;
+                    worksheet.Cells[rows, 16].Value = t.Cedula;
+                    worksheet.Cells[rows, 17].Value = t.DISTRIBUIDOR;
+                    rows++;
+                }
+                //Add values
+               
+
+                package.Save(); //Save the workbook.
+            }
+            var result = PhysicalFile(Path.Combine(sWebRootFolder, sFileName), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            Response.Headers["Content-Disposition"] = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = file.Name
+            }.ToString();
+
+            return result;
         }
+
+      
 
         [HttpGet]
         public IActionResult Register(string idCampaign)

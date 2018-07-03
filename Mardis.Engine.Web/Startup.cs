@@ -35,6 +35,8 @@ namespace Mardis.Engine.Web
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                 .AddEnvironmentVariables();
+            string sAppPath = env.ContentRootPath; //Application Base Path
+            string swwwRootPath = env.WebRootPath;  //wwwroot folder path
 
             Configuration = builder.Build();
         }
@@ -161,9 +163,9 @@ namespace Mardis.Engine.Web
             app.UseDefaultFiles();
 
             app.UseSession();
+
            
-           
-            
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");

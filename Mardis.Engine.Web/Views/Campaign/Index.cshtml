@@ -42,14 +42,7 @@
 @section filters{
     @Html.Partial("_CoreFilterPartial", Model.Properties)
 }
-@*@{Html.BeginForm("GenerateDocument", "Campaign", FormMethod.Get);
-    {
-        <div>
-            <input type="submit" value="Generate Document" style="width:150px;height:27px" />
-        </div>
-    }
-    Html.EndForm();
-}*@
+
 
 
 <div id="divMainCampaign">
@@ -110,7 +103,19 @@
 
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
+                    <div style="text-align: center">
+                        <div class="row">
+                            <a asp-action="Export" asp-route-id="@(campaign.Id)">Download</a>
+                        </div>
+                        <div class="row">
+                           
+                        </div>
+                    </div>
+                </div>
+               
+
+                <div class="col-sm-1">
                     <div style="text-align: center">
                         <div class="row">
                             <h3>@(campaign.RemainingDays + " días")</h3>

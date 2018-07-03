@@ -438,6 +438,12 @@ namespace Mardis.Engine.Business.MardisCore
 
         }
 
+        public List<TaskCampaign> ListTask(Guid? idCampaign)
+        {
+            return _taskCampaignDao.GetAlltasksByCampaignNewId(idCampaign);
+        }
+
+
         private List<BranchImages> GetImagesTask(Guid idAccount, MyTaskViewModel taskWithPoll)
         {
             var images =
