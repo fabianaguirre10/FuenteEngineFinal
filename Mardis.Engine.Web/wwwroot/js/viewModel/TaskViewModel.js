@@ -193,6 +193,12 @@ function ApplyBindingTaskService(data) {
                 this.poll.BranchImages[index].UrlImage="";
 
             },
+            loadImg: function (index) {
+        
+                var url = this.poll.BranchImages[index].UrlImage;
+                window.open(url, 'Download');  
+
+            },
         onFileChange(e, index) {
             console.log(e.target.files)
             var files = e.target.files || e.dataTransfer.files;
