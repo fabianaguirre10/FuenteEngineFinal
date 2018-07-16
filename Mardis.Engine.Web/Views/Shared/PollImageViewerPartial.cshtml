@@ -6,7 +6,7 @@
 
         <div class="row">
 
-            <div class="col-sm-3 center" v-for="(image, index) in poll.BranchImages" style="margin-bottom: 10px;">
+            <div class="col-sm-2 center" v-for="(image, index) in poll.BranchImages" style="margin-bottom: 10px;">
 
                 <div v-if="image.NameFile.indexOf('vid')>=0 || image.NameFile.indexOf('.mp4')>=0 || image.NameFile.indexOf('.3gp')>=0">
                     <video style="width: 100%; border-radius: 5px;" onclick="openModal();currentSlide(x + 1);" class="hover-shadow cursor" controls>

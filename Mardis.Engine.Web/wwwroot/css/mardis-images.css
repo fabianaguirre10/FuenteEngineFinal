@@ -23,18 +23,18 @@
     }
 
     /* The Modal (background) */
-    .modalmardis {
-        display: none;
-        position: absolute;
-        z-index: 1;
-        padding-top: 100px;
-        left: 35%;
-        top: -98%;
-        width: 600px;
-        height: 200px;
-        /*overflow: auto;*/
-        background-color: black;
-    }
+.modalmardis {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    padding-top: 50px;
+    left: 26%;
+    top: -68%;
+    width: 900px;
+    height: 199px;
+    /* overflow: auto; */
+    background-color: black;
+}
 
     /* Modal Content */
     .modalmardis-content {

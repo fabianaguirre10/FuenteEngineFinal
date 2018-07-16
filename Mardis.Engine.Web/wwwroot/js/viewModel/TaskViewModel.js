@@ -402,7 +402,8 @@ function Save() {
                     AnswerQuestion: ko.toJSON(infoList),
                     fintransaccion: "ok",
                     Idtask: getParameterByName('idTask')
-                    , idstatus:vueVM.$data.poll.IdStatusTask
+                    , idstatus: vueVM.$data.poll.IdStatusTask
+                    , CodigoGemini: vueVM.$data.poll.CodeGemini
                 },
                 success: function (data) {
                     if (data) {

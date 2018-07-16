@@ -9,6 +9,7 @@ using Mardis.Engine.Framework.Resources;
 using Mardis.Engine.Framework.Resources.PagesConstants;
 using Mardis.Engine.Web.ViewModel;
 using Mardis.Engine.Web.ViewModel.Filter;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mardis.Engine.DataObject.MardisCore
 {
@@ -111,6 +112,41 @@ namespace Mardis.Engine.DataObject.MardisCore
 
             return resultList;
         }
+        public List<Campaign> GetPaginatedCampaignListbyUser(List<FilterValue> filterValues, int pageSize, int pageNumber, Guid idAccount, Guid iduser, Guid _typeuser)
+        {
+
+            if (_typeuser.Equals(new Guid("30DB815C-8B82-47EE-9279-B28922BEB616")))
+            {
+                var strPredicate = $" StatusRegister == \"{CStatusRegister.Active}\" && IdAccount == \"{idAccount.ToString()}\" ";
+
+                strPredicate += GetFilterPredicate(filterValues);
+                var innerJoinQuery =
+                 from c in Context.UserCanpaign
+                 join d in Context.Campaigns on c.idCanpaign equals d.Id
+                 where c.idUser == iduser && d.IdAccount == idAccount
+                 orderby d.CreationDate
+                 
+                 select d; //produces flat sequence
+
+                return innerJoinQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize).Where(strPredicate).ToList();
+            }
+            else {
+                //En caso de ser usuario administrador
+
+                var strPredicate = $" StatusRegister == \"{CStatusRegister.Active}\" && IdAccount == \"{idAccount.ToString()}\" ";
+
+            strPredicate += GetFilterPredicate(filterValues);
+
+            var resultList = Context.Campaigns
+                .Where(strPredicate)
+                .OrderBy(c => c.CreationDate)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return resultList;
+            }
+        }
 
         public int GetPaginatedCampaignCount(List<FilterValue> filterValues, int pageSize, int pageNumber, Guid idAccount ,Guid _typeuser, Guid _iduser)
         {
@@ -123,14 +159,20 @@ namespace Mardis.Engine.DataObject.MardisCore
             //    .Count(strPredicate);
             if (_typeuser.Equals(new Guid("30DB815C-8B82-47EE-9279-B28922BEB616")))
             {
-                var strPredicate = $" status == \"{CStatusRegister.Active}\" && idUser ==\"{_iduser.ToString()}\" ";
+
+
+                var strPredicate = $" StatusRegister == \"{CStatusRegister.Active}\" && IdAccount ==\"{idAccount.ToString()}\" ";
 
                 strPredicate += GetFilterPredicate(filterValues);
-                var resultList = Context.UserCanpaign
+                var innerJoinQuery =
+                 from c in Context.UserCanpaign
+                 join d in Context.Campaigns on c.idCanpaign equals d.Id
+                 where c.idUser == _iduser && d.IdAccount == idAccount
+                 orderby d.CreationDate
 
-                 .Where(strPredicate)
-                .Count();
-                return resultList;
+                 select d; //produces flat sequence
+
+                return innerJoinQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize).Where(strPredicate).Count();
             }
             else {
                 var strPredicate = $" StatusRegister == \"{CStatusRegister.Active}\" && IdAccount ==\"{idAccount.ToString()}\" ";

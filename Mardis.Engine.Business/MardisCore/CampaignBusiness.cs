@@ -404,7 +404,7 @@ namespace Mardis.Engine.Business.MardisCore
 #endif
 
             var itemResult = new CampaignListViewModel();
-            var campaigns = _campaignDao.GetPaginatedCampaignList(filterValues, pageSize, pageNumber, idAccount);
+            var campaigns = _campaignDao.GetPaginatedCampaignListbyUser(filterValues, pageSize, pageNumber, idAccount, userid, _typeuser);
             var countCampaigns = _campaignDao.GetPaginatedCampaignCount(filterValues, pageSize, pageNumber, idAccount, _typeuser, userid);
             var _data = _taskCampaignDao.statusAllow(idAccount, pageNumber, pageSize);
             foreach (var campaign in campaigns)
