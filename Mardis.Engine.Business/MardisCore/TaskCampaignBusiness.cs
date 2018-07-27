@@ -60,7 +60,7 @@ namespace Mardis.Engine.Business.MardisCore
         private readonly ServiceDetailBusiness _serviceDetailBusiness;
         private readonly BranchMigrateDao _branchMigrateDao;
         private readonly IList<TaskMigrateResultViewModel> lstTaskResult = new List<TaskMigrateResultViewModel>();
-        private readonly IList<BranchMigrate> lsBranch = new List<BranchMigrate>();
+        private readonly IList<Branch> lsBranch = new List<Branch>();
 
         public TaskCampaignBusiness(MardisContext mardisContext, RedisCache distributedCache)
             : base(mardisContext)
@@ -1410,7 +1410,7 @@ namespace Mardis.Engine.Business.MardisCore
                 Sheet sheet = doc.WorkbookPart.Workbook.Sheets.GetFirstChild<Sheet>();
                 Worksheet worksheet = (doc.WorkbookPart.GetPartById(sheet.Id.Value) as WorksheetPart).Worksheet;
                 IEnumerable<Row> rows = worksheet.GetFirstChild<SheetData>().Descendants<Row>();
-
+                Branch BranchModel=new Branch();
                 foreach (Row row in rows)
                 {
                     j++;
@@ -1418,7 +1418,7 @@ namespace Mardis.Engine.Business.MardisCore
                     if (row.RowIndex.Value != 1)
                     {
 
-                        BranchMigrate BranchModel = new BranchMigrate();
+                       
                         int i = 0;
                         if (row.Descendants<Cell>().Count() >= 17)
                         {
@@ -1431,32 +1431,53 @@ namespace Mardis.Engine.Business.MardisCore
                                     switch (i)
                                     {
                                         case 1:
-                                            BranchModel.Code = GetCellValue(doc, cell);
-                                            Isval(BranchModel.Code, 1, j);
+                                            BranchModel = _branchMigrateDao.GetLocal(GetCellValue(doc, cell), idAccount);
+                                            BranchModel.routeDate = DateTime.Now;
+                                            if(BranchModel.Id== Guid.Parse("00000000-0000-0000-0000-000000000000"))
+                                            {
+                                                BranchModel.Code = GetCellValue(doc, cell);
+                                                BranchModel.PersonOwner.Code = GetCellValue(doc, cell);
+                                                BranchModel.IdAccount = idAccount;
+                                                BranchModel.PersonOwner.IdAccount = idAccount;
+                                                BranchModel.IdCountry = Guid.Parse("BE7CF5FF-296B-464D-82FA-EF0B4F48721B");// Pais ecuador
+                                                BranchModel.IsAdministratorOwner = "SI";
+                                                BranchModel.Zone = "-";
+                                                BranchModel.Neighborhood = "-";
+                                          
+                                                BranchModel.NumberBranch = "-";
+                                                BranchModel.SecundaryStreet = "-";
+                                                BranchModel.StatusRegister = "A";
+                                                BranchModel.PersonOwner.SurName = "-";
+                                                BranchModel.PersonOwner.TypeDocument = "CI";
+                                                BranchModel.PersonOwner.StatusRegister = "A";
+                                                Isval(BranchModel.Code, 1, j);
+                                            }
+                                            BranchModel.ESTADOAGGREGATE = "S";
                                             break;
                                         case 2:
-                                            BranchModel.BranchType = GetCellValue(doc, cell);
+                                            BranchModel.TypeBusiness = GetCellValue(doc, cell);
                                             break;
                                         case 3:
-                                            BranchModel.BranchName = GetCellValue(doc, cell);
+                                            BranchModel.Name = GetCellValue(doc, cell);
                                             break;
                                         case 4:
-                                            BranchModel.BranchStreet = GetCellValue(doc, cell);
+                                            BranchModel.MainStreet = GetCellValue(doc, cell);
                                             break;
                                         case 5:
-                                            BranchModel.BranchReference = GetCellValue(doc, cell);
+                                            BranchModel.Reference = GetCellValue(doc, cell);
                                             break;
                                         case 6:
-                                            BranchModel.PersonName = GetCellValue(doc, cell);
+                                            BranchModel.PersonOwner.Name = GetCellValue(doc, cell);
+                                            BranchModel.Label = BranchModel.PersonOwner.Name;
                                             break;
                                         case 7:
-                                            BranchModel.Document = GetCellValue(doc, cell);
+                                            BranchModel.PersonOwner.Document = GetCellValue(doc, cell);
                                             break;
                                         case 8:
-                                            BranchModel.phone = GetCellValue(doc, cell);
+                                            BranchModel.PersonOwner.Phone = GetCellValue(doc, cell);
                                             break;
                                         case 9:
-                                            BranchModel.Mobil = GetCellValue(doc, cell);
+                                            BranchModel.PersonOwner.Mobile = GetCellValue(doc, cell);
                                             break;
                                         case 10:
                                             string lat = GetCellValue(doc, cell);
@@ -1469,11 +1490,11 @@ namespace Mardis.Engine.Business.MardisCore
 
                                             break;
                                         case 12:
-                                            BranchModel.IdProvice = _branchMigrateDao.GetProviceByName(GetCellValue(doc, cell));
-                                            Isval(BranchModel.IdProvice.ToString(), 4, j);
+                                            BranchModel.IdProvince = _branchMigrateDao.GetProviceByName(GetCellValue(doc, cell));
+                                            Isval(BranchModel.IdProvince.ToString(), 4, j);
                                             break;
                                         case 13:
-                                            BranchModel.IdDistrict = _branchMigrateDao.GetDistrictByName(GetCellValue(doc, cell), BranchModel.IdProvice);
+                                            BranchModel.IdDistrict = _branchMigrateDao.GetDistrictByName(GetCellValue(doc, cell), BranchModel.IdProvince);
                                             Isval(BranchModel.IdDistrict.ToString(), 5, j);
                                             break;
                                         case 14:
@@ -1485,10 +1506,10 @@ namespace Mardis.Engine.Business.MardisCore
                                             Isval(BranchModel.IdSector.ToString(), 7, j);
                                             break;
                                         case 16:
-                                            BranchModel.Rute = GetCellValue(doc, cell);
+                                            BranchModel.RUTAAGGREGATE = GetCellValue(doc, cell);
                                             break;
                                         case 17:
-                                            BranchModel.IMEI = GetCellValue(doc, cell);
+                                            BranchModel.IMEI_ID = GetCellValue(doc, cell);
 
                                             break;
 

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Runtime.Serialization;
 using Mardis.Engine.Business;
 using Mardis.Engine.Business.MardisCore;
 using Mardis.Engine.Business.MardisSecurity;
@@ -9,6 +12,7 @@ using Mardis.Engine.Web.Model;
 using Mardis.Engine.Web.Services;
 using Mardis.Engine.Web.ViewModel.DashBoardViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +24,8 @@ namespace Mardis.Engine.Web.Controllers
 {
 
     [Authorize]
+    [EnableCors("CorsPolicy")]
+
     public class HomeController : AController<HomeController>
     {
         private readonly MenuBusiness _menuBusiness;
@@ -27,6 +33,7 @@ namespace Mardis.Engine.Web.Controllers
         private readonly HomeBusiness _homeBusiness;
         private readonly IDataProtector _protector;
         private readonly IDataProtector _protectorCampaign;
+        private string setting;
 
         public HomeController(UserManager<ApplicationUser> userManager,
                               IHttpContextAccessor httpContextAccessor,
@@ -61,10 +68,14 @@ namespace Mardis.Engine.Web.Controllers
         
         public IActionResult Index()
         {
+            HttpContext.Session.SetString("das", "The Doctor");
+            HttpContext.Session.SetInt32("dsa", 773);
             return View();
         }
         
         [HttpGet]
+
+
         public IActionResult DashBoard(DashBoardViewModel model, string filterValues, bool deleteFilter, int pageIndex = 1, int pageSize = 50)
         {
 
@@ -76,7 +87,7 @@ namespace Mardis.Engine.Web.Controllers
             {
                 model.IdCampaign = GetSessionVariable("idCampaign");
             }
-
+         
             ViewBag.CampaignList =
                 _campaignBusiness.GetActiveCampaignsListDasboard(ApplicationUserCurrent.AccountId, Guid.Parse(ApplicationUserCurrent.UserId)).OrderBy(x => x.Name)
                     .Select(c => new SelectListItem() { Value = _protectorCampaign.Protect(c.idcampaign.ToString()), Text = c.Name });

@@ -142,9 +142,25 @@ else
             Generar()
         });
         function Generar() {
+
+            $.ajax({
+                url: "http://geomardis6728.cloudapp.net:8000/api/3.0/serverinfo",
+                type: "get",
+                async: true,
+                dataType: 'text/html',
+                success: function (viewHtml) {
+                    console.log(viewHtml)
+                },
+                error: function (error) {
+                    console.log(error);
+                    $.unblockUI();
+                }
+            });
+
+   
             var vals = $('#selCampaigns option:selected').val();
             var as = GetDashbord(vals);
-            initViz1(as);
+            initViz1('http://geomardis6728.cloudapp.net:8000/views/CAPTACIONES_TOPWEB/CAPTACIONES?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no');
 
         }
     </script>

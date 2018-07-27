@@ -43,6 +43,13 @@
         text-align: center;
     }
 
+    .col-sm-18 {
+        padding-right: 0px;
+        width: 4.9%;
+        float: left;
+        text-align: center;
+    }
+
     * {
         padding: 0;
     }
@@ -242,7 +249,9 @@
         <div v-if="poll.ServiceCollection[0].Template=='Matrix'">
             @Html.Partial("_Trade")
         </div>
-        
+        <div v-if="poll.ServiceCollection[0].Template!='Matrix'">
+            @Html.Partial("_censo")
+        </div>
 
     </div> @*Fin Sección de Encuestas*@
 </div>

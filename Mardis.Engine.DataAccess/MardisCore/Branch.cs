@@ -11,9 +11,10 @@ namespace Mardis.Engine.DataAccess.MardisCore
     /// Tabla de Locales en el sistema
     /// </summary>
     [Table("Branch", Schema = "MardisCore")]
-    public sealed class Branch : IEntity, ISoftDelete
+    public  class Branch : IEntity, ISoftDelete
     {
 
+     
         [Key]
         public Guid Id { get; set; } = Guid.Empty;
 
@@ -78,10 +79,10 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public Parish Parish { get; set; }
 
         [ForeignKey("IdPersonOwner")]
-        public Person PersonOwner { get; set; } = new Person();
+        public virtual Person PersonOwner { get; set; } = new Person();
 
         [ForeignKey("IdPersonAdministrator")]
-        public Person PersonAdministration { get; set; } = new Person();
+        public  Person PersonAdministration { get; set; } 
 
         [ForeignKey("IdProvince")]
         public Province Province { get; set; }

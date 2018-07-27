@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Mardis.Engine.DataAccess.MardisCore;
 using Mardis.Engine.DataAccess.MardisSecurity;
 using Mardis.Engine.Framework.Resources;
 
@@ -17,6 +18,7 @@ namespace Mardis.Engine.DataAccess.MardisCommon
         public Person()
         {
             Users = new HashSet<User>();
+            //this.Branches = new HashSet<Branch>();
         }
 
         [Key]
@@ -33,7 +35,7 @@ namespace Mardis.Engine.DataAccess.MardisCommon
 
         [ForeignKey("IdAccount")]
         public virtual  Account Account { get; set; }
-
+        //public virtual ICollection<Branch> Branches { get; set; }
         public ICollection<User> Users { get; set; }
     }
 }
