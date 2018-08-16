@@ -359,6 +359,12 @@ namespace Mardis.Engine.DataAccess
         /// Tabla de ACTIVIDADES
         /// </summary>
         public DbSet<Activity> Activities { get; set; }
+
+
+        /// <summary>
+        /// Tabla de Pollster
+        /// </summary>
+        public DbSet<Pollster> Pollsters { get; set; }
         /// <summary>
         /// Tabla de ESTADOS DINAMICOS
         /// </summary>

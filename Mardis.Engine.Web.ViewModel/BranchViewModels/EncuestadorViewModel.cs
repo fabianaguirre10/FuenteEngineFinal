@@ -11,6 +11,7 @@ namespace Mardis.Engine.Web.ViewModel.BranchViewModels
         public string Name { get; set; }
         public string Code { get; set; }
         public string Phone { get; set; }
+        public string Oficina { get; set; }
 
     }
 }

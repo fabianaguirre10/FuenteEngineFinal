@@ -96,10 +96,10 @@ namespace Mardis.Engine.DataObject.MardisCommon
         /// Obtener las personas con status activo
         /// </summary>
         /// <returns></returns>
-        public List<Person> GetActiveIMEI(Guid idaccount)
+        public List<Pollster> GetActiveIMEI(Guid idaccount)
         {
-            return Context.Persons
-                .Where(p => p.StatusRegister == CStatusRegister.Active && p.IdAccount.Equals(idaccount)&& p.TypeDocument=="IMEI")
+            return Context.Pollsters
+                .Where(p => p.Status == CStatusRegister.Active )
                 .ToList();
 
         }

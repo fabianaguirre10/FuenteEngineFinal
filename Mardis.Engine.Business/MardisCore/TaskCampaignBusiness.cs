@@ -1077,7 +1077,7 @@ namespace Mardis.Engine.Business.MardisCore
                 var task = _taskCampaignDao.Get(idtask, idaccount);
                 var branchImge = _branchImageBusiness.GetBranchesImagesList(task.IdBranch, idaccount,task.IdCampaign);
                 var branch = _branchDao.GetOne(task.IdBranch, idaccount);
-                var person = _branchDao.GetOnePerson(Guid.Parse(branch.IdPersonAdministrator.ToString()));
+                var person = _branchDao.GetOnePerson(Guid.Parse(branch.IdPersonOwner.ToString()));
                 #region variable de estilo
 
                 var normalFont = FontFactory.GetFont(FontFactory.HELVETICA, 12);
@@ -1436,6 +1436,7 @@ namespace Mardis.Engine.Business.MardisCore
                                             if(BranchModel.Id== Guid.Parse("00000000-0000-0000-0000-000000000000"))
                                             {
                                                 BranchModel.Code = GetCellValue(doc, cell);
+                                                BranchModel.ExternalCode = BranchModel.Code;
                                                 BranchModel.PersonOwner.Code = GetCellValue(doc, cell);
                                                 BranchModel.IdAccount = idAccount;
                                                 BranchModel.PersonOwner.IdAccount = idAccount;

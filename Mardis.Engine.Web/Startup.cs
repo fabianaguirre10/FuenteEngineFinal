@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,7 +54,7 @@ namespace Mardis.Engine.Web
 
             services.AddSingleton<IUserStore<ApplicationUser>>(userStore);
             services.AddSingleton<IRoleStore<ApplicationRole>>(roleStore);
-
+            services.AddMvcCore();
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -75,7 +77,7 @@ namespace Mardis.Engine.Web
 
             services.Configure<IdentityOptions>(options =>
             {
-           
+
                 // Password settings
                 options.Password.RequireDigit = true;
                 options.Password.RequiredLength = 8;
@@ -87,15 +89,15 @@ namespace Mardis.Engine.Web
                 // Cookie settings
                 options.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
                 options.Cookies.ApplicationCookie.LogoutPath = "/Account/Login";
-                
+
                 // User settings
                 options.User.RequireUniqueEmail = true;
 
-               
-
+                //services.AddCors();
+                
 
             });
-        
+
 
             services.Configure<FormOptions>(x => x.ValueCountLimit = 8192);
 
@@ -103,27 +105,36 @@ namespace Mardis.Engine.Web
                 .SetApplicationName("M@rdisEngin3")
                 .SetDefaultKeyLifetime(TimeSpan.FromDays(14));
 
-            
+            services.AddCors(o => o.AddPolicy("MPT", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             // Add framework services.
             services.AddMvc()
                         .AddJsonOptions(options =>
                         {
                             options.SerializerSettings.ContractResolver = new DefaultContractResolver();
                             options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                            
+
                         }
                     );
-
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("MPT"));
+            });
             services.AddDistributedMemoryCache();
 
             services.AddMemoryCache();
             services.AddSession(options =>
             {
                 // Set a short timeout for easy testing.
-              
+
             });
 
-         
+
 
             services.AddSingleton<RedisCache, RedisCache>();
 
@@ -137,6 +148,9 @@ namespace Mardis.Engine.Web
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
             services.AddScoped<IMenuService, MenuService>();
+
+     
+            //.WithOrigins("https://localhost:44306")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -156,20 +170,25 @@ namespace Mardis.Engine.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+           
+
             app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
             app.UseStaticFiles();
 
             app.UseIdentity();
             app.UseDefaultFiles();
-
+       
             app.UseSession();
+            app.UseCors("MPT");
 
-           
+            //app.UseMvcWithDefaultRoute();
+          
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+          
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>

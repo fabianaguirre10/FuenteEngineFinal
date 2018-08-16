@@ -206,6 +206,7 @@
     <Compile Include="MardisCommon\Map.cs" />
     <Compile Include="MardisCommon\Parish.cs" />
     <Compile Include="MardisCommon\Person.cs" />
+    <Compile Include="MardisCommon\Pollster.cs" />
     <Compile Include="MardisCommon\Province.cs" />
     <Compile Include="MardisCommon\Region.cs" />
     <Compile Include="MardisCommon\Sector.cs" />

@@ -2,7 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.Serialization;
+using System.Text;
 using Mardis.Engine.Business;
 using Mardis.Engine.Business.MardisCore;
 using Mardis.Engine.Business.MardisSecurity;
@@ -19,12 +22,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using RestSharp;
 
 namespace Mardis.Engine.Web.Controllers
 {
 
     [Authorize]
-    [EnableCors("CorsPolicy")]
+    [EnableCors("MPT")]
 
     public class HomeController : AController<HomeController>
     {
@@ -79,6 +84,56 @@ namespace Mardis.Engine.Web.Controllers
         public IActionResult DashBoard(DashBoardViewModel model, string filterValues, bool deleteFilter, int pageIndex = 1, int pageSize = 50)
         {
 
+            using (var clientw = new HttpClient())
+            {
+                clientw.BaseAddress = new Uri("http://geomardis6728.cloudapp.net:8000/api/3.0/");
+
+
+
+                var json = JsonConvert.SerializeObject("<tsRequest >\r\n < credentials name =\"administrador\" password=\"M@rdisserver2018\" >\r\n  <site contentUrl=\"\" />\r\n  </credentials>\r\n</tsRequest>", Formatting.Indented);
+                var stringContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
+                var buffer = System.Text.Encoding.UTF8.GetBytes(json);
+
+                var byteContent = new ByteArrayContent(buffer);
+
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var responseTask = clientw.PostAsync("auth/signin", byteContent);
+                responseTask.Wait();
+            }
+            //    var result = responseTask.Result;
+            //    var requestUrl = "http://geomardis6728.cloudapp.net:8000/api/3.0/auth/signin";
+            //    string jsonBody = Newtonsoft.Json.JsonConvert.SerializeObject(json);
+            //    HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, requestUrl);
+            //    requestMessage.Content = new StringContent(jsonBody);
+            //    var requestBody = requestMessage.Content.ReadAsStringAsync().Result;
+
+            //    Add body content
+            //    requestMessage.Content = new StringContent(
+            //        jsonBody.ToString(),
+            //        Encoding.UTF8,
+            //        "application/json"
+            //    );
+
+            //    var result = client.SendAsync(requestMessage);
+            //    result.Wait();
+            //    var re = result.Result;
+            //    //if (result.IsSuccessStatusCode)
+            //    //{
+            //    //    var readTask = result.Content.ReadAsAsync<IList<StudentViewModel>>();
+            //    //    readTask.Wait();
+
+            //    //    students = readTask.Result;
+            //    //}
+            //    else //web api sent error response 
+            //    {
+            //        //log response status here..
+
+            //        students = Enumerable.Empty<StudentViewModel>();
+
+            //        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+            //    }
+            //}
+          
             if (!string.IsNullOrEmpty(model.IdCampaign))
             {
                 SetSessionVariable("idCampaign", model.IdCampaign);
@@ -110,6 +165,15 @@ namespace Mardis.Engine.Web.Controllers
 
           var id= _protectorCampaign.Unprotect(idCampaign);
             var url=_campaignBusiness.GetDashOne(Guid.Parse(id)).url;
+
+            //var client = new RestClient("http://geomardis6728.cloudapp.net:8000/api/3.0/auth/signin");
+            //var request = new RestRequest(Method.POST);
+
+            //request.AddParameter("", "<tsRequest>\n  <credentials name=\"administrador\" password=\"M@rdisserver2018\" >\n    <site contentUrl=\"topsy\" />\n  </credentials>\n</tsRequest>", ParameterType.RequestBody);
+            //IRestResponse response = client.Execute(request);
+            ////  var responseBody = Json(response.RawBytes.ToString());
+            //string result = System.Text.Encoding.UTF8.GetString(response.RawBytes);
+
             return Json(url);
         }
         public IActionResult About()

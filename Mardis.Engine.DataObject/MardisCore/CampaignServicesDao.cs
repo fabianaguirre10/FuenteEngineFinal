@@ -76,32 +76,44 @@ namespace Mardis.Engine.DataObject.MardisCore
             //            where data.IdAccount == idAccount
             //            group data by new { data.IdAccount, data.RUTAAGGREGATE } into grupo
             //            select new { route = grupo.Key.RUTAAGGREGATE , numbreBranches = grupo.Count()};
-
-            var query = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE!="")
-  
-                       . Select ( x=>  x.RUTAAGGREGATE ).Distinct();
-
+            var query = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE != "")
+                        .Select(s => new { s.RUTAAGGREGATE, s.ESTADOAGGREGATE }).Distinct().OrderBy(x=>x.RUTAAGGREGATE);
             var result = query.ToList();
            foreach (var item in result)
             {
-                //var result2 = from c in Context.Branches
-                //             group c by new { c.IdAccount, c.RUTAAGGREGATE, c.ESTADOAGGREGATE } into grp
-                //             where grp.Count() > 1 & grp.Key.ESTADOAGGREGATE=="S" & grp.Key.RUTAAGGREGATE == item.route
-                //              select grp.Key;
+                if (item != null)
+                {
 
-                if (item != null) {
+                    var List_data = _model.Where(x => x.route == item.RUTAAGGREGATE);
+                    if (List_data.Count() > 0)
+                    {
+                        if (item.ESTADOAGGREGATE == "S")
+                        {
+                            List_data.First().status = true;
+                        }
+                        else
+                        {
+                            List_data.First().status = false;
+                        }
+                    }
+                    else
+                    {                
+                        if (item.ESTADOAGGREGATE == "S")
+                        {
+                            RouteBranchViewModel route = new RouteBranchViewModel();
+                            _model.Add(new RouteBranchViewModel() { route = item.RUTAAGGREGATE ,status=true});
+                        }
+                        else
+                        {
+                            RouteBranchViewModel route = new RouteBranchViewModel();
+                            _model.Add(new RouteBranchViewModel() { route = item.RUTAAGGREGATE,status=false });
 
-                    RouteBranchViewModel route = new RouteBranchViewModel();
-                    _model.Add(new RouteBranchViewModel() { route = item.ToString() });
+                        }
+                     }
                 }
-
-
            }
-            var active = Context.Branches.Where(x => x.IdAccount == idAccount && result.Contains(x.RUTAAGGREGATE) && x.ESTADOAGGREGATE == "S").Select(x => x.RUTAAGGREGATE);
-            var resulta =_model.ToList();
-            resulta.Where(x=> active.Contains(x.route)).ToList().ForEach(a => a.status = true);
-            //     result.upda
-            return resulta;
+              var resulta =_model.ToList();
+              return resulta;
         }
 
         public async Task<int> UpdateStatusRoute( Guid idAccount ,string route)
@@ -113,8 +125,8 @@ namespace Mardis.Engine.DataObject.MardisCore
 
                 using (var transaction = Context.Database.BeginTransaction())
                 {
-                    var updatebranches = Context.Branches.Where(x => x.RUTAAGGREGATE.Equals(route) && x.IdAccount == idAccount).ToList();
-                    var Isactive = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE == route && x.ESTADOAGGREGATE == "S").Select(x => x.Id).FirstOrDefault();
+                    var updatebranches = Context.Branches.Where(x => x.RUTAAGGREGATE.Trim()==route.Trim() && x.IdAccount == idAccount).ToList();
+                    var Isactive = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE.Trim() == route && x.ESTADOAGGREGATE == "S").Select(x => x.Id).FirstOrDefault();
                     var estados = Isactive != Guid.Parse("00000000-0000-0000-0000-000000000000") ? "" : "S";
                     updatebranches.ForEach(a => a.ESTADOAGGREGATE = estados) ;
                     Context.Branches.UpdateRange(updatebranches);
@@ -138,29 +150,28 @@ namespace Mardis.Engine.DataObject.MardisCore
         public IList<String> GetIMEIRoute(string routes, Guid idAccount)
         {
 
-            var query = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE == routes).Select(x=>x.IMEI_ID).Distinct().ToList();
+            var query = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE.Trim() == routes).Select(x=>x.IMEI_ID).Distinct().ToList();
             //     result.upda
             return query;
         }
-        public IList<Person> GetIdPersonByDocumentAndTypeDocumentAndAccount(IList<string> document, string typeDocument,Guid idAccount)
+        public IList<Pollster> GetIdPersonByDocumentAndTypeDocumentAndAccount(IList<string> document, string typeDocument,Guid idAccount)
         {
-            return Context.Persons
-                .Where(p => document.Contains(p.Document)  &&
-                            p.TypeDocument == typeDocument &&
-                            p.StatusRegister == CStatusRegister.Active
-                            && p.IdAccount.Equals(idAccount)).ToList();
+            return Context.Pollsters
+                .Where(p => document.Contains(p.IMEI) &&
+                     p.Status == CStatusRegister.Active).ToList();
+                    
         }
         public int UpdateRouteImei(string document, string routes, Guid idAccount)
         {
 
             try
             {
-                var route = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE == routes && x.IMEI_ID.Contains(document)).Select(x => x.IMEI_ID).Distinct().First();
+                var route = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE.Trim() == routes && x.IMEI_ID.Contains(document)).Select(x => x.IMEI_ID).Distinct().First();
 
                 var actuallyRoute = route.Replace("-" + document, "");
                 actuallyRoute = actuallyRoute.Replace(document + "-", "");
                 actuallyRoute = actuallyRoute.Replace(document, "");
-                var updatebranches = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE == routes && x.IMEI_ID.Contains(document)).ToList();
+                var updatebranches = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE.Trim() == routes && x.IMEI_ID.Contains(document)).ToList();
                 updatebranches.ForEach(a => a.IMEI_ID = actuallyRoute);
                 Context.Branches.UpdateRange(updatebranches);
                 Context.SaveChanges();
@@ -176,19 +187,70 @@ namespace Mardis.Engine.DataObject.MardisCore
 
        
         }
-
-        public int AddRouteImei(string document, string routes, Guid idAccount)
+        public int UpdateRouteAccount(Guid idAccount, string type)
         {
 
             try
             {
-                var route = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE == routes).Select(x => x.IMEI_ID).Distinct().First();
+                if (type == "S")
+                {
 
-                var actuallyRoute = route.Length > 5 ? route + '-'+document : document;
-                var updatebranches = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE == routes).ToList();
-                updatebranches.ForEach(a => a.IMEI_ID = actuallyRoute);
-                Context.Branches.UpdateRange(updatebranches);
-                Context.SaveChanges();
+                    var updatebranches = Context.Branches.Where(x => x.IdAccount == idAccount).ToList();
+                    updatebranches.ForEach(a => a.ESTADOAGGREGATE = "S");
+                    Context.Branches.UpdateRange(updatebranches);
+                    Context.SaveChanges();
+
+                }
+                else
+                {
+                    var updatebranches = Context.Branches.Where(x => x.IdAccount == idAccount).ToList();
+                    updatebranches.ForEach(a => a.ESTADOAGGREGATE = "");
+                    Context.Branches.UpdateRange(updatebranches);
+                    Context.SaveChanges();
+                }
+
+
+                return 1;
+            }
+            catch (Exception)
+            {
+
+                return -1;
+            }
+
+
+
+
+        }
+
+        public int AddRouteImei(string document, string rout, Guid idAccount)
+        {
+
+            try
+            {
+                var routes = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE.Trim() == rout.Trim()).Select(x => x.IMEI_ID).Distinct().ToList();
+
+                if (routes.Count() > 0)
+                {
+                    var route = routes.First();
+                    var actuallyRoute = route.Length > 5 ? route + '-' + document : document;
+                    var updatebranches = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE == rout).ToList();
+                    updatebranches.ForEach(a => a.IMEI_ID = actuallyRoute);
+                    Context.Branches.UpdateRange(updatebranches);
+                    Context.SaveChanges();
+
+
+                }
+                else {
+                    var actuallyRoute =  document;
+                    var updatebranches = Context.Branches.Where(x => x.IdAccount == idAccount && x.RUTAAGGREGATE == rout).ToList();
+                    updatebranches.ForEach(a => a.IMEI_ID = actuallyRoute);
+                    Context.Branches.UpdateRange(updatebranches);
+                    Context.SaveChanges();
+
+                }
+
+               
                 return 1;
             }
             catch (Exception e)

@@ -620,6 +620,14 @@ namespace Mardis.Engine.Web.Controllers
 
             return Json(model);
         }
+        public JsonResult deleteAccount(string active)
+        {
+
+
+            var model = _campaignBusiness.deleteCuenta(ApplicationUserCurrent.AccountId, active);
+
+            return Json(model);
+        }
 
         public JsonResult GetActiveEncuestador(string id)
         {
@@ -627,7 +635,7 @@ namespace Mardis.Engine.Web.Controllers
 
             var model = _campaignBusiness.GetEncuestadoresbyIMEI(ApplicationUserCurrent.AccountId);
             var _autocompleteModel = from x in model
-                                     select new { name=x.Name+"("+x.Code+")" , abbr=x.Name, id=x.Code , phone=x.Phone };           
+                                     select new { name=x.Name+"("+x.IMEI+")" , abbr=x.Name, id=x.IMEI , phone=x.Phone };           
             return Json(_autocompleteModel);
         }
         public JsonResult SaveEncuestador(string route, string id)

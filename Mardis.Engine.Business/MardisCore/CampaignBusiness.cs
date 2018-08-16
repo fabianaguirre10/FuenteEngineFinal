@@ -648,6 +648,7 @@ namespace Mardis.Engine.Business.MardisCore
             string[] separadas;
 
             foreach (var person in imei) {
+                if (person != null) { 
                 string UniqueImei = person;
                 separadas = UniqueImei.Split('-');
                 for (int xi = 0; xi < separadas.Length; xi++)
@@ -655,13 +656,14 @@ namespace Mardis.Engine.Business.MardisCore
 
                     encuestadores.Add(separadas[xi]);
                 }
+                }
             }
             var data = _campaignServicesDao.GetIdPersonByDocumentAndTypeDocumentAndAccount(encuestadores, "IMEI", idaccount);
 
             IList<EncuestadorViewModel> _model = new List<EncuestadorViewModel>();
 
             foreach (var item in data) {
-                _model.Add(new EncuestadorViewModel { Code = item.Code, Name = item.Name, Phone = item.Phone });
+                _model.Add(new EncuestadorViewModel { Code = item.IMEI, Name = item.Name, Phone = item.Phone,Oficina=item.Oficina });
             }
             return _model;
         }
@@ -673,17 +675,24 @@ namespace Mardis.Engine.Business.MardisCore
 
     
         }
-
-        public IList<Person> GetActiveEncuestadores(Guid idAccount)
+        public int deleteCuenta(Guid idaccount, string type)
         {
-            IList<Person> model = new List<Person>();
-            model = _personDao.GetActiveIMEI(idAccount);
 
-            return model;
+            return _campaignServicesDao.UpdateRouteAccount( idaccount, type);
+
+
+
         }
-        public IList<Person> GetEncuestadoresbyIMEI(Guid idAccount)
+        //public IList<Pollster> GetActiveEncuestadores(Guid idAccount)
+        //{
+        //    IList<Pollster> model = new List<Pollster>();
+        //    model = _personDao.GetActiveIMEI(idAccount);
+
+        //    return model;
+        //}
+        public IList<Pollster> GetEncuestadoresbyIMEI(Guid idAccount)
         {
-            IList<Person> model = new List<Person>();
+            IList<Pollster> model = new List<Pollster>();
             model = _personDao.GetActiveIMEI(idAccount);
 
             return model;

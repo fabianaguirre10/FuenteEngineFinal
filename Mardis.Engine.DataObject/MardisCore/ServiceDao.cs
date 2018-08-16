@@ -107,7 +107,9 @@ namespace Mardis.Engine.DataObject.MardisCore
         public int SaveFormAggregate(IList<StructXmlModel> Aggregate , Guid Idaccount, String Name) {
             DateTime localDate = DateTime.Now;
             string LogFile = localDate.ToString("MMyy");
-            string name = "Encuesta " +Context.Accounts.Where(x => x.Id == Idaccount).First().Name+"_"+LogFile;
+            var servicedata = Context.Accounts.Where(x => x.Id == Idaccount);
+            var serv = Context.Services.Where(z => z.IdAccount == Idaccount);
+            string name = "Formulario_"+ serv.Count()+ " " + servicedata.First().Name+"_"+LogFile;
             Name = name;
           
                 using (var transaction = Context.Database.BeginTransaction())

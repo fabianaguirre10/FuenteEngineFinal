@@ -3147,10 +3147,10 @@ table.text-center th {
   background: #d2d6de;
 }
 .lockscreen-logo {
-  font-size: 35px;
-  text-align: center;
-  margin-bottom: 25px;
-  font-weight: 300;
+    font-size: 35px;
+    text-align: center;
+    margin-bottom: 65px !important;
+    font-weight: 300;
 }
 .lockscreen-logo a {
   color: #444;
@@ -3158,7 +3158,7 @@ table.text-center th {
 .lockscreen-wrapper {
   max-width: 400px;
   margin: 0 auto;
-  margin-top: 10%;
+  margin-top: 5%;
 }
 /* User name [optional] */
 .lockscreen .lockscreen-name {
@@ -3167,12 +3167,13 @@ table.text-center th {
 }
 /* Will contain the image and the sign in form */
 .lockscreen-item {
-  border-radius: 4px;
-  padding: 0;
-  background: #fff;
-  position: relative;
-  margin: 10px auto 30px auto;
-  width: 290px;
+    border-radius: 4px;
+    padding: 0;
+    background: #d2d6de;
+    position: relative;
+    margin: 10px auto 30px auto;
+    width: 350px;
+    height: 20px;
 }
 /* User image */
 .lockscreen-image {

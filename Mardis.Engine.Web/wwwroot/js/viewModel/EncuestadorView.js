@@ -31,7 +31,7 @@ function LoadEquipment(idEq) {
                     });
                 }
                 coount++;
-                $('#responsive').modal('show');
+               // $('#responsive').modal('show');
                 $.unblockUI();
             } else {
                 bootbox.alert("Error! no se ha encontrado la tarea" + error);
@@ -74,13 +74,13 @@ function GetEncuestador() {
 
             } else {
                 bootbox.alert("Error! no se ha encontrado la tarea" + error);
-                window.location.href = "/Equipment/Index";
+                window.location.href = "/Campaign/Route";
             }
         },
         error: function (error) {
             console.log(error);
             bootbox.alert("Error! no se ha encontrado la tarea" + error);
-            window.location.href = "/Equipment/Index";
+            window.location.href = "/Campaign/Route";
         }
     });
 
@@ -126,7 +126,11 @@ function ApplyBindingEquipment() {
             CloseModal: function () {
        
                 $('#responsive').modal('hide');
+            }, OpenModalEncuesta: function (e) {
+              
+                $('#responsive').modal('show');
             },
+
             currentSlide: function (data) {
                 return currentSlide(data);
             },
@@ -225,7 +229,7 @@ function SaveEnc(imei) {
         dataType: "json",
         success: function (data) {
             if (data == '1') {
-                bootbox.alert("Error en la Encuestador")
+                bootbox.alert("Se agregó correctamente el encuestador en la Ruta.")
                 $.unblockUI();
             }
 
@@ -238,7 +242,42 @@ function SaveEnc(imei) {
         error: function (error) {
             console.log(error);
             bootbox.alert("Error! no se ha encontrado la tarea" + error);
-            window.location.href = "/Equipment/Index";
+            window.location.href = "/Campaign/Route";
+        }
+    });
+
+    return null;
+}
+
+
+function SaveAccount(status) {
+    $.blockUI({ message: "Actualizando ruta. El proceso puede tarda algunos segundos." });
+    $.ajax({
+        type: "GET",
+        url: "/Campaign/deleteAccount",
+        // async: false,
+        data: {
+            active: status
+        },
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            if (data == '1') {
+                bootbox.alert("Se actualizo todas las rutas.")
+                $.unblockUI();
+                window.location.href = "/Campaign/Route";
+            }
+
+            if (data == '-1') {
+                bootbox.alert("Error al actualizar rutas")
+                $.unblockUI();
+            }
+            $.unblockUI();
+        },
+        error: function (error) {
+            console.log(error);
+            bootbox.alert("Error! no se ha encontrado la tarea" + error);
+            window.location.href = "/Campaign/Route";
         }
     });
 
