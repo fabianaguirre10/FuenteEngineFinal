@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -51,7 +52,9 @@ namespace Mardis.Engine.Web
             var conn = Configuration.GetConnectionString("DefaultConnection");
             var userStore = new UserStore(conn);
             var roleStore = new RoleStore(conn);
-
+            var manager = new ApplicationPartManager();
+            manager.ApplicationParts.Add(new AssemblyPart(typeof(Startup).Assembly));
+            services.AddSingleton(manager);
             services.AddSingleton<IUserStore<ApplicationUser>>(userStore);
             services.AddSingleton<IRoleStore<ApplicationRole>>(roleStore);
             services.AddMvcCore();

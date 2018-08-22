@@ -295,6 +295,7 @@
     <Compile Include="MenuViewModel.cs" />
     <Compile Include="Paging\IPaging.cs" />
     <Compile Include="Paging\PaginatedList.cs" />
+    <Compile Include="PollsterViewModels\PollsterRegisterViewModel.cs" />
     <Compile Include="PollViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionServiceViewModel.cs" />

@@ -1460,6 +1460,7 @@ namespace Mardis.Engine.Business.MardisCore
                                             break;
                                         case 3:
                                             BranchModel.Name = GetCellValue(doc, cell);
+                                            BranchModel.Label = GetCellValue(doc, cell);
                                             break;
                                         case 4:
                                             BranchModel.MainStreet = GetCellValue(doc, cell);
@@ -1469,7 +1470,7 @@ namespace Mardis.Engine.Business.MardisCore
                                             break;
                                         case 6:
                                             BranchModel.PersonOwner.Name = GetCellValue(doc, cell);
-                                            BranchModel.Label = BranchModel.PersonOwner.Name;
+                                            BranchModel.PersonOwner.SurName = "";
                                             break;
                                         case 7:
                                             BranchModel.PersonOwner.Document = GetCellValue(doc, cell);
