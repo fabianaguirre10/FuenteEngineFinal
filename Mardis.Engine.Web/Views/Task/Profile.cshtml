@@ -246,13 +246,13 @@
 
     <div id="divPollServices">
 
-        @*<div v-if="poll.ServiceCollection[0].Template=='Matrix'">
+        <div v-if="poll.ServiceCollection[0].Template=='Matrix'">
             @Html.Partial("_Trade")
         </div>
         <div v-if="poll.ServiceCollection[0].Template!='Matrix'">
             @Html.Partial("_censo")
-        </div>*@
-        @Html.Partial("_censo")
+        </div>
+    
     </div> @*Fin Sección de Encuestas*@
 </div>
 @*<div id="Container">

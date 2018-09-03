@@ -53,6 +53,7 @@ namespace Mardis.Engine.Services.Controllers
         public object Get(Guid idAccount, string Imeid)
 
         {
+            var idAcccout = Guid.Parse("C2844261-CCB7-4310-99CF-08D5D25156BE");
 
             if (Imeid == null)
             {

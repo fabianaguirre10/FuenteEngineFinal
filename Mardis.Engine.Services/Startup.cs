@@ -17,6 +17,7 @@ using Mardis.Engine.Services.Models;
 using Mardis.Engine.Services.Services;
 using Swashbuckle.AspNetCore.Swagger;
 using Mardis.Engine.DataAccess;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 
 namespace Mardis.Engine.Services
 {
@@ -47,7 +48,9 @@ namespace Mardis.Engine.Services
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            var manager = new ApplicationPartManager();
+            manager.ApplicationParts.Add(new AssemblyPart(typeof(Startup).Assembly));
+            services.AddSingleton(manager);
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();

@@ -51,24 +51,24 @@ namespace Mardis.Engine.DataObject.MardisCore
             List<Branch> consulta = new List<Branch>();
             if (Imeid == "")
             {
-                 consulta = Context.Branches.Include(b => b.PersonAdministration).Where(tb => tb.StatusRegister == CStatusRegister.Active && tb.IdAccount == idAccount && tb.ESTADOAGGREGATE == "S").ToList();
+                 consulta = Context.Branches.Include(b => b.PersonOwner).Where(tb => tb.StatusRegister == CStatusRegister.Active && tb.IdAccount == idAccount && tb.ESTADOAGGREGATE == "S").ToList();
             }
             else
             {
-                consulta = Context.Branches.Include(b => b.PersonAdministration).Where(tb => tb.StatusRegister == CStatusRegister.Active && tb.IdAccount == idAccount && tb.ESTADOAGGREGATE == "S" && tb.IMEI_ID.Contains(Imeid)).ToList();
+                consulta = Context.Branches.Include(b => b.PersonOwner).Where(tb => tb.StatusRegister == CStatusRegister.Active && tb.IdAccount == idAccount && tb.ESTADOAGGREGATE == "S" && tb.IMEI_ID.Contains(Imeid)).ToList();
 
             }
                 return consulta.Select(x => new
                 {
                     x.Id,
                     x.IdAccount,
-                    x.ExternalCode,
+                    ExternalCode= x.Code,
                     x.Code,
                     x.Name,
                     x.MainStreet,
                     x.Neighborhood,
                     x.Reference,
-                    Propietario = x.PersonAdministration.Name,
+                    Propietario = x.PersonOwner.Name,
                     x.IdProvince,
                     x.IdDistrict,
                     x.IdParish,
@@ -76,7 +76,7 @@ namespace Mardis.Engine.DataObject.MardisCore
                     x.IMEI_ID,
                     x.LatitudeBranch,
                     x.LenghtBranch,
-                    Celular=x.PersonAdministration.Phone
+                    Celular=x.PersonOwner.Phone
                 });
             
         }

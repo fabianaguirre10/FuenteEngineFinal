@@ -51,7 +51,7 @@ namespace Mardis.Engine.DataObject.MardisCore
                 c.IdAccount == idAccount);
         }
         public object GetCampaing(){
-            var consulta=Context.Campaigns.Where(c=> c.StatusRegister == CStatusRegister.Active ).ToList();
+            var consulta=Context.Campaigns.Where(c=> c.statusAggregate == CStatusRegister.Active ).ToList();
             return consulta.Select(x => new
             {
                 x.Id,

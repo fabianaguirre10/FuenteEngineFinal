@@ -37,18 +37,21 @@
     .paginate_button {
         font-size: 13px !important
     }
+
     .input-group .input-group__selections__comma {
         padding-left: 0.9pc !important;
     }
+
     .input-group label {
         left: 0.9pc !important;
         font-weight: 700 !important;
     }
+
     .input-group .input-group--select__autocomplete {
         padding-left: 0.9pc !important;
         display: block;
         width: 100%;
-        height: 38px ;
+        height: 38px;
         padding: 6px 12px;
         font-size: 14px;
         line-height: 1.42857143;
@@ -63,20 +66,42 @@
         -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
         transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     }
+
+    .btn-app {
+        top: -1.3pc !important;
+        margin: 0px !important;
+        color: white !important;
+        background-color: #76787a;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        border-radius: 0.3pc !important;
+        padding: 7px 5px !important;
+        height: 45px !important;
+    }
+
+        .btn-app:hover {
+            background-color: #a1a1a1 !important;
+        }
+
+    .breadcrumb i {
+        color: rgba(221, 24, 34, 0.98) !important;
+    }
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.35/css/uikit.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/1.10.19/css/dataTables.uikit.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
 <link href="~/css/theme/autocomplete.css" rel="stylesheet" />
-<section class="content-header">
+<section class="content-header" style="margin-bottom: 15px;">
     <h1>
         Administración
         <small>Control Rutas</small>
     </h1>
-    @*<ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-toggle-on"></i> Home</a></li>
-        </ol>*@
+    <ol class="breadcrumb" style="right: 40px; !important">
+        <a href="@Url.Action("Pollsters","Campaign")" class="btn btn-app" style="top: -1.3pc; margin:0px !important">
+            <i class="fa fa-users"></i> Mercaderista
+        </a>
+    </ol>
 </section>
 <br />
 <section class="content">
@@ -117,8 +142,8 @@
                         <!--<button type="button" id="color-chooser-btn" class="btn btn-info btn-block dropdown-toggle" data-toggle="dropdown">Color <span class="caret"></span></button>-->
                         <ul class="fc-color-picker pull-right" id="color-chooser">
                             <li><a class="text-red" href="javascript:void(0);" onclick="SaveAccount('T');" data-toggle="tooltip" data-placement="bottom" title="El botón desactiva todas las rutas del proyecto!"><i class="fa fa-times-circle-o"></i> </a></li>
-                            <li><a class="text-green" href="javascript:void(0);" onclick="SaveAccount('S');"  data-toggle="tooltip" data-placement="top" title="El botón activa todas las rutas del proyecto!"><i class="fa fa-check-circle-o"></i> </a></li>
-                        
+                            <li><a class="text-green" href="javascript:void(0);" onclick="SaveAccount('S');" data-toggle="tooltip" data-placement="top" title="El botón activa todas las rutas del proyecto!"><i class="fa fa-check-circle-o"></i> </a></li>
+
                         </ul>
                     </div>
                     <!-- /btn-group -->
@@ -134,7 +159,7 @@
                         <h3 class="box-title">Encuestadores en la ruta</h3>
                         <div class="box-tools pull-right">
 
-                            <button type="button" class="btn btn-box-tool " style="    color: #a3242c;    font-size: 13px;   font-weight: 700;" v-on:click="OpenModalEncuesta('1')">   <i class="fa fa-users" v-on:click="OpenModalEncuesta('1')"></i> Encuestadores</button>
+                            <button type="button" class="btn btn-box-tool " style="    color: #76787a;    font-size: 13px;   font-weight: 700;" v-on:click="OpenModalEncuesta('1')">   <i class="fa fa-plus-square" v-on:click="OpenModalEncuesta('1')"></i> Agregar</button>
                         </div>
                     </div>
                     <div class="box-body no-padding">
@@ -174,10 +199,10 @@
                     <div class="modal-dialog  modal-scrollable">
                         <div class="modal-content">
                             @*<div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-                                <h4 class="modal-title">Encuestadores</h4>
-                            </div>*@
+                                    <h4 class="modal-title">Encuestadores</h4>
+                                </div>*@
 
                             <div class="modal-body" style="background-color:#d2d6de">
                                 <div class="row">
@@ -205,7 +230,7 @@
                                         <div class="lockscreen-item" style="background-color:#d2d6de;">
                                             <!-- lockscreen image -->
                                             <div class="lockscreen-image" style="">
-                                                <img src="~/images/default_avatar_male.jpg" alt="User Image"/>
+                                                <img src="~/images/default_avatar_male.jpg" alt="User Image" />
                                                 @*<img src="~/images/avatar-1.jpg" alt="User Image" />*@
                                             </div>
                                             <!-- /.lockscreen-image -->
@@ -224,7 +249,7 @@
                                                     </div>
                                                 </div>
                                             </form>
-                               
+
                                             <!-- /.lockscreen credentials -->
 
                                         </div>

@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Mardis.Engine.DataAccess.MardisCommon;
 using Mardis.Engine.DataObject.MardisCommon;
+using Mardis.Engine.Web.ViewModel.PollsterViewModels;
 
 namespace Mardis.Engine.Business.MardisCore
 {
@@ -96,9 +97,9 @@ namespace Mardis.Engine.Business.MardisCore
                         var cust = _customerDao.GetCustomerById(campaign.IdCustomer, idAccount);
 
                         campaign.Code = nextSequence.ToString();
-                        campaign.Name = nextSequence.SequenceCurrent.ToString();
-                        campaign.Name += "-" + cust.Abbreviation.Trim() + "-" +
-                            campaign.CreationDate.ToString("MMMM", CultureInfo.InvariantCulture);
+                      //  campaign.Name = nextSequence.SequenceCurrent.ToString();
+                        //campaign.Name += "-" + cust.Abbreviation.Trim() + "-" +
+                        //    campaign.CreationDate.ToString("MMMM", CultureInfo.InvariantCulture);
                     }
                     else
                     {
@@ -703,6 +704,69 @@ namespace Mardis.Engine.Business.MardisCore
             return _campaignServicesDao.AddRouteImei(id, route, idaccount);
 
 
+
+        }
+
+        public IList<Pollster> GetPollster()
+        {
+            IList<Pollster> model = new List<Pollster>();
+            model = _campaignServicesDao.GetPollsterdata();
+
+            return model;
+        }
+
+        public PollsterRegisterViewModel GetPollster(int Id)
+        {
+
+            var model = new PollsterRegisterViewModel();
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Pollster, PollsterRegisterViewModel>();
+            });
+            var equipmentsmodel = new Pollster();
+            equipmentsmodel = _campaignServicesDao.GetPollster_Edit(Id);
+            model = Mapper.Map<PollsterRegisterViewModel>(equipmentsmodel);
+
+
+
+            return model;
+
+        }
+        public int SavePollsters(PollsterRegisterViewModel models)
+        {
+
+            var model = new PollsterRegisterViewModel();
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<PollsterRegisterViewModel, Pollster>();
+            });
+            var _marpermodel = new Pollster();
+
+            _marpermodel = Mapper.Map<Pollster>(models);
+
+            var _result = _campaignServicesDao.SavePollster(_marpermodel);
+
+            return _result;
+
+
+
+        }
+        public int DeletePollster(int ID)
+        {
+
+
+            var a = _campaignServicesDao.DeletePollsters(ID);
+
+            return a;
+
+        }
+        public int StatusPollster(string imei)
+        {
+
+
+            var a = _campaignServicesDao.UpdateRouteImei(imei);
+
+            return a;
 
         }
         #endregion

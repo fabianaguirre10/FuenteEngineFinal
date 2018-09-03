@@ -47,7 +47,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
         public DateTime CreationDate { get; set; } = DateTime.Now;
 
         public string Comment { get; set; }
-
+        public string statusAggregate { get; set; }
         public List<CampaignServices> CampaignServices { get; set; }
 
         public string StatusRegister { get; set; } = CStatusRegister.Active;

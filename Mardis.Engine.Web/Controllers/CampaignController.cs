@@ -32,6 +32,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using OfficeOpenXml;
 using System.Net.Http.Headers;
+using Mardis.Engine.Web.ViewModel.PollsterViewModels;
 
 
 #endregion
@@ -647,7 +648,81 @@ namespace Mardis.Engine.Web.Controllers
             return Json(model);
         }
 
+        public IActionResult Pollsters(string returnUrl = null)
+        {
 
+            ViewData["ReturnUrl"] = returnUrl;
+
+           var _model = _campaignBusiness.GetPollster();
+            return View(_model);
+        }
+
+        public IActionResult PollsterRegister(int idPolls, string returnUrl = null)
+        {
+
+            try
+            {
+
+                ViewData["ReturnUrl"] = returnUrl;
+                var model = idPolls != 0 ? _campaignBusiness.GetPollster(idPolls) : null;
+                if (model == null)
+                {
+                    model = new PollsterRegisterViewModel();
+
+                }
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), e.Message);
+                return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
+            }
+        }
+        [HttpPost]
+        public IActionResult PollsterRegister(PollsterRegisterViewModel _model, string returnUrl = null)
+        {
+
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+
+                    return View(_model);
+                }
+                _campaignBusiness.SavePollsters(_model);
+
+                return RedirectToAction("Pollsters");
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(new EventId(0, "Error Index"), e.Message);
+                return RedirectToAction("Index", "StatusCode", new { statusCode = 1 });
+            }
+        }
+        public IActionResult DeletePollster(int idPolls, string returnUrl = null)
+        {
+            var result = _campaignBusiness.DeletePollster(idPolls);
+            if (result != 3)
+            {
+                return RedirectToAction("Pollsters");
+            }
+            else
+            {
+                return RedirectToAction("Pollsters", new { returnUrl = "Tasks" });
+            }
+
+
+        }
+        public IActionResult UpdatePollster(string Imei, string returnUrl = null)
+        {
+            var result = _campaignBusiness.StatusPollster(Imei);
+
+            return RedirectToAction("Pollsters", new { returnUrl = "Branch" });
+
+
+
+        }
         #endregion
         #region modoSupervisor
         [HttpGet]

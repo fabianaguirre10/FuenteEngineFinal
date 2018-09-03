@@ -263,6 +263,94 @@ namespace Mardis.Engine.DataObject.MardisCore
 
 
         }
+        public IList<Pollster> GetPollsterdata()
+        {
+
+            var query = Context.Pollsters.ToList();
+            //     result.upda
+            return query;
+        }
+
+        public Pollster GetPollster_Edit(int Id)
+        {
+            var resultList = Context.Pollsters
+                .Where(x => x.Id.Equals(Id)).First();
+            //.Where(usr => usr.Equipaments. == typeUser &&
+            //              usr.StatusRegister == CStatusRegister.Active &&
+            //              usr.IdAccount == idAccount)
+
+            return resultList;
+        }
+        public int SavePollster(Pollster entity)
+        {
+
+            try
+            {
+                Context.Pollsters.Add(entity);
+
+                if (entity.Id < 1) Context.Entry(entity).State = EntityState.Added;
+                else Context.Entry(entity).State = EntityState.Modified;
+
+
+                Context.SaveChanges();
+                return 1;
+
+
+            }
+            catch (Exception)
+            {
+
+                return 0;
+            }
+
+        }
+
+        public int DeletePollsters(int Id)
+        {
+            try
+            {
+
+                Context.Pollsters.RemoveRange(Context.Pollsters.Where(x => x.Id == Id));
+                var status = Context.SaveChanges();
+                return 1;
+            }
+            catch (Exception e)
+            {
+                //var tasks = Context.Pollsters.Include(x => x.Tasks).Where(i => i.Id == Id).Select(d => d.Tasks);
+                //if (tasks.Count() > 0)
+                //{ return 3; }
+                //else { return 0; }
+                return 0;
+                throw;
+            }
+        }
+
+        public int UpdateRouteImei(string Imei)
+        {
+
+            try
+            {
+
+
+                var updatebranches = Context.Branches.Where(z => z.IMEI_ID.Trim() == Imei.Trim()).ToList();
+                updatebranches.ForEach(a => a.ESTADOAGGREGATE = "");
+                Context.Branches.UpdateRange(updatebranches);
+                Context.SaveChanges();
+
+
+
+                return 1;
+            }
+            catch (Exception)
+            {
+
+                return -1;
+            }
+
+
+
+
+        }
 
     }
     #endregion
