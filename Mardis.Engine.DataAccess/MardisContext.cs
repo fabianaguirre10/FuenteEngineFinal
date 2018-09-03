@@ -6,6 +6,7 @@ using Dapper;
 using Mardis.Engine.DataAccess.MardisCommon;
 using Mardis.Engine.DataAccess.MardisCore;
 using Mardis.Engine.DataAccess.MardisSecurity;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
@@ -277,6 +278,15 @@ namespace Mardis.Engine.DataAccess
         /// Tabla de Respuestas
         /// </summary>
         public DbSet<Answer> Answers { get; set; }
+
+
+        /// <summary>
+        /// Tabla de Pedidos
+        /// </summary>
+ 
+
+
+
 
         /// <summary>
         /// Tabla de detalle de respuestas
