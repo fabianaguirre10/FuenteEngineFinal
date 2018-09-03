@@ -1497,6 +1497,8 @@ namespace Mardis.Engine.Business.MardisCore
                                             break;
                                         case 13:
                                             BranchModel.IdDistrict = _branchMigrateDao.GetDistrictByName(GetCellValue(doc, cell), BranchModel.IdProvince);
+
+                                            ValidoCodigo(BranchModel.Code, idAccount, BranchModel.IdDistrict, j);
                                             Isval(BranchModel.IdDistrict.ToString(), 5, j);
                                             break;
                                         case 14:
@@ -1634,6 +1636,7 @@ namespace Mardis.Engine.Business.MardisCore
                 case 4:
                     if (data == null || data == "00000000-0000-0000-0000-000000000000")
                         lstTaskResult.Add(new TaskMigrateResultViewModel { description = "La Provicia se encuentra vacia o no existe en la base de datos", line = fil, type = "E" });
+                  
                     break;
                 case 5:
                     if (data == null || data == "00000000-0000-0000-0000-000000000000") lstTaskResult.Add(new TaskMigrateResultViewModel
@@ -1648,10 +1651,16 @@ namespace Mardis.Engine.Business.MardisCore
                     { description = "El sector se encuentra vacio o no existe en la base de datos", line = fil, type = "E" });
                     break;
                 case 8:
-                    if (_personDao.GetPersonByCode(data) == null) lstTaskResult.Add(new TaskMigrateResultViewModel
-                    { description = "El IMEI no se encuentra asignado a ningún encuestador", line = fil, type = "E" });
+                  
                     break;
             }
+            return "";
+        }
+        public string ValidoCodigo(string code, Guid Idaccount, Guid Iddistrict, int fil) {
+
+            if (!_branchMigrateDao.CodigoUnico(code,Idaccount, Iddistrict)) lstTaskResult.Add(new TaskMigrateResultViewModel
+            { description = "Este registro ya se encuentra creado en otra ciudad. Por favor asigne un codigo Unico", line = fil, type = "E" });
+
             return "";
         }
 

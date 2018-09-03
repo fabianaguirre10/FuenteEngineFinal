@@ -97,9 +97,9 @@ namespace Mardis.Engine.Business.MardisCore
                         var cust = _customerDao.GetCustomerById(campaign.IdCustomer, idAccount);
 
                         campaign.Code = nextSequence.ToString();
-                        campaign.Name = nextSequence.SequenceCurrent.ToString();
-                        campaign.Name += "-" + cust.Abbreviation.Trim() + "-" +
-                            campaign.CreationDate.ToString("MMMM", CultureInfo.InvariantCulture);
+                      //  campaign.Name = nextSequence.SequenceCurrent.ToString();
+                        //campaign.Name += "-" + cust.Abbreviation.Trim() + "-" +
+                        //    campaign.CreationDate.ToString("MMMM", CultureInfo.InvariantCulture);
                     }
                     else
                     {
