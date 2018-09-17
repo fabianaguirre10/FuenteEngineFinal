@@ -10,17 +10,17 @@ using Mardis.Engine.DataAccess;
 using Mardis.Engine.Framework;
 using Mardis.Engine.Web.ViewModel.TaskViewModels;
 using Mardis.Engine.DataAccess.MardisCore;
-
+using clases;
 
 using Microsoft.Extensions.Logging;
 using Mardis.Engine.Services.Models.EngieWEB;
 
 namespace Mardis.Engine.Services.Controllers
 {
-    [Route("api/Task")]
+   [Route("api/Task")]
     public class TaskController : Controller
     {
-
+        
         private readonly TaskCampaignBusiness _taskCampaignBusiness;
         private readonly BranchBusiness _BranchBusiness;
         private readonly CodigoReservadosBusiness _CodigoReservadosBusiness;
@@ -63,7 +63,12 @@ namespace Mardis.Engine.Services.Controllers
             return _BranchBusiness.GetBranchesListAndroid(idAccount, Imeid);
           
         }
-      
+        [Route("api/getCtaCte")]
+        [HttpGet()]
+        public List<ItemCtaCte> getCtaCte(string cliente ,string fechaDesde ,string fechaHasta)
+        {
+            return null;
+        }
 
         //[HttpGet]
         //public object Get()
