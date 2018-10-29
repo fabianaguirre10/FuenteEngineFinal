@@ -1594,15 +1594,25 @@ namespace Mardis.Engine.Business.MardisCore
             {
                 if (status.Equals("2"))
                 {
-                    if (_branchMigrateDao.SaveBranchMigrate(lsBranch, idAccount, idcampaing))
-                    {
-                        result.Add(new TaskMigrateResultViewModel { description = "Locales Cargados", Element = (j - 1).ToString() });
-                        result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = "0" });
-                    }
-                    else {
-                        result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = "NA" });
-                        result.Add(new TaskMigrateResultViewModel { description = "No se actualizo la información volver", Element = (j - 1).ToString() });
+
+                    var regCarga = lsBranch.Select(z => z.Code).Distinct().Count();
+                    if(regCarga==(j-1))
+                    {                 
+                            if (_branchMigrateDao.SaveBranchMigrate(lsBranch, idAccount, idcampaing))
+                            {
+                                result.Add(new TaskMigrateResultViewModel { description = "Locales Cargados", Element = (j - 1).ToString() });
+                                result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = "0" });
+                            }
+                            else {
+                                result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = "NA" });
+                                result.Add(new TaskMigrateResultViewModel { description = "No se actualizo la información volver", Element = (j - 1).ToString() });
                        
+                            }
+                    }
+                    else
+                    {
+                        result.Add(new TaskMigrateResultViewModel { description = "Registros verificados",  Element = (j - 1).ToString() });
+                        result.Add(new TaskMigrateResultViewModel { description = "Existen codigos duplicados en el Documento. Favor verificar y volver a cargar", Element = ((j - 1)- regCarga).ToString() });
                     }
                     if (File.Exists(fileBrachMassive))
                     {
@@ -1611,8 +1621,19 @@ namespace Mardis.Engine.Business.MardisCore
 
                 }
                 else {
-                    result.Add(new TaskMigrateResultViewModel { description = "Registro verificados", Element = (j - 1).ToString() });
-                    result.Add(new TaskMigrateResultViewModel { description = "Errores", Element ="0"});
+                    var regCarga = lsBranch.Select(z => z.Code).Distinct().Count();
+                    if (regCarga == (j - 1))
+                    {
+
+                        result.Add(new TaskMigrateResultViewModel { description = "Registro verificados", Element = (j - 1).ToString() });
+                        result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = "0" });
+                    }
+                    else
+                    {
+                        result.Add(new TaskMigrateResultViewModel { description = "Registros verificados", Element = (j - 1).ToString() });
+                        result.Add(new TaskMigrateResultViewModel { description = "Existen codigos duplicados en el Documento. Favor verificar y volver a cargar", Element = ((j - 1) - regCarga).ToString() });
+                        result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = "0" });
+                    }
                 }
             }
             else
