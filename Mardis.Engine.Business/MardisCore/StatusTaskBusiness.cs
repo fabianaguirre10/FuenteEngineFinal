@@ -11,7 +11,7 @@ namespace Mardis.Engine.Business.MardisCore
     public class StatusTaskBusiness : ABusiness
     {
         private readonly RedisCache _myCache;
-        private const string CacheName = "StatusTaskUnilever";
+        private const string CacheName = "StatusTask";
 
         public StatusTaskBusiness(MardisContext mardisContext, RedisCache cache) : base(mardisContext)
         {

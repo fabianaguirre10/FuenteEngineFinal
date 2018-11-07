@@ -1482,12 +1482,20 @@ namespace Mardis.Engine.Business.MardisCore
                                             BranchModel.PersonOwner.Mobile = GetCellValue(doc, cell);
                                             break;
                                         case 10:
-                                            string lat = GetCellValue(doc, cell);
+
+                                            var latitud = GetCellValue(doc, cell);
+                                            var lat= latitud.Contains("E")? ExponecialToString (latitud): latitud ;
+
+                                          
+
                                             BranchModel.LatitudeBranch = lat.Length <= 10 ? lat : lat.Substring(0, 11);
 
                                             break;
                                         case 11:
-                                            string len = GetCellValue(doc, cell);
+
+
+                                            var longitud = GetCellValue(doc, cell);
+                                            string len = longitud.Contains("E") ? ExponecialToString(longitud) : longitud;
                                             BranchModel.LenghtBranch = len.Length <= 10 ? len : len.Substring(0, 11);
 
                                             break;
@@ -1558,22 +1566,53 @@ namespace Mardis.Engine.Business.MardisCore
 
 
             }
-            // 
+            // }
+
+           string ExponecialToString(String lat) {
+
+                var tam = int.Parse(lat.Substring(lat.Length - 1));
+                var cero = "0.";
+                for (int i = 1; i < tam; i++) {
+                    cero = cero + "0";
+
+                }
+            
+
+                char[] MyChar = {  '.',',',' '};
+                lat = lat.Substring(0, lat.Length - 3);
+                lat = lat.Replace(".", "");
+            
+
+                string NewString = lat.TrimEnd(MyChar);
+                lat = cero + NewString;
+                return lat;
+            
+}
             IList<TaskMigrateResultViewModel> result = new List<TaskMigrateResultViewModel>();
             int numberError = lstTaskResult.Where(x => x.type == "E").Count();
             if (numberError < 1)
             {
                 if (status.Equals("2"))
                 {
-                    if (_branchMigrateDao.SaveBranchMigrate(lsBranch, idAccount, idcampaing))
-                    {
-                        result.Add(new TaskMigrateResultViewModel { description = "Locales Cargados", Element = (j - 1).ToString() });
-                        result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = "0" });
-                    }
-                    else {
-                        result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = "NA" });
-                        result.Add(new TaskMigrateResultViewModel { description = "No se actualizo la información volver", Element = (j - 1).ToString() });
+
+                    var regCarga = lsBranch.Select(z => z.Code).Distinct().Count();
+                    if(regCarga==(j-1))
+                    {                 
+                            if (_branchMigrateDao.SaveBranchMigrate(lsBranch, idAccount, idcampaing))
+                            {
+                                result.Add(new TaskMigrateResultViewModel { description = "Locales Cargados", Element = (j - 1).ToString() });
+                                result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = "0" });
+                            }
+                            else {
+                                result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = "NA" });
+                                result.Add(new TaskMigrateResultViewModel { description = "No se actualizo la información volver", Element = (j - 1).ToString() });
                        
+                            }
+                    }
+                    else
+                    {
+                        result.Add(new TaskMigrateResultViewModel { description = "Registros verificados",  Element = (j - 1).ToString() });
+                        result.Add(new TaskMigrateResultViewModel { description = "Existen codigos duplicados en el Documento. Favor verificar y volver a cargar", Element = ((j - 1)- regCarga).ToString() });
                     }
                     if (File.Exists(fileBrachMassive))
                     {
@@ -1582,8 +1621,19 @@ namespace Mardis.Engine.Business.MardisCore
 
                 }
                 else {
-                    result.Add(new TaskMigrateResultViewModel { description = "Registro verificados", Element = (j - 1).ToString() });
-                    result.Add(new TaskMigrateResultViewModel { description = "Errores", Element ="0"});
+                    var regCarga = lsBranch.Select(z => z.Code).Distinct().Count();
+                    if (regCarga == (j - 1))
+                    {
+
+                        result.Add(new TaskMigrateResultViewModel { description = "Registro verificados", Element = (j - 1).ToString() });
+                        result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = "0" });
+                    }
+                    else
+                    {
+                        result.Add(new TaskMigrateResultViewModel { description = "Registros verificados", Element = (j - 1).ToString() });
+                        result.Add(new TaskMigrateResultViewModel { description = "Existen codigos duplicados en el Documento. Favor verificar y volver a cargar", Element = ((j - 1) - regCarga).ToString() });
+                        result.Add(new TaskMigrateResultViewModel { description = "Errores", Element = "0" });
+                    }
                 }
             }
             else
