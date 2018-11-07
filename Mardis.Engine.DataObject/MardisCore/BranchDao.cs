@@ -76,7 +76,8 @@ namespace Mardis.Engine.DataObject.MardisCore
                     x.IMEI_ID,
                     x.LatitudeBranch,
                     x.LenghtBranch,
-                    Celular=x.PersonOwner.Phone
+                    Celular=x.PersonOwner.Phone,
+                    x.TypeBusiness
                 });
             
         }
