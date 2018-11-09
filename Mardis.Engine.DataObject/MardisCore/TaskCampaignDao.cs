@@ -9,6 +9,7 @@ using Mardis.Engine.DataObject.Dto;
 using Mardis.Engine.DataObject.MardisCommon;
 using Mardis.Engine.Framework.Resources;
 using Mardis.Engine.Web.ViewModel.Filter;
+using Mardis.Engine.Web.ViewModel.Migration;
 using Mardis.Engine.Web.ViewModel.TaskViewModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -437,6 +438,78 @@ namespace Mardis.Engine.DataObject.MardisCore
                 
              
 
+        }
+
+        public MigrationTaskViewModel ExcuteMigrationTask(Guid Idcampaign, string _uri)
+        {
+
+#if DEBUG
+            var myWatch = new Stopwatch();
+            myWatch.Start();
+#endif
+
+            var task = Context.Query<MigrationTaskViewModel>($@"EXEC dbo.sp_proc_migration_Campaign @idcampaign='{Idcampaign}',@_uri='{_uri}'").FirstOrDefault();
+
+#if DEBUG
+            myWatch.Stop();
+            Debugger.Log(0, "Consulta", $"ms: {myWatch.ElapsedMilliseconds}");
+#endif
+
+            return task;
+        }
+        public bool TaskImages(Guid idtask)
+        {
+            var _exists = false;
+            var _Model= from st in Context.TaskCampaigns
+                        join stc in Context.BranchImageses
+                        on new { st.IdCampaign, st.IdBranch} equals new { stc.IdCampaign, stc.IdBranch }
+                        where st.Id.Equals(idtask)
+                        select stc;
+            if (_Model.ToList().Count() > 0) {
+                _exists = true;       
+            }
+            
+
+            return _exists;
+
+
+
+
+
+        }
+        public List<TableImage> GetMigrationImage(Guid Idcampaign, string _uri)
+        {
+
+#if DEBUG
+            var myWatch = new Stopwatch();
+            myWatch.Start();
+#endif
+
+            var images = Context.Query<TableImage>($@"select _uri Uri, [Table],orden, content from vw_migration_image where  campaign='{Idcampaign}' and _TOP_LEVEL_AURI='{_uri}'");
+
+#if DEBUG
+            myWatch.Stop();
+            Debugger.Log(0, "Consulta", $"ms: {myWatch.ElapsedMilliseconds}");
+#endif
+
+            return images.ToList();
+        }
+        public ImageBinaryModel GetDataImage( string _uri , string table)
+        {
+
+#if DEBUG
+            var myWatch = new Stopwatch();
+            myWatch.Start();
+#endif
+
+            var _model = Context.Query<ImageBinaryModel>($@"select VALUE as _VALUE from {table} where  _URI='{_uri}'").FirstOrDefault();
+
+#if DEBUG
+            myWatch.Stop();
+            Debugger.Log(0, "Consulta", $"ms: {myWatch.ElapsedMilliseconds}");
+#endif
+
+            return _model;
         }
     }
 }

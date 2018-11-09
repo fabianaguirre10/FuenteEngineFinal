@@ -293,6 +293,10 @@
     <Compile Include="LoginViewModel.cs" />
     <Compile Include="MenusViewModel.cs" />
     <Compile Include="MenuViewModel.cs" />
+    <Compile Include="Migration\ImageBinaryModel.cs" />
+    <Compile Include="Migration\MigrationTaskViewModel.cs" />
+    <Compile Include="Migration\TableImage.cs" />
+    <Compile Include="Migration\TaskImage.cs" />
     <Compile Include="Paging\IPaging.cs" />
     <Compile Include="Paging\PaginatedList.cs" />
     <Compile Include="PollsterViewModels\PollsterRegisterViewModel.cs" />

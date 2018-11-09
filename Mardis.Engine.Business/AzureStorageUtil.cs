@@ -110,6 +110,20 @@ namespace Mardis.Engine.Business
             await blockBlob.UploadFromStreamAsync(stream);
             
         }
+        public static async Task UploadFromStreamAsinc(MemoryStream stream, string containerName, string fileName)
+        {
+            var client = GetCloudStorageAccount().CreateCloudBlobClient();
+            var cloudContainer = client.GetContainerReference(containerName);
+            cloudContainer.CreateIfNotExists();
+            //await cloudContainer.SetPermissionsAsync(new BlobContainerPermissions
+            //{
+            //    PublicAccess = BlobContainerPublicAccessType.Blob
+            //});
+            var blockBlob = cloudContainer.GetBlockBlobReference(fileName);
+
+             blockBlob.UploadFromStreamAsync(stream);
+
+        }
 
         public static void DeleteBlob(string containerName, string fileName)
         {

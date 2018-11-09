@@ -1860,5 +1860,63 @@ namespace Mardis.Engine.Business.MardisCore
 
         }
         #endregion
+
+        #region Sincronizacion de Tareas
+
+
+        public int MigrationTask(Guid idcampaign, string _uri)
+        {
+            try
+            {
+                var _model = _taskCampaignDao.ExcuteMigrationTask(idcampaign, _uri);
+                var _existsImagen = _taskCampaignDao.TaskImages(_model.Idtask);
+                if (!_existsImagen)
+                {
+
+                    var _modeltaskImage = _taskCampaignDao.GetMigrationImage(idcampaign, _uri);
+
+                    foreach (var _data in _modeltaskImage)
+                    {
+
+
+                        var value = new MemoryStream(_taskCampaignDao.GetDataImage(_data.Uri, _data.Table)._VALUE.ToArray());
+                        if (value != null)
+                        {
+                            AzureStorageUtil.UploadFromStreamAsinc(value, _data.content, _data.Uri + ".jpg").Wait();
+                            var uri = AzureStorageUtil.GetUriFromBlob(_data.content, _data.Uri + ".jpg");
+
+                            var branchImage = new BranchImages()
+                            {
+                                Id = Guid.NewGuid(),
+                                IdBranch = _model.Idbranch,
+                                IdCampaign = idcampaign,
+                                NameContainer = _data.content,
+                                NameFile = _data.Uri + ".jpg",
+                                Order = _data.orden,
+                                UrlImage = uri
+                            };
+
+
+                            Context.BranchImageses.Add(branchImage);
+                            Context.SaveChanges();
+                        }
+                    }
+                }
+
+                return 1;
+            }
+            catch (Exception)
+            {
+
+                return 0;
+            }
+          
+        }
+
+     
+
+
+
+        #endregion
     }
 }
