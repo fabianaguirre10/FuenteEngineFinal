@@ -192,7 +192,7 @@ namespace Mardis.Engine.Converter
                     {
                         Id = q.Id,
                         Order = q.Order,
-                        HasPhoto = q.HasPhoto.IndexOf("S", StringComparison.Ordinal) >= 0,
+                        HasPhoto = q.HasPhoto,
                         Weight = q.Weight,
                         AnswerRequired = q.AnswerRequired,
                         IdTypePoll = q.IdTypePoll,
@@ -250,7 +250,7 @@ namespace Mardis.Engine.Converter
                 QuestionDetailCollection = questionDetailList,
                 Title = question.Title,
                 Weight = question.Weight,
-                HasPhoto = question.HasPhoto == "S",
+                HasPhoto = question.HasPhoto,
                 CopyNumber = count,
                 AnswerRequired = question.AnswerRequired
             };

@@ -42,7 +42,7 @@ namespace Mardis.Engine.Converter
                 {
                     Id = q.Id,
                     Order = q.Order,
-                    HasPhoto = q.HasPhoto.IndexOf("S") >= 0,
+                    HasPhoto = q.HasPhoto,
                     Weight = q.Weight,
                     AnswerRequired = q.AnswerRequired,
                     IdTypePoll = q.IdTypePoll,
@@ -82,7 +82,7 @@ namespace Mardis.Engine.Converter
                                             {
                                                 Id = q.Id,
                                                 Order = q.Order,
-                                                HasPhoto = q.HasPhoto.IndexOf("S") >= 0,
+                                                HasPhoto = q.HasPhoto,
                                                 Weight = q.Weight,
                                                 AnswerRequired = q.AnswerRequired,
                                                 IdTypePoll = q.IdTypePoll,

@@ -5976,7 +5976,7 @@ body.lock-screen .user-info {
 .mardis-check {
     display: -webkit-inline-box;
     font-size: 13px;
-    margin: 10px 0px 0px 15px;
+    margin: 10px 0px 2px 15px;
     font-weight: 700;
     font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }

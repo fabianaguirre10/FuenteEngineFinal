@@ -21,7 +21,7 @@ namespace Mardis.Engine.Web.ViewModel.TaskViewModels
 
         public string Answer { get; set; }
 
-        public bool HasPhoto { get; set; }
+        public string HasPhoto { get; set; }
 
         public int CopyNumber { get; set; }
 

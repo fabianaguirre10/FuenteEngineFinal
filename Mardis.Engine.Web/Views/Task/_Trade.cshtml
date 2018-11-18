@@ -42,7 +42,7 @@
 
                                         <div class="row">
                                             <div v-for="(question, j) in section.QuestionCollection">
-                                                <div class="col-sm-3" v-if="(question.CodeTypePoll=='ONE'||question.CodeTypePoll=='OPEN' ) && question.Weight=='0'">
+                                                <div class="col-sm-3" v-if="(question.CodeTypePoll=='ONE'||question.CodeTypePoll=='OPEN' ) && question.Weight!='-1'">
 
                                                     <div class="panel panel-mardis-grey" style="margin-bottom: 5px;">
                                                         <div class="panel-heading" style="padding-bottom: 0; padding-top: 0; height: 10%; color: white;">
@@ -60,7 +60,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4" v-if="question.CodeTypePoll=='MANY'" style="text-align:-webkit-center;">
+                                                <div class="col-sm-4" v-if="question.CodeTypePoll=='MANY' && question.Weight=='0' " style="text-align:-webkit-center;">
                                                     <div class="panel panel-mardis-grey" style="margin-bottom: 1px;">
                                                         <div class="panel-heading" style="padding-bottom: 12px; padding-top: 0; height: 10%; color: white;">
                                                             {{question.Title}}
@@ -75,6 +75,23 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
+
+                                                <div class="col-sm-4" v-if="question.CodeTypePoll=='MANY' && question.Weight!='0' " style="text-align:-webkit-center;">
+                                                   
+                                                      
+                                                           Tiene
+                                                       
+
+                                                        <div v-for="answer in question.QuestionDetailCollection">
+                                                            <div class="form-check">
+                                                                <label for="answer.Id" class="col-sm-6 mardis-check">
+                                                                    {{ answer.Answer }}
+                                                                    <input v-for-events type="checkbox" class="inputcheck subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)">
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    
                                                 </div>
                                             </div>
 
@@ -102,7 +119,9 @@
                                                                     </div>
 
                                                                 </div>
+                                                            </div>  
                                                                 <br>
+
                                                                 <div class="row">
                                                                     <div v-for="(questionM, jf) in section.QuestionCollection">
                                                                         <div v-bind:class="{
@@ -133,7 +152,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                   
                                                 </div>
 
                                                 @*Seleccion multiple con preguntas*@
