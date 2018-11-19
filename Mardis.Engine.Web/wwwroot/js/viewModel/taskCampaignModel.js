@@ -203,6 +203,21 @@ function ApplyBindingTaskService(data) {
                     return;
                 this.createImage(files[0], index);
             },
+           
+            classlenght: function (length) {
+                var bindclass = "col-sm-3";
+                if (length == 3 || length == 0) {
+                    bindclass = "col-sm-3";
+
+                } else {
+
+                    bindclass = "col-sm-" + length;
+
+                }
+
+                return bindclass;
+
+            },
             createImage(file, index) {
                 var image = new Image();
                 var reader = new FileReader();

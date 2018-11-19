@@ -199,6 +199,20 @@ function ApplyBindingTaskService(data) {
                 window.open(url, 'Download');  
 
             },
+            classlenght: function (length) {
+                var bindclass = "col-sm-3";
+                if (length == 3 || length == 0) {
+                    bindclass = "col-sm-3";
+
+                } else {
+
+                    bindclass = "col-sm-" + length;
+
+                }
+
+                return bindclass;
+
+            },
         onFileChange(e, index) {
             console.log(e.target.files)
             var files = e.target.files || e.dataTransfer.files;

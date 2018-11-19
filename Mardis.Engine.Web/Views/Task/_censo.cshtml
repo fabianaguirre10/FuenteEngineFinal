@@ -42,7 +42,7 @@
 
                                         <div class="row">
                                             <div v-for="(question, j) in section.QuestionCollection">
-                                                <div class="col-sm-3" v-if="(question.CodeTypePoll=='ONE'||question.CodeTypePoll=='OPEN' ) && question.Weight=='0'">
+                                                <div v-bind:class="classlenght(question.Weight)"  v-if="(question.CodeTypePoll=='ONE'||question.CodeTypePoll=='OPEN' ) && question.Weight!='-1'">
 
                                                     <div class="panel panel-mardis-grey" style="margin-bottom: 5px;">
                                                         <div class="panel-heading" style="padding-bottom: 0; padding-top: 0; height: 10%; color: white;">
@@ -60,7 +60,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='N' " style="text-align:-webkit-center;">
+                                                <div v-bind:class="classlenght(question.Weight)"  v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='N' " style="text-align:-webkit-center;">
                                                     <div class="panel panel-mardis-grey" style="margin-bottom: 1px;">
                                                         <div class="panel-heading" style="padding-bottom: 12px; padding-top: 0; height: 10%; color: white;">
                                                             {{question.Title}}
@@ -78,7 +78,7 @@
                                                 </div>
 
                                                 <div class="col-sm-2" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='M' " style="text-align:-webkit-center;">
-                                                    Tiene
+                                                    <span style="font-weight:600; font-size: 12px !important;">{{question.Title}}</span> 
                                                     <div v-for="answer in question.QuestionDetailCollection">
                                                         <div class="form-check">
                                                             <label for="answer.Id" class="col-sm-6 mardis-check">
@@ -90,23 +90,19 @@
 
                                                 </div>
 
-                                                <div class="col-sm-12" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='L' " style="text-align:-webkit-center; margin-top:15PX">
-                                                    
-                                         
-                                                            {{question.Title}}
-                                                        
-
-                                                        <div v-for="answer in question.QuestionDetailCollection">
-                                                            <div class="col-lg-2">
-                                                                <div class="form-check">
-                                                                    <label for="answer.Id" class="col-sm-6 mardis-check">
-                                                                        <span>{{ answer.Answer }}</span>
-                                                                        <input v-for-events type="checkbox" class="inputcheck subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)">
-                                                                    </label>
-                                                                </div>
+                                                <div v-bind:class="classlenght(question.Weight)" v-if="question.CodeTypePoll=='MANY' && question.HasPhoto=='L' " style="text-align:-webkit-center; margin-top:15PX">
+                                                    <span style="font-weight:600; font-size: 12px !important;">{{question.Title}}</span>
+                                                    <div v-for="answer in question.QuestionDetailCollection">
+                                                        <div v-bind:class="classlenght(answer.Weight)">
+                                                            <div class="form-check">
+                                                                <label for="answer.Id" class="col-sm-6 mardis-check">
+                                                                    <span>{{ answer.Answer }}</span>
+                                                                    <input v-for-events type="checkbox" class="inputcheck subsec" v-bind:id="answer.Id" v-bind:value="answer.IdQuestion" v-bind:name="question.IdAnswer" v-model="answer.Checked" onchange="onToggle(this)">
+                                                                </label>
                                                             </div>
                                                         </div>
-                                                   
+                                                    </div>
+
                                                 </div>
                                             </div>
 
@@ -114,7 +110,7 @@
                                             @*Seleccion multiple con preguntas*@
                                             <div class="col-sm-9 pull-left">
                                                 <div v-for="(questionS, jf) in section.QuestionCollection">
-                                                    <div v-if="questionS.CodeTypePoll=='MANY' && questionS.Weight!='0'">
+                                                    <div v-if="questionS.CodeTypePoll=='MANY' &&  questionS.HasPhoto=='M' ">
 
 
 
@@ -130,7 +126,7 @@
                                                                      'casounasem' : questionS.Weight>
                                                                     9}" v-if="questionM.CodeTypePoll=='ONE'||questionM.CodeTypePoll=='OPEN'"  style="word-wrap: break-word ;padding-left: 5px; font-size: 10px;padding-left: 5px; text-align: center;">
                                                                     <div v-if="jf < questionS.Weight+1">
-                                                                        {{questionM.Title}}
+                                                                        <span style="font-weight:600; font-size: 12px !important;">{{questionM.Title}}</span>
                                                                     </div>
 
                                                                 </div>

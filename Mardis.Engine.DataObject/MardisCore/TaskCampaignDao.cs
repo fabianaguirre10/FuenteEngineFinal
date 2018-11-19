@@ -457,6 +457,36 @@ namespace Mardis.Engine.DataObject.MardisCore
 
             return task;
         }
+
+
+        public List<AggregateDataViewModels> _dataAggregate(string IMEI, string _form)
+        {
+
+#if DEBU
+
+
+#endif
+            try
+            {
+                var myWatch = new Stopwatch();
+                myWatch.Start();
+                var task = Context.Query<AggregateDataViewModels>($@"select ID,IMEI_ID,campaing from vw_prc_aggregate_uri where IMEI_ID='{IMEI}' and  TableCore='{_form}'");
+                return task.ToList();
+                myWatch.Stop();
+                Debugger.Log(0, "Consulta", $"ms: {myWatch.ElapsedMilliseconds}");
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }
+        
+#if DEBUG
+
+#endif
+
+      
+        }
         public bool TaskImages(Guid idtask)
         {
             var _exists = false;

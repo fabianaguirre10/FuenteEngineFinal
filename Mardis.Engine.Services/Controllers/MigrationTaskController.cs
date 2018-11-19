@@ -37,9 +37,9 @@ namespace Mardis.Engine.Services.Controllers
  
         // GET: api/MigrationTask/5
         [HttpGet()]
-        public object Get(string Icampaign, string aggregateUri)
+        public object Get(string IMEI, string _form)
         {
-            return _taskCampaignBusiness.MigrationTask(Guid.Parse(Icampaign), aggregateUri);
+            return _taskCampaignBusiness.MigrationTask(IMEI, _form);
         }
         
         // POST: api/MigrationTask

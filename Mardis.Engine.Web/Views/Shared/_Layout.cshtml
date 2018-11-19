@@ -171,10 +171,10 @@
                     <div class="col-sm-8">
                         @if (!string.IsNullOrEmpty((string)ViewData["Title"]) && !string.IsNullOrEmpty((string)ViewData["Description"]))
                         {
-                        <h2>
-                            @ViewData["Title"]
-                            <small>@ViewData["Description"]</small>
-                        </h2>
+                            <h2>
+                                @ViewData["Title"]
+                                <small>@ViewData["Description"]</small>
+                            </h2>
                         }
                     </div>
                     <div class="col-sm-4">
@@ -189,12 +189,13 @@
                     @RenderBody()
                     <div class="clearfix"></div>
                 </div>
-         
+
             </section>
             <!-- /.content -->
+            <div class="clearfix"></div>
         </div>
 
-        <div class="clearfix"></div>
+      
         <!-- /.content-wrapper -->
         <footer class="main-footer">
             <div class="pull-right hidden-xs">

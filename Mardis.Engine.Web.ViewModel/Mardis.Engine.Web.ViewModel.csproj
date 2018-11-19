@@ -293,6 +293,7 @@
     <Compile Include="LoginViewModel.cs" />
     <Compile Include="MenusViewModel.cs" />
     <Compile Include="MenuViewModel.cs" />
+    <Compile Include="Migration\AggregateDataViewModels.cs" />
     <Compile Include="Migration\ImageBinaryModel.cs" />
     <Compile Include="Migration\MigrationTaskViewModel.cs" />
     <Compile Include="Migration\TableImage.cs" />

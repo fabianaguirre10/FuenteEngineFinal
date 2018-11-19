@@ -1576,15 +1576,20 @@ namespace Mardis.Engine.Business.MardisCore
                     cero = cero + "0";
 
                 }
-            
 
-                char[] MyChar = {  '.',',',' '};
+         
+                char[] MyChar = {  '.',',',' ','-'};
                 lat = lat.Substring(0, lat.Length - 3);
                 lat = lat.Replace(".", "");
-            
-
+                
+                string cadenaTexto = lat;
+                string negativo = "";
+                int resultado ;
+                resultado =      cadenaTexto.IndexOf("-")      ;
+                negativo = resultado == 0 ? "-" : "";
+                lat = lat.Replace("-", "");
                 string NewString = lat.TrimEnd(MyChar);
-                lat = cero + NewString;
+                lat = negativo + cero + NewString;
                 return lat;
             
 }
@@ -1864,43 +1869,50 @@ namespace Mardis.Engine.Business.MardisCore
         #region Sincronizacion de Tareas
 
 
-        public int MigrationTask(Guid idcampaign, string _uri)
+        public int MigrationTask(string Imei, string _form)
         {
             try
             {
-                var _model = _taskCampaignDao.ExcuteMigrationTask(idcampaign, _uri);
-                var _existsImagen = _taskCampaignDao.TaskImages(_model.Idtask);
-                if (!_existsImagen)
-                {
-
-                    var _modeltaskImage = _taskCampaignDao.GetMigrationImage(idcampaign, _uri);
-
-                    foreach (var _data in _modeltaskImage)
-                    {
-
-
-                        var value = new MemoryStream(_taskCampaignDao.GetDataImage(_data.Uri, _data.Table)._VALUE.ToArray());
-                        if (value != null)
+                var _modelAggregate= _taskCampaignDao._dataAggregate(Imei, _form);
+                foreach (var _Aggregate in _modelAggregate) { 
+                    
+                var _model = _taskCampaignDao.ExcuteMigrationTask(Guid.Parse(_Aggregate.campaing), _Aggregate.ID);
+                    if (_model != null)
+                    { 
+                        var _existsImagen = _taskCampaignDao.TaskImages(_model.Idtask);
+                        if (!_existsImagen)
                         {
-                            AzureStorageUtil.UploadFromStreamAsinc(value, _data.content, _data.Uri + ".jpg").Wait();
-                            var uri = AzureStorageUtil.GetUriFromBlob(_data.content, _data.Uri + ".jpg");
 
-                            var branchImage = new BranchImages()
+                            var _modeltaskImage = _taskCampaignDao.GetMigrationImage(Guid.Parse(_Aggregate.campaing), _Aggregate.ID);
+
+                            foreach (var _data in _modeltaskImage)
                             {
-                                Id = Guid.NewGuid(),
-                                IdBranch = _model.Idbranch,
-                                IdCampaign = idcampaign,
-                                NameContainer = _data.content,
-                                NameFile = _data.Uri + ".jpg",
-                                Order = _data.orden,
-                                UrlImage = uri
-                            };
 
 
-                            Context.BranchImageses.Add(branchImage);
-                            Context.SaveChanges();
+                                var value = new MemoryStream(_taskCampaignDao.GetDataImage(_data.Uri, _data.Table)._VALUE.ToArray());
+                                if (value != null)
+                                {
+                                    AzureStorageUtil.UploadFromStreamAsinc(value, _data.content, _data.Uri + ".jpg").Wait();
+                                    var uri = AzureStorageUtil.GetUriFromBlob(_data.content, _data.Uri + ".jpg");
+
+                                    var branchImage = new BranchImages()
+                                    {
+                                        Id = Guid.NewGuid(),
+                                        IdBranch = _model.Idbranch,
+                                        IdCampaign = Guid.Parse(_Aggregate.campaing),
+                                        NameContainer = _data.content,
+                                        NameFile = _data.Uri + ".jpg",
+                                        Order = _data.orden,
+                                        UrlImage = uri
+                                    };
+
+
+                                    Context.BranchImageses.Add(branchImage);
+                                    Context.SaveChanges();
+                                }
+                            }
                         }
-                    }
+                        }
                 }
 
                 return 1;
