@@ -51,11 +51,11 @@ namespace Mardis.Engine.DataObject.MardisCore
             List<Branch> consulta = new List<Branch>();
             if (Imeid == "")
             {
-                 consulta = Context.Branches.Include(b => b.PersonOwner).Where(tb => tb.StatusRegister == CStatusRegister.Active && tb.IdAccount == idAccount && tb.ESTADOAGGREGATE == "S").ToList();
+                 consulta = Context.Branches.Include(b => b.PersonOwner).Where(tb => tb.StatusRegister == CStatusRegister.Active && tb.IdAccount == idAccount && tb.ESTADOAGGREGATE.Equals("")==false && tb.ESTADOAGGREGATE!=null).ToList();
             }
             else
             {
-                consulta = Context.Branches.Include(b => b.PersonOwner).Where(tb => tb.StatusRegister == CStatusRegister.Active && tb.IdAccount == idAccount && tb.ESTADOAGGREGATE == "S" && tb.IMEI_ID.Contains(Imeid)).ToList();
+                consulta = Context.Branches.Include(b => b.PersonOwner).Where(tb => tb.StatusRegister == CStatusRegister.Active && tb.IdAccount == idAccount && tb.ESTADOAGGREGATE.Equals("") == false && tb.ESTADOAGGREGATE != null && tb.IMEI_ID.Contains(Imeid)).ToList();
 
             }
             return consulta.Select(x => new
@@ -78,7 +78,8 @@ namespace Mardis.Engine.DataObject.MardisCore
                 x.LenghtBranch,
                 Celular = x.PersonOwner.Phone,
                 x.TypeBusiness,
-                Cedula = x.PersonOwner.Document
+                Cedula = x.PersonOwner.Document,
+                x.ESTADOAGGREGATE
                 });
             
         }

@@ -64,12 +64,12 @@ namespace Mardis.Engine.Web.Controllers
             if (ModelState.IsValid)
             {
                 //cambio de clave para usuarios
-                /*RegisterViewModel model1= new RegisterViewModel();
+                RegisterViewModel model1= new RegisterViewModel();
                 model1.Email = model.Email;
-                model1.Password = "Eclaro$1511";
-                model1.ConfirmPassword = "Eclaro$1511";
+                model1.Password = "Campo$0112";
+                model1.ConfirmPassword = "Campo$0112";
 
-                Register(model1, returnUrl);*/
+                Register(model1, returnUrl);
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
