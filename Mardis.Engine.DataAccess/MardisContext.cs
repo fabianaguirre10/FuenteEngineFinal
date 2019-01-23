@@ -378,6 +378,8 @@ namespace Mardis.Engine.DataAccess
         /// <summary>
         /// Tabla de ESTADOS DINAMICOS
         /// </summary>
+        /// 
+        public DbSet<logApi> logApies { get; set; }
         public DbSet<StatusTaskAccount> StatusTaskAccounts { get; set; }
         public IEnumerable<T> Query<T>(string query) where T : class
         {

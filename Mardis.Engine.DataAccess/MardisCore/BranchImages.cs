@@ -25,6 +25,7 @@ namespace Mardis.Engine.DataAccess.MardisCore
 
         [ForeignKey("IdCampaign")]
         public Campaign Campaign { get; set; }
+        public Guid? idtask { get; set; }
 
         public string ContentType { get; set; }
        public int Order { get; set; }

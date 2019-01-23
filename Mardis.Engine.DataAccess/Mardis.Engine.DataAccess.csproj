@@ -235,6 +235,7 @@
     <Compile Include="MardisCore\FilterExecutionDetail.cs" />
     <Compile Include="MardisCore\FilterField.cs" />
     <Compile Include="MardisCore\FilterTable.cs" />
+    <Compile Include="MardisCore\logApi.cs" />
     <Compile Include="MardisCore\Product.cs" />
     <Compile Include="MardisCore\ProductCategory.cs" />
     <Compile Include="MardisCore\Question.cs" />

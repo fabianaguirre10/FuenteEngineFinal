@@ -490,11 +490,10 @@ namespace Mardis.Engine.DataObject.MardisCore
         public bool TaskImages(Guid idtask)
         {
             var _exists = false;
-            var _Model= from st in Context.TaskCampaigns
-                        join stc in Context.BranchImageses
-                        on new { st.IdCampaign, st.IdBranch} equals new { stc.IdCampaign, stc.IdBranch }
-                        where st.Id.Equals(idtask)
-                        select stc;
+            var _Model= from st in  Context.BranchImageses
+                    
+                        where st.idtask.Equals(idtask)
+                        select st;
             if (_Model.ToList().Count() > 0) {
                 _exists = true;       
             }
@@ -540,6 +539,19 @@ namespace Mardis.Engine.DataObject.MardisCore
 #endif
 
             return _model;
+        }
+        public void saveLogApi(string log) {
+
+            logApi _model = new logApi();
+            _model.controller = "MigrationTaskController";
+            _model.creationDate = DateTime.Now;
+            _model.views = "GET";
+            _model.logs = log;
+
+            Context.logApies.Add(_model);
+            Context.SaveChanges();
+
+
         }
     }
 }

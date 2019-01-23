@@ -375,6 +375,7 @@
     <Compile Include="MardisCore\FilterExecutionDetailBusiness.cs" />
     <Compile Include="MardisCore\FilterFieldsBusiness.cs" />
     <Compile Include="MardisCore\FilterTableBusiness.cs" />
+    <Compile Include="MardisCore\logApi.cs" />
     <Compile Include="MardisCore\ServiceBusiness.cs" />
     <Compile Include="MardisCore\ServiceDetailBusiness.cs" />
     <Compile Include="MardisCore\ServiceDetailTaskBusiness.cs" />

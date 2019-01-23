@@ -1903,7 +1903,8 @@ namespace Mardis.Engine.Business.MardisCore
                                         NameContainer = _data.content,
                                         NameFile = _data.Uri + ".jpg",
                                         Order = _data.orden,
-                                        UrlImage = uri
+                                        UrlImage = uri,
+                                        idtask= _model.Idtask
                                     };
 
 
@@ -1917,8 +1918,9 @@ namespace Mardis.Engine.Business.MardisCore
 
                 return 1;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _taskCampaignDao.saveLogApi("IMEI: "+ Imei+ " || _form: "+ _form+" || error: "+ e.ToString());
 
                 return 0;
             }
