@@ -210,10 +210,12 @@
                                                         <div v-for="(question,i) in subSection.QuestionCollection">
                                                             <div v-if="ix===0">
                                                                 <div v-bind:class="{
+                                                                      'col-sm-1' : subSection.QuestionCollection.length==6,
+                                                                    'casounasem7':  subSection.QuestionCollection.length==7,
                                                                      'col-sm-6' : subSection.QuestionCollection.length==1,
                                                                      'col-sm-4' : subSection.QuestionCollection.length==2,
                                                                      'col-sm-3' : subSection.QuestionCollection.length==3 || (subSection.QuestionCollection.length==4 && i < 2 ),
-                                                                     'col-sm-2' : subSection.QuestionCollection.length == 5 || (subSection.QuestionCollection.length == 4 && i > 1 ) || (subSection.QuestionCollection.length == 6 && i < 4 ) || (subSection.QuestionCollection.length == 7 && i <3 ),
+                                                                     'col-sm-2' : subSection.QuestionCollection.length == 5 || (subSection.QuestionCollection.length == 4 && i > 1 ),
                                                                     'casounasem' : subSection.QuestionCollection.length >  21 ,
                                                                     'col-sm-18':  subSection.QuestionCollection.length >  7
                                                                     }" style="word-wrap: break-word ;padding-left: 5px; font-size: 10px;padding-left: 5px; text-align: center;">
@@ -235,10 +237,12 @@
                                                     <div v-for="(question, i) in subSection.QuestionCollection">
 
                                                         <div v-bind:class="{
+                                                              'col-sm-1' : subSection.QuestionCollection.length==6,
+                                                             'casounasem7':  subSection.QuestionCollection.length==7,
                                                              'col-sm-6' : subSection.QuestionCollection.length==1,
                                                              'col-sm-4' : subSection.QuestionCollection.length==2,
                                                              'col-sm-3' : subSection.QuestionCollection.length==3 || (subSection.QuestionCollection.length==4 && i < 2 ),
-                                                            'col-sm-2' : subSection.QuestionCollection.length == 5 || (subSection.QuestionCollection.length == 4 && i > 1 ) || (subSection.QuestionCollection.length == 6 && i < 4 ) || (subSection.QuestionCollection.length == 7 && i <3 ),
+                                                            'col-sm-2' : subSection.QuestionCollection.length == 5 || (subSection.QuestionCollection.length == 4 && i > 1 ),
                                                             'casounasem' : subSection.QuestionCollection.length >  21  ,
                                                                     'col-sm-18':  subSection.QuestionCollection.length >  7
 
