@@ -390,7 +390,8 @@ namespace Mardis.Engine.DataObject.MardisCore
                     [Otros Motivos Rechazo American Express] as Otros_Motivos_Rechazo_American_Express,
                     [EQUIPO],
                     [CORE],
-                    [Campaña] as Campania
+                    [Campaña] as Campania,
+                    Fecha
                     FROM    vw_equipos_bg_campañas";
             var result =Context.Query<equiposcampanias>(query).ToList();
 

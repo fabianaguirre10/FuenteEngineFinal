@@ -302,6 +302,7 @@ namespace Mardis.Engine.Web.Controllers
                 worksheet.Cells[1, 16].Value = "EQUIPO";
                 worksheet.Cells[1, 17].Value = "CORE";
                 worksheet.Cells[1, 18].Value = "Campania";
+                worksheet.Cells[1, 19].Value = "Fecha";
 
                 int rows = 2;
                 foreach (var t in listado)
@@ -324,6 +325,8 @@ namespace Mardis.Engine.Web.Controllers
                     worksheet.Cells[rows, 16].Value = t.EQUIPO;
                     worksheet.Cells[rows, 17].Value = t.CORE;
                     worksheet.Cells[rows, 18].Value = t.Campania;
+                    worksheet.Cells[rows, 19].Value = t.Fecha;
+                    worksheet.Cells[rows, 19].Style.Numberformat.Format = "yyyy-mm-dd";
                     rows++;
                 }
                 //Add values
