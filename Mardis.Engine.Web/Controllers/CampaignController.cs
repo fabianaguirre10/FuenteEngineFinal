@@ -262,7 +262,92 @@ namespace Mardis.Engine.Web.Controllers
             return result;
         }
 
-      
+
+
+        public IActionResult ExportCampaniaEquipos()
+        {
+
+            string sWebRootFolder = _hostingEnv.WebRootPath;
+
+            var listado = _taskCampaignBusiness.Listvistaequiposcampania().ToList();
+
+            string sFileName = @"Listado.xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            if (file.Exists)
+            {
+                file.Delete();
+                file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            }
+            using (ExcelPackage package = new ExcelPackage(file))
+            {
+                // add a new worksheet to the empty workbook
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Datos");
+                //First add the headers
+                worksheet.Cells[1, 1].Value = "IdTrade";
+                worksheet.Cells[1, 2].Value = "URI";
+                worksheet.Cells[1, 3].Value = "Nombre";
+                worksheet.Cells[1, 4].Value = "Contacto";
+                worksheet.Cells[1, 5].Value = "Cedula_RUC";
+                worksheet.Cells[1, 6].Value = "Direccion";
+                worksheet.Cells[1, 7].Value = "Tipo_de_Equipo";
+                worksheet.Cells[1, 8].Value = "MID_TID";
+                worksheet.Cells[1, 9].Value = "Proceso_Visa";
+                worksheet.Cells[1, 10].Value = "Adquiencia";
+                worksheet.Cells[1, 11].Value = "Motivos_Rechazo_Visa";
+                worksheet.Cells[1, 12].Value = "Otros_Motivos_Rechazo_Visa";
+                worksheet.Cells[1, 13].Value = "American_Express";
+                worksheet.Cells[1, 14].Value = "Motivos_Rechazo_American_Express";
+                worksheet.Cells[1, 15].Value = "Otros_Motivos_Rechazo_American_Express";
+                worksheet.Cells[1, 16].Value = "EQUIPO";
+                worksheet.Cells[1, 17].Value = "CORE";
+                worksheet.Cells[1, 18].Value = "Campania";
+
+                int rows = 2;
+                foreach (var t in listado)
+                {
+                    worksheet.Cells[rows, 1].Value = t.IdTrade;
+                    worksheet.Cells[rows, 2].Value = t.URI;
+                    worksheet.Cells[rows, 3].Value = t.Nombre;
+                    worksheet.Cells[rows, 4].Value = t.Contacto;
+                    worksheet.Cells[rows, 5].Value = t.Cedula_RUC;
+                    worksheet.Cells[rows, 6].Value = t.Direccion;
+                    worksheet.Cells[rows, 7].Value = t.Tipo_de_Equipo;
+                    worksheet.Cells[rows, 8].Value = t.MID_TID;
+                    worksheet.Cells[rows, 9].Value = t.Proceso_Visa;
+                    worksheet.Cells[rows, 10].Value = t.Adquiencia;
+                    worksheet.Cells[rows, 11].Value = t.Motivos_Rechazo_Visa;
+                    worksheet.Cells[rows, 12].Value = t.Otros_Motivos_Rechazo_Visa;
+                    worksheet.Cells[rows, 13].Value = t.American_Express;
+                    worksheet.Cells[rows, 14].Value = t.Motivos_Rechazo_American_Express;
+                    worksheet.Cells[rows, 15].Value = t.Otros_Motivos_Rechazo_American_Express;
+                    worksheet.Cells[rows, 16].Value = t.EQUIPO;
+                    worksheet.Cells[rows, 17].Value = t.CORE;
+                    worksheet.Cells[rows, 18].Value = t.Campania;
+                    rows++;
+                }
+                //Add values
+
+
+                package.Save(); //Save the workbook.
+            }
+            var result = PhysicalFile(Path.Combine(sWebRootFolder, sFileName), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            Response.Headers["Content-Disposition"] = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = file.Name
+            }.ToString();
+
+            return result;
+        }
+
+
+
+
+
+
+
+
 
         [HttpGet]
         public IActionResult Register(string idCampaign)

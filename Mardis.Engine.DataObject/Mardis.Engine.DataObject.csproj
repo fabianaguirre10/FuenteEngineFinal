@@ -193,6 +193,7 @@
   <ItemGroup>
     <Compile Include="ADao.cs" />
     <Compile Include="CatalogDao.cs" />
+    <Compile Include="Dto\equiposcampanias.cs" />
     <Compile Include="Dto\TaskPerViewDto.cs" />
     <Compile Include="IEntityId.cs" />
     <Compile Include="MardisCommon\CodigoReservadosDao.cs" />

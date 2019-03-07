@@ -174,6 +174,7 @@ namespace Mardis.Engine.DataObject.MardisCore
             return resultList;
         }
 
+       
 
         public List<TaskCampaign> GetAlltasksByCampaignId(Guid idCampaign, Guid idAccount, List<FilterValue> filters)
         {
@@ -368,6 +369,32 @@ namespace Mardis.Engine.DataObject.MardisCore
             //    .GroupBy(t => new { t.IdCampaign, t.StatusRegister, t.IdAccount, t.IdStatusTask, t.StatusTask.Name })
             //    .Select(t => new TaskPerViewDto() { IdStatusTask = t.Key.IdStatusTask, Count = t.Count(), StatusName = t.Key.Name })
             //    .ToDictionary(t => t.StatusName, t => t.Count);
+        }
+        public List<equiposcampanias> Getvistaequiposcampanias()
+        {
+            var query = $@"SELECT 
+                    IdTrade,	
+                    URI,	
+                    Nombre,	
+                    Contacto,	
+                    [Cédula/RUC] as Cedula_RUC,	
+                    Direccion,	
+                    [Tipo de Equipo] as Tipo_de_Equipo,	
+                    [MID-TID] as MID_TID,
+                    [Proceso_Visa] as Proceso_Visa,
+                    [Adquiencia],
+                    [Motivos Rechazo Visa] as Motivos_Rechazo_Visa,
+                    [Otros Motivos Rechazo Visa] as Otros_Motivos_Rechazo_Visa,
+                    [American Express] as American_Express,
+                    [Motivos Rechazo American Express] as Motivos_Rechazo_American_Express ,
+                    [Otros Motivos Rechazo American Express] as Otros_Motivos_Rechazo_American_Express,
+                    [EQUIPO],
+                    [CORE],
+                    [Campaña] as Campania
+                    FROM    vw_equipos_bg_campañas";
+            var result =Context.Query<equiposcampanias>(query).ToList();
+
+            return result;
         }
 
         public void ImplementTask(Guid idTask, Guid idStatus, Guid idAccount , Guid status)

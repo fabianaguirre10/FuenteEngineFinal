@@ -64,12 +64,14 @@ namespace Mardis.Engine.Web.Controllers
             if (ModelState.IsValid)
             {
                 //cambio de clave para usuarios
-                RegisterViewModel model1= new RegisterViewModel();
-                model1.Email = model.Email;
-                model1.Password = "Campo$0112";
-                model1.ConfirmPassword = "Campo$0112";
+                //RegisterViewModel model1= new RegisterViewModel();
+                //model1.Email = model.Email;
+                //model1.Password = "Campo_1$2502";
+                //model1.ConfirmPassword = "Campo_1$2502";
 
-                Register(model1, returnUrl);
+               
+
+              //  Register(model1, returnUrl);
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
@@ -280,6 +282,8 @@ namespace Mardis.Engine.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
+
+             
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByNameAsync(model.Email);
@@ -327,6 +331,7 @@ namespace Mardis.Engine.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
+            
             if (!ModelState.IsValid)
             {
                 return View(model);

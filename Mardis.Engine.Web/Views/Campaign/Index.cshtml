@@ -7,36 +7,39 @@
 }
 
 @section buttons{
-    <div class="btn-group">
-        <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
-            <i class="clip-list-5"></i>
-            Opciones
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-            <li>
-                <a href="@Url.Action("Register","Campaign")">
-                    <i class="clip-plus-circle-2"></i> Nuevo
-                </a>
-            </li>
-            <li>
-                <a href="#" onclick="ShowGeoposition();">
-                    <i class="clip-location"></i> Geoposición
-                </a>
-            </li>
-            <li>
-                <a href="#" onclick="DeleteCampaign();">
-                    <i class="clip-minus-circle-2"></i> Borrar
-                </a>
-            </li>
+<div class="btn-group">
 
-            <li>
-                <a href="@Url.Action("Route","Campaign")">
-                    <i class="clip-map"></i> Administración de Rutas
-                </a>
-            </li>
-        </ul>
-    </div>
+    <a class="btn btn-primary" asp-action="ExportCampaniaEquipos">Descargar Vista</a><p></p>
+
+    <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
+        <i class="clip-list-5"></i>
+        Opciones
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+        <li>
+            <a href="@Url.Action("Register","Campaign")">
+                <i class="clip-plus-circle-2"></i> Nuevo
+            </a>
+        </li>
+        <li>
+            <a href="#" onclick="ShowGeoposition();">
+                <i class="clip-location"></i> Geoposición
+            </a>
+        </li>
+        <li>
+            <a href="#" onclick="DeleteCampaign();">
+                <i class="clip-minus-circle-2"></i> Borrar
+            </a>
+        </li>
+
+        <li>
+            <a href="@Url.Action("Route","Campaign")">
+                <i class="clip-map"></i> Administración de Rutas
+            </a>
+        </li>
+    </ul>
+</div>
 }
 
 @section filters{

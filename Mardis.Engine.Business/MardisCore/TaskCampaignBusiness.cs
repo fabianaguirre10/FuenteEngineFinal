@@ -9,6 +9,7 @@ using Mardis.Engine.DataObject.MardisCommon;
 using Mardis.Engine.DataObject.MardisCore;
 using Mardis.Engine.DataObject.MardisSecurity;
 using Mardis.Engine.Framework;
+using Mardis.Engine.DataObject.Dto;
 using Mardis.Engine.Framework.Resources;
 using Mardis.Engine.Framework.Resources.PagesConstants;
 using Mardis.Engine.Web.ViewModel.Filter;
@@ -442,7 +443,10 @@ namespace Mardis.Engine.Business.MardisCore
         {
             return _taskCampaignDao.GetAlltasksByCampaignNewId(idCampaign);
         }
-
+        public List<equiposcampanias> Listvistaequiposcampania()
+        {
+            return _taskCampaignDao.Getvistaequiposcampanias();
+        }
 
         private List<BranchImages> GetImagesTask(Guid idAccount, MyTaskViewModel taskWithPoll)
         {
