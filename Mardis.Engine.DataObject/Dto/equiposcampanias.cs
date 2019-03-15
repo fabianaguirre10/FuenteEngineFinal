@@ -27,6 +27,7 @@ namespace Mardis.Engine.DataObject.Dto
         public string EQUIPO { get; set; }
         public string CORE { get; set; }
         public string Campania { get; set; }
-        public DateTime Fecha { get; set; }
+        public string FechaNormal { get; set; }
+        public DateTime FechaHoras { get; set; }
     }
 }

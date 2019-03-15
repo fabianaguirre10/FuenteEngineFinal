@@ -391,7 +391,8 @@ namespace Mardis.Engine.DataObject.MardisCore
                     [EQUIPO],
                     [CORE],
                     [Campaña] as Campania,
-                    Fecha
+                     CONVERT(VARCHAR(10), Fecha, 23) as FechaNormal,
+					Fecha as FechaHoras
                     FROM    vw_equipos_bg_campañas";
             var result =Context.Query<equiposcampanias>(query).ToList();
 
