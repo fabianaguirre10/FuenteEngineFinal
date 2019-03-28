@@ -79,8 +79,9 @@ namespace Mardis.Engine.DataObject.MardisCore
                 Celular = x.PersonOwner.Phone,
                 x.TypeBusiness,
                 Cedula = x.PersonOwner.Document,
-                x.ESTADOAGGREGATE
-                });
+                x.ESTADOAGGREGATE,
+                comment = x.CommentBranch == null ? "" : x.CommentBranch
+            });
             
         }
 
